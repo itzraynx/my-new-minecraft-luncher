@@ -16,7 +16,7 @@ import {
   session,
   shell
 } from "electron"
-import os, { platform, release } from "os"
+import os from "os"
 import path, { join, resolve } from "path"
 import fs from "fs/promises"
 import fss from "fs"
@@ -36,9 +36,6 @@ import { FELauncherActionOnGameLaunch } from "@gd/core_module/bindings"
 
 console.log("Modules imported successfully")
 
-const timeStart = Date.now()
-let isPotatoPcModeSet = false
-
 export const RUNTIME_PATH_OVERRIDE_NAME = "runtime_path_override"
 const RUNTIME_PATH_DEFAULT_NAME = "data"
 
@@ -48,6 +45,8 @@ let win: BrowserWindow | null = null
 
 let isGameRunning = false
 let showAppCloseWarning = true
+
+app.enableSandbox()
 
 export function initRTPath(override: string | null | undefined) {
   console.log("Initializing runtime path...")
@@ -220,35 +219,6 @@ if (!disableSentry) {
     console.log("Sentry initialized")
   }
 }
-
-function maybeDisableGPU(override: boolean) {
-  console.log("Checking if GPU should be disabled...")
-  if (app.isReady()) {
-    console.error("App is ready, cannot disable GPU")
-    return
-  }
-
-  const disableGPU = validateArgument("--disable-gpu") || override
-
-  if (disableGPU) {
-    console.log("Disabling GPU...")
-    app.commandLine.appendSwitch("no-sandbox")
-    app.commandLine.appendSwitch("disable-gpu")
-    app.commandLine.appendSwitch("disable-software-rasterizer")
-    app.commandLine.appendSwitch("disable-gpu-compositing")
-    app.commandLine.appendSwitch("disable-gpu-rasterization")
-    app.commandLine.appendSwitch("disable-gpu-sandbox")
-    app.commandLine.appendSwitch("--no-sandbox")
-  }
-
-  // Disable GPU Acceleration for Windows 7
-  if (disableGPU || (release().startsWith("6.1") && platform() === "win32")) {
-    app.disableHardwareAcceleration()
-    console.log("Hardware acceleration disabled")
-  }
-}
-
-maybeDisableGPU(false)
 
 export interface Log {
   type: "info" | "error"
@@ -432,13 +402,6 @@ const loadCoreModule: CoreModule = () =>
           const rightPart = row.split(":")[1]
           showAppCloseWarning = rightPart === "true"
           console.log("Show app close warning:", showAppCloseWarning)
-        } else if (row.startsWith("_POTATO_PC_MODE_:")) {
-          isPotatoPcModeSet = true
-          const rightPart = row.split(":")[1]
-          if (rightPart === "true") {
-            maybeDisableGPU(true)
-          }
-          console.log("Potato PC mode set:", isPotatoPcModeSet)
         } else if (row.startsWith("_HASHED_EMAIL_PREFERENCE_CHANGED_:")) {
           const rightPart = row.split(":")[1]
           const enabled = rightPart.split("|")[0] === "true"
@@ -977,16 +940,3 @@ app.on("render-process-gone", (event, webContents, detailed) => {
 app.on("open-url", (event, url) => {
   dialog.showErrorBox("Welcome Back", `You arrived from: ${url}`)
 })
-
-const LOOP_TIMEOUT = 4000
-
-// keep event loop busy until potato pc mode is set or timeout is reached
-if (!isPotatoPcModeSet && !import.meta.env.DEV) {
-  let timeEnd = Date.now()
-  while (!isPotatoPcModeSet && timeEnd - timeStart < LOOP_TIMEOUT) {
-    timeEnd = Date.now()
-  }
-
-  // DO NOT REMOVE THIS CONSOLE LOG as V8 optimizes the loop away
-  console.log("First event loop tick done in ", timeEnd - timeStart)
-}

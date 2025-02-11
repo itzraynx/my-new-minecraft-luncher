@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use super::api::{
     get_profile, DeviceCode, DeviceCodeExpiredError, FullAccount, GetProfileError, McAccount,
     McAuth, McEntitlementMissingError, MsAuth, XboxAuth, XboxError,
@@ -7,6 +5,7 @@ use super::api::{
 use anyhow::anyhow;
 use async_trait::async_trait;
 use futures::{future::abortable, stream::AbortHandle};
+use std::sync::Arc;
 use thiserror::Error;
 use tokio::sync::RwLock;
 use tracing::trace;
@@ -110,7 +109,10 @@ impl EnrollmentTask {
         client: reqwest_middleware::ClientWithMiddleware,
         refresh_token: String,
         invalidate: impl InvalidateCtx + Send + Sync + 'static,
-    ) -> Self {
+    ) -> (
+        Self,
+        tokio::task::JoinHandle<Result<(), futures::future::Aborted>>,
+    ) {
         let status = Arc::new(RwLock::new(EnrollmentStatus::RequestingCode));
         let task_status = status.clone();
 
@@ -182,12 +184,15 @@ impl EnrollmentTask {
         };
 
         let (task, abort_handle) = abortable(task);
-        tokio::task::spawn(task);
+        let handler = tokio::task::spawn(task);
 
-        Self {
-            status,
-            abort: abort_handle,
-        }
+        (
+            Self {
+                status,
+                abort: abort_handle,
+            },
+            handler,
+        )
     }
 }
 

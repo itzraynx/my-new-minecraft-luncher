@@ -37,7 +37,7 @@ pub fn main() {
     {
         let mut args = std::env::args();
         if args.any(|arg| arg == "--generate-ts-bindings") {
-            crate::api::build_rspc_router()
+            crate::api::build_rspc_router(String::new())
                 .config(
                     rspc::Config::new().export_ts_bindings(
                         PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -98,7 +98,7 @@ pub fn main() {
 
             info!("Initializing runtime path");
             let runtime_path = runtime_path_override::get_runtime_path_override().await;
-            let base_api_override = base_api_override::get_base_api_override().await;
+            let base_api_override = base_api_override::get_base_api_override();
 
             let _guard = logger::setup_logger(&runtime_path).await;
 
@@ -149,7 +149,9 @@ async fn start_router(runtime_path: PathBuf, base_api_override: String, listener
     info!("Starting router");
     let (invalidation_sender, _) = tokio::sync::broadcast::channel(1000);
 
-    let router: Arc<rspc::Router<App>> = crate::api::build_rspc_router().build().arced();
+    let router: Arc<rspc::Router<App>> = crate::api::build_rspc_router(base_api_override.clone())
+        .build()
+        .arced();
 
     // We disable CORS because this is just an example. DON'T DO THIS IN PRODUCTION!
     let cors = CorsLayer::new()

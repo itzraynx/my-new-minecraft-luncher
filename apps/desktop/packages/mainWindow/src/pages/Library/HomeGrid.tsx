@@ -43,6 +43,7 @@ import { rspc } from "@/utils/rspcClient"
 import { createStore, reconcile } from "solid-js/store"
 import { useGlobalStore } from "@/components/GlobalStoreContext"
 import { useModal } from "@/managers/ModalsManager"
+import Announcements from "@/components/Announcements"
 
 const NewsWrapper = () => {
   const newsInitializer = initNews()
@@ -338,6 +339,7 @@ const HomeGrid = () => {
   return (
     <div class="p-6">
       <UnstableCard />
+      <Announcements />
       <Show when={globalStore.settings.data?.showNews}>
         <NewsWrapper />
       </Show>

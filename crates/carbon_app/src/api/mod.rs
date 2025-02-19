@@ -1,3 +1,4 @@
+use crate::base_api_override::get_base_api_override;
 use crate::managers::{App, AppInner};
 use crate::{app_version, managers};
 use async_stream::stream;
@@ -5,10 +6,11 @@ use axum::extract::ws::Message;
 use axum::extract::{State, WebSocketUpgrade};
 use axum::response::IntoResponse;
 use rspc::RouterBuilder;
+use semver::VersionReq;
 use serde::{Deserialize, Serialize};
 use specta::Type;
 use std::sync::Arc;
-use tracing::{error, info};
+use tracing::{error, info, warn};
 
 mod account;
 pub mod instance;
@@ -69,7 +71,26 @@ pub fn update_core_module_status(status: CoreModuleStatus) {
     println!("_STATUS_:{status}");
 }
 
-pub fn build_rspc_router() -> RouterBuilder<App> {
+#[derive(Deserialize, Serialize, Type)]
+struct Announcement {
+    title: String,
+    content: String,
+    #[serde(rename = "type")]
+    _type: AnnouncementType,
+    version_req: Option<String>,
+    start_date: Option<String>,
+    end_date: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Type)]
+#[serde(rename_all = "lowercase")]
+enum AnnouncementType {
+    Info,
+    Warning,
+    Error,
+}
+
+pub fn build_rspc_router(gdl_base_api: String) -> RouterBuilder<App> {
     let mut counter = Arc::new(0);
 
     rspc::Router::<App>::new()
@@ -85,6 +106,68 @@ pub fn build_rspc_router() -> RouterBuilder<App> {
         })
         .query("fake", |t| {
             t(|_ctx, _: ()| async move { Ok(CoreModuleStatus::AccountRefreshComplete) })
+        })
+        .query("getAnnouncements", |t| {
+            t(|app, _: ()| async move {
+                let api_url = format!("{}/v1/announcements", get_base_api_override());
+                let res = match app.reqwest_client.get(&api_url).send().await {
+                    Ok(res) => res,
+                    Err(e) => {
+                        warn!("Failed to get announcements: {e}");
+                        return vec![];
+                    }
+                };
+
+                let announcements: Vec<Announcement> = match res.json().await {
+                    Ok(announcements) => announcements,
+                    Err(e) => {
+                        warn!("Failed to parse announcements: {e}");
+                        return vec![];
+                    }
+                };
+
+                // Filter announcements based on version constraints and dates
+                let filtered_announcements = announcements
+                    .into_iter()
+                    .filter(|announcement| {
+                        if let Some(version_req) = &announcement.version_req {
+                            if let Ok(version_req) = VersionReq::parse(&*version_req) {
+                                if let Ok(app_version) =
+                                    semver::Version::parse(&app_version::APP_VERSION)
+                                {
+                                    if !version_req.matches(&app_version) {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Check start date
+                        if let Some(start_date) = &announcement.start_date {
+                            let now = chrono::Utc::now();
+                            if let Ok(start) = chrono::DateTime::parse_from_rfc3339(start_date) {
+                                if now < start {
+                                    return false;
+                                }
+                            }
+                        }
+
+                        // Check end date
+                        if let Some(end_date) = &announcement.end_date {
+                            let now = chrono::Utc::now();
+                            if let Ok(end) = chrono::DateTime::parse_from_rfc3339(end_date) {
+                                if now > end {
+                                    return false;
+                                }
+                            }
+                        }
+
+                        true
+                    })
+                    .collect::<Vec<_>>();
+
+                filtered_announcements
+            })
         })
         .merge(keys::account::GROUP_PREFIX, account::mount())
         .merge(keys::java::GROUP_PREFIX, java::mount())

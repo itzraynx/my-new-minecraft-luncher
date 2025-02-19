@@ -10,6 +10,7 @@ export type Procedures = {
         { key: "account.peekGdlAccount", input: string, result: FEGDLAccount | null } | 
         { key: "echo", input: string, result: string } | 
         { key: "fake", input: never, result: CoreModuleStatus } | 
+        { key: "getAnnouncements", input: never, result: Announcement[] } | 
         { key: "getAppVersion", input: never, result: string } | 
         { key: "instance.explore", input: ExploreQuery, result: ExploreEntry[] } | 
         { key: "instance.findModUpdate", input: UpdateMod, result: RemoteVersion | null } | 
@@ -251,6 +252,8 @@ export type CFFEFileReleaseType = "stable" | "beta" | "alpha"
 
 export type ImportScanStatus = "NoResults" | { SingleResult: ImportEntry } | { MultiResult: ImportEntry[] }
 
+export type CoreModuleStatus = "LoadAndMigrate" | "LaunchBackgroundTasks" | "RefreshMSAuth" | "RequestingCode" | "PollingCode" | "McLogin" | "XboxAuth" | "MCEntitlements" | "McProfile" | "AccountRefreshComplete"
+
 export type FEUnifiedModSortIndex = { curseForge: CFFEModSearchSortField } | { modrinth: MRFESearchIndex }
 
 export type ModrinthModpack = { project_id: string; version_id: string }
@@ -368,8 +371,6 @@ export type FEModFileChangelogResponse = { data: string; pagination: CFFEPaginat
 
 export type CFFEModParameters = { modId: number }
 
-export type CoreModuleStatus = "LoadAndMigrate" | "LaunchBackgroundTasks" | "RefreshMSAuth" | "RequestingCode" | "PollingCode" | "McLogin" | "XboxAuth" | "MCEntitlements" | "McProfile" | "AccountRefreshComplete"
-
 export type FEUnifiedPagination = { index: number; pageSize: number; resultCount: number; totalCount: number }
 
 export type MRFEProjectSearchResult = { slug: string; title: string; description: string; categories: string[] | null; client_side: MRFEProjectSupportRange; server_side: MRFEProjectSupportRange; project_type: MRFEProjectType; downloads: number; icon_url: string | null; color: number | null; project_id: string; author: string; display_categories: string[] | null; versions: string[]; follows: number; date_created: string; date_modified: string; latest_version: string | null; license: string; gallery: string[] | null; featured_gallery: string | null }
@@ -423,8 +424,6 @@ export type CFFEModAuthor = { id: number; name: string; url: string }
 export type ModrinthModMetadata = { project_id: string; version_id: string; title: string; version: string; urlslug: string; description: string; authors: string; has_image: boolean }
 
 export type ListInstance = { id: FEInstanceId; group_id: FEGroupId; name: string; favorite: boolean; status: ListInstanceStatus; icon_revision: number | null; last_played: string | null; date_created: string; date_updated: string; seconds_played: number }
-
-export type Set<T> = { Set: T }
 
 export type CFFEModFilesParametersQuery = { gameVersion?: string | null; modLoaderType?: CFFEModLoaderType | null; gameVersionTypeId?: number | null; index?: number | null; pageSize?: number | null }
 
@@ -514,9 +513,13 @@ export type FEUpdateInstance = { instance: FEInstanceId; name?: Set<string> | nu
 
 export type MRFEProjectSupportRange = "required" | "optional" | "unsupported" | "unknown"
 
+export type Set<T> = { Set: T }
+
 export type ImportEntity = "LegacyGDLauncher" | "MRPack" | "Modrinth" | "CurseForgeZip" | "CurseForge" | "ATLauncher" | "Technic" | "FTB" | "MultiMC" | "PrismLauncher"
 
 export type CFFEModSearchParametersQuery = { gameId: number; searchFilter: string | null; gameVersion: string | null; categoryIds: number[] | null; sortOrder: CFFEModSearchSortOrder | null; sortField: CFFEModSearchSortField | null; classId: CFFEClassId | null; modLoaderTypes: CFFEModLoaderType[] | null; gameVersionTypeId: number | null; authorId: number | null; slug: string | null; index: number | null; pageSize: number | null }
+
+export type Announcement = { title: string; content: string; type: AnnouncementType; version_req: string | null; start_date: string | null; end_date: string | null }
 
 export type FECreateJavaProfileArgs = { profileName: string; javaId: string | null }
 
@@ -539,6 +542,8 @@ export type ManifestVersion = { id: string; type: McType }
 export type ImportEntitySelectionType = "file" | "directory"
 
 export type FEManagedJavaSetupProgress = "idle" | { downloading: [string, string] } | { extracting: [string, string] } | "done"
+
+export type AnnouncementType = "info" | "warning" | "error"
 
 export type MRFEHashes = ({ [key: string]: string }) & { sha512: string; sha1: string }
 

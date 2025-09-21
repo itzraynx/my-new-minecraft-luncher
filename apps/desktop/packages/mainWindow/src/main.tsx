@@ -5,6 +5,7 @@ import {
   createResource,
   createSignal,
   ErrorBoundary,
+  JSX,
   Match,
   Show,
   Switch
@@ -16,7 +17,8 @@ import App from "@/app"
 import { ModalProvider } from "@/managers/ModalsManager"
 import "virtual:uno.css"
 import "@gd/ui/style.css"
-import { ContextMenuProvider, NotificationsProvider, Progressbar } from "@gd/ui"
+import { ContextMenuProvider, Progress, Toaster } from "@gd/ui"
+import "@unocss/reset/tailwind.css"
 import { NavigationManager } from "./managers/NavigationManager"
 // import { ContextMenuProvider } from "./components/ContextMenu/ContextMenuContext";
 import RiveAppWapper from "./utils/RiveAppWrapper"
@@ -24,6 +26,25 @@ import GDAnimation from "./gd_logo_animation.riv"
 import { GlobalStoreProvider } from "./components/GlobalStoreContext"
 import PatternBackground from "./components/PatternBackground"
 import gdlauncherLogo from "/assets/images/gdlauncher_wide_logo_blue.svg"
+
+const ProdWrapErrorBoundary = (props: { children: JSX.Element }) => {
+  return (
+    <Switch>
+      <Match when={!import.meta.env.DEV}>
+        <ErrorBoundary
+          fallback={(err) => {
+            console.error("Window errored", err)
+            window.fatalError(err, "Window")
+            return <></>
+          }}
+        >
+          {props.children}
+        </ErrorBoundary>
+      </Match>
+      <Match when={import.meta.env.DEV}>{props.children}</Match>
+    </Switch>
+  )
+}
 
 render(() => {
   const [coreModuleProgress, setCoreModuleProgress] = createSignal<
@@ -107,6 +128,11 @@ render(() => {
     const minLoadingTime = 2500
     const timeElapsed = Date.now() - startTime
 
+    // DEV ONLY
+    if (import.meta.env.DEV && coreModuleLoaded.state === "ready") {
+      setIsReady(true)
+    }
+
     if (coreModuleLoaded.state === "ready" && timeElapsed >= minLoadingTime) {
       setIsReady(true)
     } else if (coreModuleLoaded.state === "ready") {
@@ -117,22 +143,13 @@ render(() => {
   })
 
   return (
-    <ErrorBoundary
-      fallback={(err) => {
-        console.error("Window errored", err)
-
-        window.fatalError(err, "Window")
-
-        return <></>
-      }}
-    >
+    <ProdWrapErrorBoundary>
       <Switch>
         <Match when={isIntroAnimationFinished()}>
           <Switch>
             <Match when={isReady()}>
-              <NotificationsProvider>
-                <InnerApp port={coreModuleLoaded() as unknown as number} />
-              </NotificationsProvider>
+              <InnerApp port={coreModuleLoaded() as unknown as number} />
+              <Toaster />
             </Match>
             <Match when={!isReady()}>
               <PatternBackground>
@@ -162,9 +179,9 @@ render(() => {
                       "opacity-0": coreModuleProgress() === undefined
                     }}
                   >
-                    <Progressbar
+                    <Progress
                       color="bg-blue-500"
-                      percentage={coreModuleProgress() ?? 0}
+                      value={coreModuleProgress() ?? 0}
                     />
                   </div>
                 </div>
@@ -183,7 +200,7 @@ render(() => {
           </div>
         </Match>
       </Switch>
-    </ErrorBoundary>
+    </ProdWrapErrorBoundary>
   )
 }, document.getElementById("root")!)
 

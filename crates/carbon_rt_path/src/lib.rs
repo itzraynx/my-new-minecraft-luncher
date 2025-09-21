@@ -145,6 +145,10 @@ impl InstancePath {
         self.get_data_path().join("saves")
     }
 
+    pub fn get_datapacks_path(&self) -> PathBuf {
+        self.get_data_path().join("datapacks")
+    }
+
     pub fn get_logs_path(&self) -> PathBuf {
         self.get_data_path().join("logs")
     }
@@ -417,7 +421,7 @@ where
     futures::future::join_all(entries)
         .await
         .into_iter()
-        .collect::<Result<_, _>>()?;
+        .collect::<Result<Vec<()>, _>>()?;
 
     Ok(())
 }

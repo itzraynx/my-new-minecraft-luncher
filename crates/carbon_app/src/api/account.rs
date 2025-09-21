@@ -1,4 +1,4 @@
-use crate::api::keys::account::*;
+use crate::api::keys::{self, account::*};
 use crate::api::router::router;
 use crate::domain::account as domain;
 use crate::error::{AxumError, FeError};
@@ -7,10 +7,10 @@ use crate::managers::account::gdl_account::{
     GDLAccountStatus, GDLUser, RegisterAccountBody, RequestGDLAccountDeletionError,
     RequestNewEmailChangeError, RequestNewVerificationTokenError,
 };
-use crate::managers::{account, App, AppInner};
+use crate::managers::{App, AppInner, account};
 use axum::extract::{Query, State};
 use chrono::{DateTime, Utc};
-use hyper::{header, StatusCode};
+use hyper::{StatusCode, header};
 use rspc::RouterBuilder;
 use serde::{Deserialize, Serialize};
 use specta::Type;
@@ -129,6 +129,10 @@ pub(super) fn mount() -> RouterBuilder<App> {
             app.account_manager()
                 .change_nickname(args.uuid, args.nickname)
                 .await
+        }
+
+        mutation UPLOAD_PROFILE_ICON[app, args: FEUploadProfileIcon] {
+            app.account_manager().upload_profile_icon(args.uuid, args.icon_path).await
         }
     }
 }
@@ -303,8 +307,8 @@ impl From<Option<domain::StatusFlags>> for StatusFlags {
 
 impl From<&account::EnrollmentStatus> for Result<EnrollmentStatus, FeError> {
     fn from(value: &account::EnrollmentStatus) -> Self {
-        use account::EnrollmentStatus as BE;
         use EnrollmentStatus as Api;
+        use account::EnrollmentStatus as BE;
 
         Ok(match value {
             BE::RefreshingMSAuth => Api::RefreshingMSAuth,
@@ -495,4 +499,11 @@ impl From<Result<(), RequestGDLAccountDeletionError>> for FERequestDeletionStatu
 pub struct FEChangeGdlAccountNickname {
     pub uuid: String,
     pub nickname: String,
+}
+
+#[derive(Type, Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FEUploadProfileIcon {
+    pub uuid: String,
+    pub icon_path: String,
 }

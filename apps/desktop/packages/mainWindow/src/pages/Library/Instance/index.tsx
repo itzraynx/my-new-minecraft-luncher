@@ -41,8 +41,7 @@ import DefaultImg from "/assets/images/default-instance-img.png"
 import { useModal } from "@/managers/ModalsManager"
 import { convertSecondsToHumanTime } from "@/utils/helpers"
 import Authors from "./Info/Authors"
-import { getCFModloaderIcon } from "@/utils/sidebar"
-import { setInstanceId } from "@/utils/browser"
+import { getModloaderIcon } from "@/utils/sidebar"
 import { getInstanceIdFromPath } from "@/utils/routes"
 import {
   setPayload,
@@ -51,6 +50,8 @@ import {
 import { setCheckedFiles } from "@/managers/ModalsManager/modals/InstanceExport/atoms/ExportCheckboxParent"
 import { isFullScreen } from "./Tabs/Log"
 import FeatureStatusBadge from "@/components/FeatureStatusBadge"
+import useSearchContext from "@/components/SearchInputContext"
+import { useGlobalStore } from "@/components/GlobalStoreContext"
 
 interface InstancePage {
   label: string | JSX.Element
@@ -58,7 +59,8 @@ interface InstancePage {
 }
 
 const Instance = () => {
-  const navigate = useGDNavigate()
+  const navigator = useGDNavigate()
+  const searchContext = useSearchContext()
   const params = useParams()
   const rspcContext = rspc.useContext()
   const location = useLocation()
@@ -192,16 +194,11 @@ const Instance = () => {
       label: "Overview",
       path: `/library/${params.id}`
     },
-
-    ...(routeData.instanceDetails.data?.modloaders.length! > 0
-      ? [
-          {
-            label: "Mods",
-            path: `/library/${params.id}/mods`,
-            noPadding: true
-          }
-        ]
-      : []),
+    {
+      label: "Addons",
+      path: `/library/${params.id}/addons`,
+      noPadding: true
+    },
     {
       label: "Settings",
       path: `/library/${params.id}/settings`
@@ -215,10 +212,6 @@ const Instance = () => {
       ),
       path: `/library/${params.id}/logs`
     }
-    // {
-    //   label: "Resource Packs",
-    //   path: `/library/${params.id}/resourcepacks`,
-    // },
     // {
     //   label: "Screenshots",
     //   path: `/library/${params.id}/screenshots`,
@@ -243,6 +236,30 @@ const Instance = () => {
   const killInstanceMutation = rspc.createMutation(() => ({
     mutationKey: ["instance.killInstance"]
   }))
+
+  const globalStore = useGlobalStore()
+  const handlePlay = () => {
+    const parsedInstanceId = parseInt(params.id, 10)
+    if (isRunning()) {
+      killInstanceMutation.mutate(parsedInstanceId)
+      return
+    }
+    if (
+      globalStore.currentlySelectedAccount()?.status === "expired" ||
+      globalStore.currentlySelectedAccount()?.status === "invalid"
+    ) {
+      modalsContext?.openModal(
+        {
+          name: "accountExpired"
+        },
+        {
+          id: parsedInstanceId
+        }
+      )
+      return
+    }
+    launchInstanceMutation.mutate(parsedInstanceId)
+  }
 
   const isRunning = () =>
     routeData.instanceDetails.data?.state &&
@@ -349,6 +366,18 @@ const Instance = () => {
     })
   }
 
+  const handleDelete = () => {
+    modalsContext?.openModal(
+      {
+        name: "confirmInstanceDeletion"
+      },
+      {
+        id: parseInt(params.id, 10),
+        name: routeData.instanceDetails.data?.name
+      }
+    )
+  }
+
   const menuItems = () => [
     {
       icon: "i-ri:pencil-fill",
@@ -365,14 +394,14 @@ const Instance = () => {
       label: t("instance.export_instance"),
       action: () => {
         const instanceId = getInstanceIdFromPath(location.pathname)
-        setInstanceId(parseInt(instanceId!, 10))
+        searchContext?.setSelectedInstanceId(parseInt(instanceId!, 10))
 
         setPayload({
           target: "Curseforge",
           save_path: undefined,
           self_contained_addons_bundling: false,
           filter: { entries: {} },
-          instance_id: parseInt(instanceId!, 10)
+          instance_id: searchContext?.selectedInstance.data?.id!
         })
         setCheckedFiles([])
         setExportStep(0)
@@ -381,6 +410,11 @@ const Instance = () => {
           name: "exportInstance"
         })
       }
+    },
+    {
+      icon: "i-ri:delete-bin-2-fill",
+      label: t("instance.action_delete"),
+      action: handleDelete
     }
   ]
 
@@ -391,7 +425,7 @@ const Instance = () => {
         (instance) => instance.id === parseInt(params.id, 10)
       )
     ) {
-      navigate("/library")
+      navigator.navigate("/library")
     }
   })
 
@@ -401,7 +435,7 @@ const Instance = () => {
       class="bg-darkSlate-800 relative flex h-full flex-col overflow-x-hidden"
       classList={{
         "overflow-hidden": isFullScreen(),
-        "overflow-x-hidden": !isFullScreen()
+        "overflow-y-auto overflow-x-hidden": !isFullScreen()
       }}
     >
       <header
@@ -430,7 +464,7 @@ const Instance = () => {
           <div class="sticky left-5 top-5 z-50 w-fit">
             <Button
               rounded
-              onClick={() => navigate("/library")}
+              onClick={() => navigator.navigate("/library")}
               size="small"
               type="transparent"
             >
@@ -439,11 +473,11 @@ const Instance = () => {
           </div>
           <div class="absolute right-5 top-5 z-50 flex w-fit gap-2">
             <DropdownMenu placement="bottom-end">
-              <DropdownMenuTrigger class="p-0 b-0 bg-transparent">
+              <DropdownMenuTrigger class="b-0 bg-transparent p-0">
                 <Button
                   as="div"
                   rounded
-                  class="w-full h-full"
+                  class="h-full w-full"
                   size="small"
                   type="transparent"
                 >
@@ -594,8 +628,8 @@ const Instance = () => {
                               <>
                                 <Show when={modloader.type_}>
                                   <img
-                                    class="h-4 w-4"
-                                    src={getCFModloaderIcon(modloader.type_)}
+                                    class="h-5 w-5"
+                                    src={getModloaderIcon(modloader.type_)}
                                     alt="Modloader icon"
                                   />
                                 </Show>
@@ -612,7 +646,7 @@ const Instance = () => {
                           }
                         >
                           <div class="flex items-center gap-2">
-                            <div class="i-ri:time-fill" />
+                            <div class="i-ri:time-fill text-lg" />
                             <span class="whitespace-nowrap">
                               {convertSecondsToHumanTime(
                                 routeData.instanceDetails.data!.secondsPlayed
@@ -636,17 +670,7 @@ const Instance = () => {
                             "view-transition-name": `instance-tile-play-button`,
                             contain: "layout"
                           }}
-                          onClick={() => {
-                            if (isRunning()) {
-                              killInstanceMutation.mutate(
-                                parseInt(params.id, 10)
-                              )
-                            } else {
-                              launchInstanceMutation.mutate(
-                                parseInt(params.id, 10)
-                              )
-                            }
-                          }}
+                          onClick={handlePlay}
                         >
                           <Switch>
                             <Match when={!isRunning()}>
@@ -677,7 +701,7 @@ const Instance = () => {
         >
           <div class="bg-darkSlate-800 w-full">
             <div
-              class="bg-darkSlate-800 sticky top-0 z-10 flex h-14 items-center justify-between"
+              class="bg-darkSlate-800 sticky top-0 z-30 flex h-14 items-center justify-between"
               classList={{
                 "px-6": instancePages()[selectedIndex()]?.noPadding
               }}
@@ -697,7 +721,7 @@ const Instance = () => {
                   }}
                 >
                   <Button
-                    onClick={() => navigate("/library")}
+                    onClick={() => navigator.navigate("/library")}
                     icon={<div class="i-ri:arrow-drop-left-line text-2xl" />}
                     size="small"
                     type="secondary"
@@ -717,7 +741,7 @@ const Instance = () => {
                         {(page: InstancePage) => (
                           <Tab
                             onClick={() => {
-                              navigate(page.path)
+                              navigator.navigate(page.path)
                             }}
                           >
                             {page.label}
@@ -740,13 +764,7 @@ const Instance = () => {
                   size="small"
                   variant={isRunning() && "red"}
                   loading={isPreparing() !== undefined}
-                  onClick={() => {
-                    if (isRunning()) {
-                      killInstanceMutation.mutate(parseInt(params.id, 10))
-                    } else {
-                      launchInstanceMutation.mutate(parseInt(params.id, 10))
-                    }
-                  }}
+                  onClick={handlePlay}
                 >
                   <Switch>
                     <Match when={!isRunning()}>
@@ -762,10 +780,13 @@ const Instance = () => {
               </div>
             </div>
             <div
-              class="px-4"
+              class="px-0"
               classList={{
                 "pt-14": isFullScreen(),
-                "pt-4": !isFullScreen()
+                "pt-0":
+                  !isFullScreen() && location.pathname.includes("/addons"),
+                "pt-4 px-4":
+                  !isFullScreen() && !location.pathname.includes("/addons")
               }}
             >
               <Outlet />

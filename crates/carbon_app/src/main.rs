@@ -3,11 +3,11 @@
 #![allow(dead_code)]
 
 use crate::managers::{
+    App, AppInner,
     java::{
         discovery::{Discovery, RealDiscovery},
         java_checker::RealJavaChecker,
     },
-    App, AppInner,
 };
 use serde_json::Value;
 use std::{path::PathBuf, sync::Arc};
@@ -179,7 +179,8 @@ async fn start_router(runtime_path: PathBuf, base_api_override: String, listener
 
     let app1 = app.clone();
     let app2 = app.clone();
-    let rspc_axum_router: axum::Router<Arc<AppInner>> = rspc_axum::endpoint(router, move || app);
+    let rspc_axum_router: axum::Router<Arc<AppInner>> =
+        rspc_axum::endpoint(router, move || app.clone());
 
     let app = axum::Router::new()
         .nest("/", crate::api::build_axum_vanilla_router())
@@ -213,15 +214,6 @@ async fn start_router(runtime_path: PathBuf, base_api_override: String, listener
                 break;
             }
         }
-    });
-
-    let _app = app2.clone();
-    tokio::spawn(async move {
-        _app.meta_cache_manager().launch_background_tasks().await;
-        _app.clone()
-            .instance_manager()
-            .launch_background_tasks()
-            .await;
     });
 
     axum::serve(listener, app.into_make_service())
@@ -268,7 +260,7 @@ impl std::ops::Deref for TestEnv {
 
 #[cfg(test)]
 async fn setup_managers_for_test() -> TestEnv {
-    let temp_dir = tempdir::TempDir::new("carbon_app_test").unwrap();
+    let temp_dir = tempfile::tempdir().unwrap();
     let temp_path = dunce::canonicalize(temp_dir.into_path()).unwrap();
     //let log_guard = logger::setup_logger(&temp_path).await;
     println!("Test RTP: {}", temp_path.to_str().unwrap());
@@ -330,7 +322,7 @@ mod test {
     async fn test_router() {
         let tcp_listener = get_available_port().await;
         let port = &tcp_listener.local_addr().unwrap().port();
-        let temp_dir = tempdir::TempDir::new("carbon_app_test").unwrap();
+        let temp_dir = tempfile::tempdir().unwrap();
         let server = tokio::spawn(async move {
             super::start_router(
                 temp_dir.into_path(),

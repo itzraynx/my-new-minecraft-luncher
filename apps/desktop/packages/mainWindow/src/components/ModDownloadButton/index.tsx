@@ -15,6 +15,7 @@ interface ModDownloadButtonProps {
   selectedInstanceId?: number
   selectedInstanceMods?: Mod[]
   instanceLocked?: boolean
+  size?: "small" | "medium" | "large"
 }
 
 const ModDownloadButton = (props: ModDownloadButtonProps) => {
@@ -213,6 +214,7 @@ const ModDownloadButton = (props: ModDownloadButtonProps) => {
           fileId={props.fileId}
           installedMod={installedMod}
           onDownload={handleDownload}
+          size={props.size}
         />
       </Match>
     </Switch>

@@ -90,68 +90,92 @@ const InfiniteScrollVersionsQueryWrapper = (props: Props) => {
         ])
 
         return {
-          data: response.data.map((v) => ({
-            id: v.modId.toString(),
-            fileId: v.id.toString(),
-            name: v.displayName,
-            releaseType: v.releaseType as string,
-            gameVersions: v.gameVersions,
-            downloads: v.downloadCount,
-            datePublished: v.fileDate,
-            fileName: v.fileName,
-            size: v.fileLength,
-            hash: v.fileFingerprint,
-            status: v.fileStatus,
-            mainThumbnail: project.data.logo?.url
-          })),
+          data: response.data
+            .map((v) => ({
+              id: v.modId.toString(),
+              fileId: v.id.toString(),
+              name: v.displayName,
+              releaseType: v.releaseType as string,
+              gameVersions: v.gameVersions,
+              downloads: v.downloadCount,
+              datePublished: v.fileDate,
+              fileName: v.fileName,
+              size: v.fileLength,
+              hash: v.fileFingerprint,
+              status: v.fileStatus,
+              mainThumbnail: project.data.logo?.url
+            }))
+            .sort(
+              (a, b) =>
+                new Date(b.datePublished).getTime() -
+                new Date(a.datePublished).getTime()
+            ),
           index: response.pagination?.index || 0,
           total: response.pagination?.totalCount || 0
         } satisfies VersionRowType
       } else {
-        const project = await rspcContext.client.query([
-          "modplatforms.modrinth.getProject",
-          props.modId
-        ])
+        try {
+          const project = await rspcContext.client.query([
+            "modplatforms.modrinth.getProject",
+            props.modId
+          ])
 
-        const response = await rspcContext.client.query([
-          "modplatforms.modrinth.getProjectVersions",
-          {
-            project_id: props.modId,
-            game_versions: versionsQuery.gameVersion
-              ? [versionsQuery.gameVersion]
-              : undefined,
-            loaders: versionsQuery.modLoaderType
-              ? [versionsQuery.modLoaderType]
-              : undefined,
-            limit: versionsQuery.pageSize,
-            offset: versionsQuery.index
-          }
-        ])
+          const response = await rspcContext.client.query([
+            "modplatforms.modrinth.getProjectVersions",
+            {
+              project_id: props.modId,
+              game_versions: versionsQuery.gameVersion
+                ? [versionsQuery.gameVersion]
+                : undefined,
+              loaders: versionsQuery.modLoaderType
+                ? [versionsQuery.modLoaderType]
+                : undefined,
+              limit: versionsQuery.pageSize,
+              offset: ctx.pageParam
+            }
+          ])
 
-        return {
-          data: response.map((v) => ({
-            id: v.project_id,
-            fileId: v.id,
-            name: v.name,
-            releaseType: v.version_type as string,
-            gameVersions: v.game_versions,
-            downloads: v.downloads,
-            datePublished: v.date_published,
-            fileName: v.files[0].filename,
-            size: v.files[0].size,
-            hash: v.files[0].hashes.sha512,
-            status: v.status || "",
-            mainThumbnail: project.icon_url || undefined
-          })),
-          index: versionsQuery.index,
-          total: project.versions.length
-        } satisfies VersionRowType
+          const processedData = {
+            data: response
+              .map((v) => ({
+                id: v.project_id,
+                fileId: v.id,
+                name: v.name,
+                releaseType: v.version_type as string,
+                gameVersions: v.game_versions,
+                downloads: v.downloads,
+                datePublished: v.date_published,
+                fileName: v.files[0].filename,
+                size: v.files[0].size,
+                hash: v.files[0].hashes.sha512,
+                status: v.status || "",
+                mainThumbnail: project.icon_url || undefined
+              }))
+              .sort(
+                (a, b) =>
+                  new Date(b.datePublished).getTime() -
+                  new Date(a.datePublished).getTime()
+              ),
+            index: ctx.pageParam,
+            total: project.versions.length
+          } satisfies VersionRowType
+
+          return processedData
+        } catch (error) {
+          throw error
+        }
       }
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage, allPages) => {
       if (props.modplatform === "modrinth") {
-        return null
+        const loadedCount = allPages.reduce(
+          (acc, page) => acc + page.data.length,
+          0
+        )
+        const totalCount = lastPage.total || 0
+
+        return loadedCount < totalCount ? loadedCount : null
       }
 
       const index = lastPage?.index || 0
@@ -161,7 +185,7 @@ const InfiniteScrollVersionsQueryWrapper = (props: Props) => {
 
       return (hasNextPage && index + pageSize) || null
     },
-    enabled: false
+    enabled: !!props.modId
   }))
 
   const setQueryWrapper = (newValue: Partial<typeof versionsQuery>) => {

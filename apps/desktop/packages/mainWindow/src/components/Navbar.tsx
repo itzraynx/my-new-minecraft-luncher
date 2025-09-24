@@ -24,7 +24,6 @@ import { Trans, useTransContext } from "@gd/i18n"
 import { useModal } from "@/managers/ModalsManager"
 import { useGlobalStore } from "./GlobalStoreContext"
 import useSearchContext from "./SearchInputContext"
-import { CacheStatusIcon } from "./CacheStatusIcon"
 
 export interface AccountsStatus {
   label: {
@@ -197,7 +196,6 @@ const AppNavbar = () => {
                     />
                   </Tab>
                 </div>
-                <CacheStatusIcon />
                 <Show
                   when={
                     updateAvailable() ||

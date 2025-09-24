@@ -17,6 +17,7 @@ interface InstallButtonProps {
   fileId?: number | string
   installedMod: () => any
   onDownload: () => void
+  size?: "small" | "medium" | "large"
 }
 
 export const InstallButton = (props: InstallButtonProps) => {
@@ -27,6 +28,7 @@ export const InstallButton = (props: InstallButtonProps) => {
           uppercase
           variant={props.isInstalled() ? "green" : "primary"}
           disabled={props.instanceLocked() && !props.isInstalled()}
+          size={props.size || "medium"}
           onClick={props.onDownload}
         >
           <Show when={props.loading()}>

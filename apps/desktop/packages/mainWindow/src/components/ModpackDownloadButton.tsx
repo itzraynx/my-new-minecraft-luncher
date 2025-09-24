@@ -9,6 +9,7 @@ interface ModDownloadButtonProps {
   fileId?: number | string
   name?: string
   addon: FEUnifiedSearchResult | undefined
+  size?: "small" | "medium" | "large"
 }
 
 const ModpackDownloadButton = (props: ModDownloadButtonProps) => {
@@ -100,7 +101,11 @@ const ModpackDownloadButton = (props: ModDownloadButtonProps) => {
 
   return (
     <div class="relative">
-      <Button disabled={loading()} onClick={handleDownload}>
+      <Button
+        disabled={loading()}
+        size={props.size || "medium"}
+        onClick={handleDownload}
+      >
         <Show when={loading()}>
           <Spinner />
         </Show>

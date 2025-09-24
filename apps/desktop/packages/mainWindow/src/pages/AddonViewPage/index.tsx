@@ -133,7 +133,7 @@ const AddonExplore = () => {
 
   return (
     <div
-      class="bg-darkSlate-800 relative flex h-full max-h-full flex-col"
+      class="bg-darkSlate-800 relative flex h-full flex-col overflow-y-auto overflow-x-hidden"
       style={{
         "scrollbar-gutter": "stable"
       }}
@@ -293,14 +293,14 @@ const AddonExplore = () => {
           </div>
         </div>
       </div>
-      <div class="bg-darkSlate-800 flex flex-1 flex-col p-6">
-        <div class="flex flex-1 justify-center pb-4">
-          <div class="bg-darkSlate-800 flex w-full flex-1 flex-col">
+      <div class="bg-darkSlate-800 sticky">
+        <div class="flex justify-center py-0 px-6">
+          <div class="bg-darkSlate-800 w-full">
             <div
               ref={(el) => {
                 refStickyTabs = el
               }}
-              class="bg-darkSlate-800 sticky top-0 z-10 flex flex-col pb-0"
+              class="bg-darkSlate-800 sticky top-0 z-30 flex flex-col pb-0"
             >
               <div class="mb-4 flex items-center justify-between">
                 <Show when={isSticky()}>
@@ -351,7 +351,7 @@ const AddonExplore = () => {
                 <ExploreVersionsNavbar modplatform={platform()} type="mod" />
               </Show>
             </div>
-            <div class="z-0 flex flex-1 flex-col">
+            <div class="z-0 flex flex-1 flex-col px-0 pt-4">
               <ModContextProvider mod={project}>
                 <Outlet />
               </ModContextProvider>

@@ -6,32 +6,17 @@ prisma = "run -p prisma-cli --"
 git-fetch-with-cli = true
 
 
+# Production builds - use old linkers for maximum compatibility
 [target.x86_64-pc-windows-msvc]
-linker = "lld-link.exe"
+linker = "link.exe"
 rustflags = ["-C", "target-feature=+crt-static"]
 
 [target.aarch64-apple-darwin]
 rustflags = [
-  "-C",
-  "link-arg=-fuse-ld=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
-  "-C",
-  "link-arg=-ld_new",
-]
-
-
-# Production builds - use old linkers for compatibility
-[profile.production.target.x86_64-pc-windows-msvc]
-rustflags = [
-  "-C", "linker=link.exe",
-  "-C", "target-feature=+crt-static"
-]
-
-[profile.production.target.aarch64-apple-darwin]
-rustflags = [
   "-C", "link-arg=-fuse-ld=ld"
 ]
 
-[profile.production.target.x86_64-apple-darwin]
+[target.x86_64-apple-darwin]
 rustflags = [
   "-C", "link-arg=-fuse-ld=ld"
 ]

@@ -394,21 +394,25 @@ const Instance = () => {
       label: t("instance.export_instance"),
       action: () => {
         const instanceId = getInstanceIdFromPath(location.pathname)
-        searchContext?.setSelectedInstanceId(parseInt(instanceId!, 10))
 
         setPayload({
           target: "Curseforge",
           save_path: undefined,
           self_contained_addons_bundling: false,
           filter: { entries: {} },
-          instance_id: searchContext?.selectedInstance.data?.id!
+          instance_id: parseInt(instanceId!, 10)
         })
         setCheckedFiles([])
         setExportStep(0)
 
-        modalsContext?.openModal({
-          name: "exportInstance"
-        })
+        modalsContext?.openModal(
+          {
+            name: "exportInstance"
+          },
+          {
+            instanceId: parseInt(instanceId!, 10)
+          }
+        )
       }
     },
     {

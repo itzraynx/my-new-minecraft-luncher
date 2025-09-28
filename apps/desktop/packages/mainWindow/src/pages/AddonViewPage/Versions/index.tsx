@@ -165,7 +165,7 @@ const Versions = () => {
                         height: `${virtualItem.size}px`,
                         transform: `translateY(${virtualItem.start}px)`
                       }}
-                      class="border-darkSlate-700 hover:bg-darkSlate-750 grid grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b py-2 transition-colors duration-150"
+                      class="border-darkSlate-700 grid grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b py-2"
                       classList={{
                         "bg-green-500/5 border-green-500/20":
                           installedMod()?.remoteId.toString() ===

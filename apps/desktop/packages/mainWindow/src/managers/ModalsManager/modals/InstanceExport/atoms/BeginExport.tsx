@@ -8,7 +8,6 @@ import { ExportArgs, ExportEntry } from "@gd/core_module/bindings"
 import { buildNestedObject, checkedFiles } from "./ExportCheckboxParent"
 import _ from "lodash"
 import { setFailedMsg } from "./Exporting"
-import useSearchContext from "@/components/SearchInputContext"
 
 function convertNestedObject(obj: any): any {
   const result: any = {}
@@ -29,10 +28,13 @@ function convertNestedObject(obj: any): any {
   return { entries: result }
 }
 
-const BeginExport = () => {
+interface Props {
+  instanceId: number
+}
+
+const BeginExport = (props: Props) => {
   const [t] = useTransContext()
   const modalsContext = useModal()
-  const searchContext = useSearchContext()
   const exportInstanceMutation = rspc.createMutation(() => ({
     mutationKey: ["instance.export"],
     onSuccess(taskId) {
@@ -52,7 +54,7 @@ const BeginExport = () => {
   const handleExportInstance = () => {
     setPayload((prev) => ({
       ...prev,
-      instance_id: searchContext?.selectedInstance.data?.id
+      instance_id: props.instanceId
     }))
     setFailedMsg(undefined)
     const obj = buildNestedObject(checkedFiles())

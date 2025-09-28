@@ -7,7 +7,6 @@ import {
   setCheckedFiles
 } from "./ExportCheckboxParent"
 import _ from "lodash"
-import useSearchContext from "@/components/SearchInputContext"
 
 interface FileFolder {
   name?: string
@@ -62,18 +61,17 @@ const FileCheckbox = (props: { file: FileFolder; name: string }) => {
   )
 }
 
-const ExportCheckbox = (props: { folder: FileFolder; initialData: any }) => {
+const ExportCheckbox = (props: { folder: FileFolder; initialData: any; instanceId: number }) => {
   const [isOpen, setIsOpen] = createSignal(false)
   const [contents, setContents] = createSignal<any[]>([])
   const rspcContext = rspc.useContext()
-  const searchContext = useSearchContext()
 
   createEffect(async () => {
     if (!isOpen() && contents().length === 0) {
       const res = await rspcContext.client.query([
         "instance.explore",
         {
-          instance_id: searchContext?.selectedInstance.data?.id!,
+          instance_id: props.instanceId,
           path: props.folder.path!
         }
       ])
@@ -168,6 +166,7 @@ const ExportCheckbox = (props: { folder: FileFolder; initialData: any }) => {
                   <Match when={item.type === "Directory"}>
                     <ExportCheckbox
                       initialData={undefined}
+                      instanceId={props.instanceId}
                       folder={{
                         name: item.name,
                         type: item.type,

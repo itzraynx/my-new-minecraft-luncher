@@ -4,7 +4,6 @@ import ExportCheckbox from "./ExportCheckbox"
 import { Checkbox } from "@gd/ui"
 import { useTransContext } from "@gd/i18n"
 import _ from "lodash"
-import useSearchContext from "@/components/SearchInputContext"
 
 const [checkedFiles, setCheckedFiles] = createSignal<string[][]>([])
 export { checkedFiles, setCheckedFiles }
@@ -27,19 +26,25 @@ export function buildNestedObject(paths: string[][]) {
 
   return root
 }
-const ExportCheckboxParent = () => {
+
+interface Props {
+  instanceId: number
+}
+
+const ExportCheckboxParent = (props: Props) => {
   const [allSelected, setAllSelected] = createSignal(false)
   const [someSelected, setSomeSelected] = createSignal(false)
-  const searchContext = useSearchContext()
   const [t] = useTransContext()
+
   const explore = rspc.createQuery(() => ({
     queryKey: [
       "instance.explore",
       {
-        instance_id: searchContext?.selectedInstance.data?.id!,
+        instance_id: props.instanceId,
         path: []
       }
-    ]
+    ],
+    enabled: !!props.instanceId
   }))
 
   createEffect(() => {
@@ -87,7 +92,7 @@ const ExportCheckboxParent = () => {
           }
         />
       </div>
-      <ExportCheckbox initialData={explore.data} folder={{ path: [] }} />
+      <ExportCheckbox initialData={explore.data} instanceId={props.instanceId} folder={{ path: [] }} />
     </>
   )
 }

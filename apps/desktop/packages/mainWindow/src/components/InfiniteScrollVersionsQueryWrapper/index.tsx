@@ -90,26 +90,20 @@ const InfiniteScrollVersionsQueryWrapper = (props: Props) => {
         ])
 
         return {
-          data: response.data
-            .map((v) => ({
-              id: v.modId.toString(),
-              fileId: v.id.toString(),
-              name: v.displayName,
-              releaseType: v.releaseType as string,
-              gameVersions: v.gameVersions,
-              downloads: v.downloadCount,
-              datePublished: v.fileDate,
-              fileName: v.fileName,
-              size: v.fileLength,
-              hash: v.fileFingerprint,
-              status: v.fileStatus,
-              mainThumbnail: project.data.logo?.url
-            }))
-            .sort(
-              (a, b) =>
-                new Date(b.datePublished).getTime() -
-                new Date(a.datePublished).getTime()
-            ),
+          data: response.data.map((v) => ({
+            id: v.modId.toString(),
+            fileId: v.id.toString(),
+            name: v.displayName,
+            releaseType: v.releaseType as string,
+            gameVersions: v.gameVersions,
+            downloads: v.downloadCount,
+            datePublished: v.fileDate,
+            fileName: v.fileName,
+            size: v.fileLength,
+            hash: v.fileFingerprint,
+            status: v.fileStatus,
+            mainThumbnail: project.data.logo?.url
+          })),
           index: response.pagination?.index || 0,
           total: response.pagination?.totalCount || 0
         } satisfies VersionRowType
@@ -135,26 +129,20 @@ const InfiniteScrollVersionsQueryWrapper = (props: Props) => {
         ])
 
         const processedData = {
-          data: response
-            .map((v) => ({
-              id: v.project_id,
-              fileId: v.id,
-              name: v.name,
-              releaseType: v.version_type as string,
-              gameVersions: v.game_versions,
-              downloads: v.downloads,
-              datePublished: v.date_published,
-              fileName: v.files[0].filename,
-              size: v.files[0].size,
-              hash: v.files[0].hashes.sha512,
-              status: v.status || "",
-              mainThumbnail: project.icon_url || undefined
-            }))
-            .sort(
-              (a, b) =>
-                new Date(b.datePublished).getTime() -
-                new Date(a.datePublished).getTime()
-            ),
+          data: response.map((v) => ({
+            id: v.project_id,
+            fileId: v.id,
+            name: v.name,
+            releaseType: v.version_type as string,
+            gameVersions: v.game_versions,
+            downloads: v.downloads,
+            datePublished: v.date_published,
+            fileName: v.files[0].filename,
+            size: v.files[0].size,
+            hash: v.files[0].hashes.sha512,
+            status: v.status || "",
+            mainThumbnail: project.icon_url || undefined
+          })),
           index: ctx.pageParam,
           total: project.versions.length
         } satisfies VersionRowType

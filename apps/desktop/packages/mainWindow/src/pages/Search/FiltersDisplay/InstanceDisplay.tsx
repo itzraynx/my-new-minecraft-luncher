@@ -24,7 +24,7 @@ export default function InstanceDisplay() {
             instanceDetails.data?.iconRevision &&
             searchContext?.selectedInstanceId()
               ? `url("${getInstanceImageUrl(
-                  searchContext?.selectedInstanceId(),
+                  searchContext?.selectedInstanceId()!,
                   instanceDetails.data?.iconRevision
                 )}")`
               : `url("${DefaultImg}")`

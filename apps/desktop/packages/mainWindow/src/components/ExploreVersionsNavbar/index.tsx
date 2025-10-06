@@ -36,16 +36,16 @@ interface Props {
 
 const ExploreVersionsNavbar = (props: Props) => {
   const [searchParams, _setSearchParams] = useSearchParams()
-  const instanceId = () => {
+  const instanceId = (): number | null => {
     const id = parseInt(searchParams.instanceId, 10)
-    return isNaN(id) ? undefined : id
+    return isNaN(id) ? null : id
   }
   const globalStore = useGlobalStore()
 
   const infiniteQuery = useInfiniteVersionsQuery()
 
   const [overrideEnabled, setOverrideEnabled] = createSignal(
-    !instanceId || isNaN(instanceId())
+    instanceId() === null
   )
 
   const [gameVersionFilters, _setGameVersionFilters] = createStore({
@@ -115,14 +115,14 @@ const ExploreVersionsNavbar = (props: Props) => {
   return (
     <div class="mb-4 flex h-12 w-full gap-4">
       <Switch>
-        <Match when={!isNaN(instanceId())}>
+        <Match when={instanceId() !== null}>
           <div class="flex gap-2">
             <div
               class="h-full w-12 flex-1"
               style={{
                 "background-image": instanceDetails.data?.iconRevision
                   ? `url("${getInstanceImageUrl(
-                      instanceId(),
+                      instanceId()!,
                       instanceDetails.data?.iconRevision
                     )}")`
                   : `url("${DefaultImg}")`,
@@ -143,9 +143,7 @@ const ExploreVersionsNavbar = (props: Props) => {
             </div>
           </div>
         </Match>
-        <Match
-          when={props.type === "mod" && (!instanceId || isNaN(instanceId()))}
-        >
+        <Match when={props.type === "mod" && instanceId() === null}>
           <div class="text-lightSlate-700 flex items-center">
             <Trans key="rowcontainer.no_instance_selected" />
           </div>

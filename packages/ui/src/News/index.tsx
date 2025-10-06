@@ -1,5 +1,4 @@
 import {
-  createEffect,
   createSignal,
   For,
   mergeProps,
@@ -42,7 +41,7 @@ interface CarouselProps {
 const News = (props: CarouselProps) => {
   const [currentImageIndex, setCurrentImageIndex] = createSignal(1)
   const [isMoving, setIsMoving] = createSignal(false)
-  let interval: ReturnType<typeof setInterval>
+  let _interval: ReturnType<typeof setInterval>
 
   const mergedProps = mergeProps(
     { showIndicators: true, showArrows: true, rtl: true },

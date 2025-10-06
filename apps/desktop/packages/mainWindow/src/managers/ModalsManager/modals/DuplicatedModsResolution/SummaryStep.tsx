@@ -3,6 +3,7 @@ import { For, Show } from "solid-js"
 import { DuplicatedMod } from "./ModSelectionStep"
 import { DuplicateAction } from "./ActionStep"
 import { Trans } from "@gd/i18n"
+import { getModImageUrl } from "@/utils/instances"
 
 interface Props {
   mods: DuplicatedMod[]
@@ -11,6 +12,7 @@ interface Props {
   prevStep: () => void
   onFinish: () => void
   isApplying: boolean
+  instanceId: number
 }
 
 const SummaryStep = (props: Props) => {
@@ -62,17 +64,24 @@ const SummaryStep = (props: Props) => {
             {(mod) => (
               <div class="border border-darkSlate-500 rounded-lg p-4 bg-darkSlate-700">
                 <div class="flex items-start gap-3 mb-3">
-                  {mod.icon ? (
+                  <Show
+                    when={mod.modId && mod.platform}
+                    fallback={
+                      <div class="w-10 h-10 rounded-lg bg-darkSlate-600 flex items-center justify-center">
+                        <div class="i-ri:puzzle-fill text-xl text-darkSlate-400" />
+                      </div>
+                    }
+                  >
                     <img
-                      src={mod.icon}
+                      src={getModImageUrl(
+                        props.instanceId.toString(),
+                        mod.modId!,
+                        mod.platform!
+                      )}
                       alt={mod.name}
                       class="w-10 h-10 rounded-lg"
                     />
-                  ) : (
-                    <div class="w-10 h-10 rounded-lg bg-darkSlate-600 flex items-center justify-center">
-                      <div class="i-ri:puzzle-fill text-xl text-darkSlate-400" />
-                    </div>
-                  )}
+                  </Show>
                   <div class="flex-1">
                     <h4 class="font-semibold text-sm m-0 mb-1">{mod.name}</h4>
 
@@ -84,7 +93,9 @@ const SummaryStep = (props: Props) => {
                             <span class="text-green-400">
                               <Trans key="instance.duplicates.summary.status_keep" />
                             </span>
-                            <span class="text-lightSlate-500">{version().fileName}</span>
+                            <span class="text-lightSlate-500">
+                              {version().fileName}
+                            </span>
                           </div>
                         </div>
                       )}
@@ -97,14 +108,18 @@ const SummaryStep = (props: Props) => {
                             <div
                               class="text-sm"
                               classList={{
-                                "i-ri:eye-off-fill text-yellow-500": props.action === "disable",
-                                "i-ri:delete-bin-fill text-red-500": props.action === "remove"
+                                "i-ri:eye-off-fill text-yellow-500":
+                                  props.action === "disable",
+                                "i-ri:delete-bin-fill text-red-500":
+                                  props.action === "remove"
                               }}
                             />
-                            <span classList={{
-                              "text-yellow-400": props.action === "disable",
-                              "text-red-400": props.action === "remove"
-                            }}>
+                            <span
+                              classList={{
+                                "text-yellow-400": props.action === "disable",
+                                "text-red-400": props.action === "remove"
+                              }}
+                            >
                               <Show
                                 when={props.action === "disable"}
                                 fallback={

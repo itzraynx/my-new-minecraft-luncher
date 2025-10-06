@@ -70,16 +70,16 @@ export const getSearchResults = (_opts?: SearchResultsOpts) => {
   }
 
   const selectedInstance = rspc.createQuery(() => ({
-    queryKey: ["instance.getInstanceDetails", selectedInstanceId()],
+    queryKey: ["instance.getInstanceDetails", selectedInstanceId() ?? null],
     enabled: !!selectedInstanceId()
   }))
 
   const selectedInstanceMods = rspc.createQuery(() => ({
-    queryKey: ["instance.getInstanceMods", selectedInstanceId()],
+    queryKey: ["instance.getInstanceMods", selectedInstanceId() ?? 0],
     enabled: !!selectedInstanceId()
   }))
 
-  createAsyncEffect((isStale, prevId) => {
+  createAsyncEffect<number>((isStale, prevId) => {
     const currentId = selectedInstanceId()
     if (currentId && currentId !== prevId) {
       selectedInstanceMods.refetch()

@@ -82,7 +82,7 @@ export function createAsyncEffect<T = undefined>(
   fn: (isStale: () => boolean, prev: T | undefined) => T | undefined,
   initialValue?: T
 ): void {
-  let latestSymbol: symbol = Symbol()
+  let latestSymbol = Symbol()
 
   createEffect<T | undefined>((prev) => {
     // Create a unique symbol for this effect run

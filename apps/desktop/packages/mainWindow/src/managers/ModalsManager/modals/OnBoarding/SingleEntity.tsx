@@ -73,7 +73,7 @@ const SingleEntity = (props: {
     setPath(entityDefaultPath.data!)
   })
 
-  createAsyncEffect((isStale, prevPath) => {
+  createAsyncEffect<string>((isStale, _prevPath) => {
     const currentPath = path()
 
     const mutation = currentPath

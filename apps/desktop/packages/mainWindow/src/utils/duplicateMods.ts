@@ -47,7 +47,7 @@ export function detectDuplicatedMods(mods: Mod[]): DuplicatedModGroup[] {
 
     // Convert to the format expected by the modal
     const versions: ModVersion[] = modsInGroup.map((mod) => {
-      console.log('[DuplicateMods] Processing mod:', {
+      console.log("[DuplicateMods] Processing mod:", {
         id: mod.id,
         filename: mod.filename,
         file_size: mod.file_size,
@@ -62,22 +62,26 @@ export function detectDuplicatedMods(mods: Mod[]): DuplicatedModGroup[] {
 
       // If no version found, try to extract from filename (e.g., "mod-1.2.3.jar" → "1.2.3")
       if (!version) {
-        const versionMatch = mod.filename.match(
-          /[-_](\d+(?:\.\d+)+(?:[-+][a-zA-Z0-9.]+)?)\./
+        const versionMatch = /[-_](\d+(?:\.\d+)+(?:[-+][a-zA-Z0-9.]+)?)\./.exec(
+          mod.filename
         )
         version = versionMatch ? versionMatch[1] : mod.filename
       }
 
       // Format file size from bytes to human-readable
       const formatFileSize = (bytes: number): string => {
-        console.log('[DuplicateMods] Formatting file size:', bytes, typeof bytes)
+        console.log(
+          "[DuplicateMods] Formatting file size:",
+          bytes,
+          typeof bytes
+        )
         if (bytes < 1024) return `${bytes} B`
         if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
         return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
       }
 
       const formattedSize = formatFileSize(mod.file_size)
-      console.log('[DuplicateMods] Formatted size:', formattedSize)
+      console.log("[DuplicateMods] Formatted size:", formattedSize)
 
       return {
         id: mod.id,

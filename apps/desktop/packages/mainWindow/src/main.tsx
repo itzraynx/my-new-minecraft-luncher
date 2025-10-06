@@ -258,7 +258,7 @@ const TransWrapper = (props: TransWrapperProps) => {
     queryKey: ["settings.getSettings"]
   }))
 
-  createAsyncEffect((isStale, prevLanguage) => {
+  createAsyncEffect<string>((isStale, prevLanguage) => {
     if (settings.isSuccess) {
       const { language } = settings.data
 

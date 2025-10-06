@@ -239,7 +239,7 @@ macro_rules! augment_data {
 
 type ProgressCallback<'a> = Box<dyn Fn(u32, u32) + Send + Sync + 'a>;
 
-#[cfg_attr(feature = "cargo-clippy", allow(clippy::too_many_arguments))]
+#[cfg_attr(clippy, allow(clippy::too_many_arguments))]
 pub async fn execute_processors<'callback>(
     processors: &Vec<Processor>,
     data: &HashMap<String, SidedDataEntry>,

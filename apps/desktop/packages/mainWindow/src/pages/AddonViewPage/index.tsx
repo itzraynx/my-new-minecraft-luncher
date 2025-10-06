@@ -11,7 +11,12 @@ import {
   TooltipContent,
   TooltipTrigger
 } from "@gd/ui"
-import { Outlet, useLocation, useParams, useSearchParams } from "@solidjs/router"
+import {
+  Outlet,
+  useLocation,
+  useParams,
+  useSearchParams
+} from "@solidjs/router"
 import {
   For,
   JSX,
@@ -99,7 +104,7 @@ const AddonExplore = () => {
   }
 
   const instanceMods = rspc.createQuery(() => ({
-    queryKey: ["instance.getInstanceMods", selectedInstanceId()],
+    queryKey: ["instance.getInstanceMods", selectedInstanceId() ?? 0],
     enabled: selectedInstanceId() !== undefined
   }))
 
@@ -297,7 +302,7 @@ const AddonExplore = () => {
                         <ModDownloadButton
                           addon={project.data}
                           selectedInstanceId={selectedInstanceId()}
-                          selectedInstanceMods={instanceMods.data}
+                          selectedInstanceMods={instanceMods.data ?? undefined}
                         />
                       </Match>
                     </Switch>
@@ -370,7 +375,7 @@ const AddonExplore = () => {
                         <ModDownloadButton
                           addon={project.data}
                           selectedInstanceId={selectedInstanceId()}
-                          selectedInstanceMods={instanceMods.data}
+                          selectedInstanceMods={instanceMods.data ?? undefined}
                         />
                       </Match>
                     </Switch>

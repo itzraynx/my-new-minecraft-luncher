@@ -41,8 +41,10 @@ const ActionStep = (props: Props) => {
           <div
             class="border border-darkSlate-500 rounded-lg p-5 transition-all duration-200"
             classList={{
-              "bg-darkSlate-600 border-primary-500": selectedAction() === "disable",
-              "bg-darkSlate-700 hover:bg-darkSlate-650": selectedAction() !== "disable"
+              "bg-darkSlate-600 border-primary-500":
+                selectedAction() === "disable",
+              "bg-darkSlate-700 hover:bg-darkSlate-650":
+                selectedAction() !== "disable"
             }}
           >
             <Radio
@@ -68,7 +70,8 @@ const ActionStep = (props: Props) => {
             class="border border-darkSlate-500 rounded-lg p-5 transition-all duration-200"
             classList={{
               "bg-darkSlate-600 border-red-500": selectedAction() === "remove",
-              "bg-darkSlate-700 hover:bg-darkSlate-650": selectedAction() !== "remove"
+              "bg-darkSlate-700 hover:bg-darkSlate-650":
+                selectedAction() !== "remove"
             }}
           >
             <Radio
@@ -93,18 +96,10 @@ const ActionStep = (props: Props) => {
       </div>
 
       <div class="flex justify-between mt-6">
-        <Button
-          type="secondary"
-          size="large"
-          onClick={() => props.prevStep()}
-        >
+        <Button type="secondary" size="large" onClick={() => props.prevStep()}>
           <Trans key="instance.duplicates.action.button_back" />
         </Button>
-        <Button
-          type="primary"
-          size="large"
-          onClick={() => props.nextStep()}
-        >
+        <Button type="primary" size="large" onClick={() => props.nextStep()}>
           <Trans key="instance.duplicates.action.button_continue" />
         </Button>
       </div>

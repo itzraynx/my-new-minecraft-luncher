@@ -134,7 +134,8 @@ impl ManagerRef<'_, InstanceManager> {
             .await?;
 
         // Detect duplicated mods by grouping enabled mods by modid
-        let mut modid_counts: std::collections::HashMap<String, u32> = std::collections::HashMap::new();
+        let mut modid_counts: std::collections::HashMap<String, u32> =
+            std::collections::HashMap::new();
         for m in &mods {
             // Only consider enabled mods with metadata and modid
             if m.enabled {
@@ -153,125 +154,122 @@ impl ManagerRef<'_, InstanceManager> {
             .map(|(modid, _)| modid)
             .collect();
 
-        let mods = mods
-            .into_iter()
-            .map(|m| {
-                let (mid, cf, mr) = m
-                    .metadata
-                    .clone()
-                    .map(|m| (Some(m.id), m.curseforge.flatten(), m.modrinth.flatten()))
-                    .unwrap_or((None, None, None));
+        let mods = mods.into_iter().map(|m| {
+            let (mid, cf, mr) = m
+                .metadata
+                .clone()
+                .map(|m| (Some(m.id), m.curseforge.flatten(), m.modrinth.flatten()))
+                .unwrap_or((None, None, None));
 
-                let has_curseforge_update = cf
-                    .as_ref()
-                    .map(|cf| {
-                        let Ok(channel) = ModChannel::try_from(cf.release_type) else {
-                            tracing::error!(
-                                "Invalid ModChannel in database for curseforge entry {}: {}",
-                                mid.as_ref().unwrap(),
-                                cf.release_type
-                            );
-                            return false;
-                        };
+            let has_curseforge_update = cf
+                .as_ref()
+                .map(|cf| {
+                    let Ok(channel) = ModChannel::try_from(cf.release_type) else {
+                        tracing::error!(
+                            "Invalid ModChannel in database for curseforge entry {}: {}",
+                            mid.as_ref().unwrap(),
+                            cf.release_type
+                        );
+                        return false;
+                    };
 
-                        !mod_sources
-                            .platform_blacklist
-                            .contains(&ModPlatform::Curseforge)
-                            && has_update_for_paths(channel, &split_paths(&cf.update_paths))
-                    })
-                    .unwrap_or(false);
+                    !mod_sources
+                        .platform_blacklist
+                        .contains(&ModPlatform::Curseforge)
+                        && has_update_for_paths(channel, &split_paths(&cf.update_paths))
+                })
+                .unwrap_or(false);
 
-                let has_modrinth_update = mr
-                    .as_ref()
-                    .map(|mr| {
-                        let Ok(channel) = ModChannel::try_from(mr.release_type) else {
-                            tracing::error!(
-                                "Invalid ModChannel in database for modrinth entry {}: {}",
-                                mid.as_ref().unwrap(),
-                                mr.release_type
-                            );
-                            return false;
-                        };
+            let has_modrinth_update = mr
+                .as_ref()
+                .map(|mr| {
+                    let Ok(channel) = ModChannel::try_from(mr.release_type) else {
+                        tracing::error!(
+                            "Invalid ModChannel in database for modrinth entry {}: {}",
+                            mid.as_ref().unwrap(),
+                            mr.release_type
+                        );
+                        return false;
+                    };
 
-                        !mod_sources
-                            .platform_blacklist
-                            .contains(&ModPlatform::Modrinth)
-                            && has_update_for_paths(channel, &split_paths(&mr.update_paths))
-                    })
-                    .unwrap_or(false);
+                    !mod_sources
+                        .platform_blacklist
+                        .contains(&ModPlatform::Modrinth)
+                        && has_update_for_paths(channel, &split_paths(&mr.update_paths))
+                })
+                .unwrap_or(false);
 
-                domain::Mod {
-                    id: m.id,
-                    filename: m.filename,
-                    enabled: m.enabled,
-                    addon_type: domain::AddonType::from_db_string(&m.addon_type)
-                        .unwrap_or(domain::AddonType::Mods),
-                    metadata: m.metadata.as_ref().map(|m| domain::ModFileMetadata {
-                        id: m.id.clone(),
-                        modid: m.modid.clone(),
-                        name: m.name.clone(),
-                        version: m.version.clone(),
-                        description: m.description.clone(),
-                        authors: m.authors.clone(),
-                        modloaders: m
-                            .modloaders
-                            .split(',')
-                            // ignore unknown modloaders
-                            .flat_map(|loader| ModLoaderType::try_from(loader).ok())
-                            .collect::<Vec<_>>(),
-                        sha_512: m.sha_512.clone(),
-                        sha_1: m.sha_1.clone(),
-                        murmur_2: m.murmur_2,
-                        has_image: m
-                            .logo_image
-                            .as_ref()
-                            .map(|v| v.as_ref().map(|_| ()))
-                            .flatten()
-                            .is_some(),
-                    }),
-                    curseforge: cf.map(|m| domain::CurseForgeModMetadata {
-                        project_id: m.project_id as u32,
-                        file_id: m.file_id as u32,
-                        name: m.name,
-                        version: m.version,
-                        urlslug: m.urlslug,
-                        summary: m.summary,
-                        authors: m.authors,
-                        has_image: m
-                            .logo_image
-                            .flatten()
-                            .as_ref()
-                            .map(|row| row.data.as_ref().map(|_| ()))
-                            .flatten()
-                            .is_some(),
-                    }),
-                    modrinth: mr.map(|m| domain::ModrinthModMetadata {
-                        project_id: m.project_id,
-                        version_id: m.version_id,
-                        title: m.title,
-                        version: m.version,
-                        urlslug: m.urlslug,
-                        description: m.description,
-                        authors: m.authors,
-                        has_image: m
-                            .logo_image
-                            .flatten()
-                            .as_ref()
-                            .map(|row| row.data.as_ref().map(|_| ()))
-                            .flatten()
-                            .is_some(),
-                    }),
-                    has_update: has_curseforge_update || has_modrinth_update,
-                    is_duplicate: m
-                        .enabled
-                        && m.metadata
-                            .as_ref()
-                            .and_then(|meta| meta.modid.as_ref())
-                            .map(|modid| duplicate_modids.contains(modid))
-                            .unwrap_or(false),
-                    file_size: m.filesize as u64,
-                }
-            });
+            domain::Mod {
+                id: m.id,
+                filename: m.filename,
+                enabled: m.enabled,
+                addon_type: domain::AddonType::from_db_string(&m.addon_type)
+                    .unwrap_or(domain::AddonType::Mods),
+                metadata: m.metadata.as_ref().map(|m| domain::ModFileMetadata {
+                    id: m.id.clone(),
+                    modid: m.modid.clone(),
+                    name: m.name.clone(),
+                    version: m.version.clone(),
+                    description: m.description.clone(),
+                    authors: m.authors.clone(),
+                    modloaders: m
+                        .modloaders
+                        .split(',')
+                        // ignore unknown modloaders
+                        .flat_map(|loader| ModLoaderType::try_from(loader).ok())
+                        .collect::<Vec<_>>(),
+                    sha_512: m.sha_512.clone(),
+                    sha_1: m.sha_1.clone(),
+                    murmur_2: m.murmur_2,
+                    has_image: m
+                        .logo_image
+                        .as_ref()
+                        .map(|v| v.as_ref().map(|_| ()))
+                        .flatten()
+                        .is_some(),
+                }),
+                curseforge: cf.map(|m| domain::CurseForgeModMetadata {
+                    project_id: m.project_id as u32,
+                    file_id: m.file_id as u32,
+                    name: m.name,
+                    version: m.version,
+                    urlslug: m.urlslug,
+                    summary: m.summary,
+                    authors: m.authors,
+                    has_image: m
+                        .logo_image
+                        .flatten()
+                        .as_ref()
+                        .map(|row| row.data.as_ref().map(|_| ()))
+                        .flatten()
+                        .is_some(),
+                }),
+                modrinth: mr.map(|m| domain::ModrinthModMetadata {
+                    project_id: m.project_id,
+                    version_id: m.version_id,
+                    title: m.title,
+                    version: m.version,
+                    urlslug: m.urlslug,
+                    description: m.description,
+                    authors: m.authors,
+                    has_image: m
+                        .logo_image
+                        .flatten()
+                        .as_ref()
+                        .map(|row| row.data.as_ref().map(|_| ()))
+                        .flatten()
+                        .is_some(),
+                }),
+                has_update: has_curseforge_update || has_modrinth_update,
+                is_duplicate: m.enabled
+                    && m.metadata
+                        .as_ref()
+                        .and_then(|meta| meta.modid.as_ref())
+                        .map(|modid| duplicate_modids.contains(modid))
+                        .unwrap_or(false),
+                file_size: m.filesize as u64,
+            }
+        });
 
         Ok(mods.collect::<Vec<_>>())
     }

@@ -22,12 +22,12 @@ const Versions = () => {
   }
 
   const instanceMods = rspc.createQuery(() => ({
-    queryKey: ["instance.getInstanceMods", instanceId()],
+    queryKey: ["instance.getInstanceMods", instanceId() ?? 0],
     enabled: instanceId() !== undefined && instanceId()! > 0
   }))
 
   const instanceDetails = rspc.createQuery(() => ({
-    queryKey: ["instance.getInstanceDetails", instanceId()],
+    queryKey: ["instance.getInstanceDetails", instanceId() ?? null],
     enabled: instanceId() !== undefined && instanceId()! > 0
   }))
 

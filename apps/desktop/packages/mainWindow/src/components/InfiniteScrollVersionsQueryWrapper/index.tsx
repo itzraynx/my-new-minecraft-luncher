@@ -152,7 +152,7 @@ const InfiniteScrollVersionsQueryWrapper = (props: Props) => {
       }
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
+    getNextPageParam: (lastPage, _allPages) => {
       if (props.modplatform === "modrinth") {
         // Modrinth returns all versions in a single request, no pagination
         return null

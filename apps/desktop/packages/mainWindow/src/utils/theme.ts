@@ -1,4 +1,12 @@
-import { mainTheme, Theme as UITheme, pixelato, win95, inferno, aether, frost } from "@gd/ui"
+import {
+  mainTheme,
+  Theme as UITheme,
+  pixelato,
+  win95,
+  inferno,
+  aether,
+  frost
+} from "@gd/ui"
 import { createEffect } from "solid-js"
 import { rspc } from "./rspcClient"
 

@@ -107,7 +107,8 @@ const frost: Theme = {
 
   font: "Monocraft",
   "font-mono": "Monocraft",
-  "ads-sidebar-background": "linear-gradient(180deg, rgba(12,76,122,1) 0%, rgba(15,25,35,1) 100%)",
+  "ads-sidebar-background":
+    "linear-gradient(180deg, rgba(12,76,122,1) 0%, rgba(15,25,35,1) 100%)",
   "additional-styles": additionalStyles
 }
 

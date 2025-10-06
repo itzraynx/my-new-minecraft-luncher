@@ -96,7 +96,8 @@ const inferno: Theme = {
 
   font: "Monocraft",
   "font-mono": "Monocraft",
-  "ads-sidebar-background": "linear-gradient(180deg, rgba(87,22,22,1) 0%, rgba(31,14,16,1) 100%)",
+  "ads-sidebar-background":
+    "linear-gradient(180deg, rgba(87,22,22,1) 0%, rgba(31,14,16,1) 100%)",
   "additional-styles": additionalStyles
 }
 

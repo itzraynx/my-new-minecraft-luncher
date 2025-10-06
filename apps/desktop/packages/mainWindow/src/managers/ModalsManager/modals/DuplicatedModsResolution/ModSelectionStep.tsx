@@ -91,8 +91,10 @@ const ModSelectionStep = (props: Props) => {
               <div
                 class="border border-darkSlate-500 rounded-lg p-4 transition-all duration-200"
                 classList={{
-                  "bg-darkSlate-600 border-primary-500": selectedVersionLocal() === version.id,
-                  "bg-darkSlate-700 hover:bg-darkSlate-650": selectedVersionLocal() !== version.id
+                  "bg-darkSlate-600 border-primary-500":
+                    selectedVersionLocal() === version.id,
+                  "bg-darkSlate-700 hover:bg-darkSlate-650":
+                    selectedVersionLocal() !== version.id
                 }}
               >
                 <Radio
@@ -102,7 +104,9 @@ const ModSelectionStep = (props: Props) => {
                 >
                   <div class="flex flex-col gap-1 w-full">
                     <div class="flex items-center justify-between">
-                      <span class="font-semibold text-sm">{version.fileName}</span>
+                      <span class="font-semibold text-sm">
+                        {version.fileName}
+                      </span>
                       <span class="text-xs text-lightSlate-600 bg-darkSlate-800 px-2 py-1 rounded">
                         {version.fileSize}
                       </span>
@@ -122,18 +126,10 @@ const ModSelectionStep = (props: Props) => {
       </div>
 
       <div class="flex-shrink-0 flex justify-between mt-6">
-        <Button
-          type="secondary"
-          size="large"
-          onClick={() => props.prevStep()}
-        >
+        <Button type="secondary" size="large" onClick={() => props.prevStep()}>
           <Trans key="instance.duplicates.selection.button_back" />
         </Button>
-        <Button
-          type="primary"
-          size="large"
-          onClick={() => props.nextStep()}
-        >
+        <Button type="primary" size="large" onClick={() => props.nextStep()}>
           {props.currentModIndex + 1 === props.totalMods ? (
             <Trans key="instance.duplicates.selection.button_continue" />
           ) : (

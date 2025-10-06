@@ -1,4 +1,4 @@
-import { Show, createEffect, createSignal, createMemo } from "solid-js"
+import { Show, createSignal, createMemo } from "solid-js"
 import { createAsyncEffect } from "@/utils/asyncEffect"
 import {
   CFFEModAuthor,
@@ -22,7 +22,7 @@ const Authors = (props: Props) => {
   const [isLoading, setIsLoading] = createSignal(false)
   const rspcContext = rspc.useContext()
 
-  createAsyncEffect((isStale, prevTeamId) => {
+  createAsyncEffect<string>((isStale, prevTeamId) => {
     if (
       props.modpackDetails &&
       props.isModrinth &&

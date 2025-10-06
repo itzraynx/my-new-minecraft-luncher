@@ -47,11 +47,7 @@ const IntroStep = (props: Props) => {
       </div>
 
       <div class="flex w-full justify-end mt-6">
-        <Button
-          type="primary"
-          size="large"
-          onClick={() => props.nextStep()}
-        >
+        <Button type="primary" size="large" onClick={() => props.nextStep()}>
           <Trans key="instance.duplicates.intro.button_start" />
         </Button>
       </div>

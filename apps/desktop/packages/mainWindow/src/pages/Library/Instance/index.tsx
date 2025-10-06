@@ -281,7 +281,7 @@ const Instance = () => {
     routeData.instanceDetails.data?.modpack?.modpack.type === "curseforge" &&
     routeData.instanceDetails.data?.modpack?.modpack.value
 
-  createAsyncEffect((isStale, prevData) => {
+  createAsyncEffect<any>((isStale, _prevData) => {
     const isCurseforge = curseforgeData()
 
     if (isCurseforge) {
@@ -309,7 +309,7 @@ const Instance = () => {
     routeData.instanceDetails.data?.modpack?.modpack.type === "modrinth" &&
     routeData.instanceDetails.data?.modpack?.modpack.value
 
-  createAsyncEffect((isStale, prevData) => {
+  createAsyncEffect<any>((isStale, _prevData) => {
     const isModrinth = modrinthData()
 
     if (isModrinth) {
@@ -831,7 +831,9 @@ const Instance = () => {
                         Duplicated Mods Detected
                       </h3>
                       <p class="text-sm text-yellow-300/70 m-0">
-                        {duplicatedMods().length} mod{duplicatedMods().length > 1 ? 's have' : ' has'} multiple versions installed. This may cause conflicts.
+                        {duplicatedMods().length} mod
+                        {duplicatedMods().length > 1 ? "s have" : " has"}{" "}
+                        multiple versions installed. This may cause conflicts.
                       </p>
                     </div>
                   </div>
@@ -842,7 +844,7 @@ const Instance = () => {
                       modalsContext?.openModal(
                         { name: "duplicatedModsResolution" },
                         {
-                          duplicatedMods: duplicatedMods().map(g => g.mods),
+                          duplicatedMods: duplicatedMods().map((g) => g.mods),
                           instanceId: parseInt(params.id, 10)
                         }
                       )

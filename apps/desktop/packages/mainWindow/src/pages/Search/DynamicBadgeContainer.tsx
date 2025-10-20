@@ -27,7 +27,7 @@ export default function DynamicBadgeContainer(props: {
     Math.max(0, props.categories.length - MAX_VISIBLE_CATEGORIES)
 
   return (
-    <div class="flex items-center gap-2 overflow-hidden">
+    <div class="flex items-center gap-2 overflow-x-hidden overflow-y-visible py-1">
       <For each={visibleCategories()}>
         {(category) => {
           const isInSearchQuery = searchContext

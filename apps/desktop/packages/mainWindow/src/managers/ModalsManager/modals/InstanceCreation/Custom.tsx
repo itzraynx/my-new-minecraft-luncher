@@ -725,14 +725,13 @@ const Custom = (props: Pick<ModalProps, "data">) => {
             </span>
             <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
           </div>
-          <div class="grid grid-cols-5 gap-2">
+          <div class="grid grid-cols-5 gap-3">
             <For each={modloaders}>
               {(modloader) => (
                 <button
-                  class="group flex flex-col items-center gap-2 p-3 bg-darkSlate-800/50 rounded-lg border-2 transition-all hover:bg-darkSlate-700/60 hover:scale-[1.02]"
+                  class="group flex flex-col items-center gap-2 p-3 bg-darkSlate-800 rounded-lg border-0 border-transparent outline-none hover:outline-darkSlate-600 hover:bg-darkSlate-700 transition-all duration-200 ease-in-out"
                   classList={{
-                    "border-transparent": loader() !== modloader.key,
-                    "border-primary-500 bg-darkSlate-700/80": loader() === modloader.key
+                    "!outline-primary-500": loader() === modloader.key
                   }}
                   onClick={() => {
                     if (modloader.key === "forge") {
@@ -767,6 +766,15 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                 <Trans key="instance.instance_loader_version" />
               </label>
               <Switch>
+                <Match when={
+                  (forgeVersionsQuery.isFetching ||
+                   fabricVersionsQuery.isFetching ||
+                   quiltVersionsQuery.isFetching ||
+                   neoForgeVersionsQuery.isFetching) &&
+                  loaderVersions().length === 0
+                }>
+                  <div class="h-10 bg-darkSlate-800 rounded-md animate-pulse" />
+                </Match>
                 <Match when={loaderVersions().length > 0}>
                   <Select
                     value={chosenLoaderVersion()}
@@ -794,7 +802,13 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                     <SelectContent />
                   </Select>
                 </Match>
-                <Match when={loaderVersions().length === 0}>
+                <Match when={
+                  loaderVersions().length === 0 &&
+                  !forgeVersionsQuery.isFetching &&
+                  !fabricVersionsQuery.isFetching &&
+                  !quiltVersionsQuery.isFetching &&
+                  !neoForgeVersionsQuery.isFetching
+                }>
                   <div class="flex items-center gap-2 text-sm text-lightSlate-500 bg-darkSlate-800 rounded-md px-3 py-2">
                     <div class="i-hugeicons:alert-circle text-yellow-500" />
                     <span>No versions available for Minecraft {mcVersion()}</span>

@@ -34,7 +34,7 @@ export const SelectTrigger = <T extends ValidComponent = "button">(
     <SelectPrimitive.Trigger
       class={cn(
         local.variant !== "unstyled" &&
-          "flex h-9 w-full items-center justify-between rounded-md border border-darkSlate-600 bg-darkSlate-800 px-3 py-2 text-sm text-lightSlate-100 shadow-sm ring-offset-darkSlate-900 transition-shadow placeholder:text-darkSlate-400 focus:outline-none focus-visible:ring-[1.5px] focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-9 w-full items-center justify-between rounded-md border-0 border-transparent outline-none hover:outline-darkSlate-600 focus-visible:outline-darkSlate-500 !bg-darkSlate-800 px-3 py-2 text-sm text-lightSlate-100 shadow-sm ring-offset-darkSlate-900 transition-all duration-200 ease-in-out placeholder:text-darkSlate-400 disabled:cursor-not-allowed disabled:opacity-50",
         local.variant === "unstyled" && "flex items-center justify-between",
         local.class
       )}
@@ -91,7 +91,7 @@ export const SelectContent = <T extends ValidComponent = "div">(
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         class={cn(
-          "relative z-[1000] max-h-80 min-w-[8rem] overflow-y-auto rounded-md border border-darkSlate-600 bg-darkSlate-800 text-lightSlate-100 shadow-md data-[expanded]:animate-selectEnter data-[closed]:animate-selectLeave",
+          "relative z-[1000] max-h-80 min-w-[8rem] overflow-y-auto rounded-md border border-darkSlate-500 bg-darkSlate-800 text-lightSlate-100 shadow-md data-[expanded]:animate-selectEnter data-[closed]:animate-selectLeave",
           local.class
         )}
         {...rest}

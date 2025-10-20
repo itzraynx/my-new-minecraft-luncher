@@ -9,6 +9,7 @@ import { useModal } from "@/managers/ModalsManager"
 import { BisectBanner } from "@/components/BisectBanner"
 import { SearchInputContext } from "@/components/SearchInputContext"
 import { getSearchResults } from "@/utils/platformSearch"
+import { FilterBadgesBar } from "@/components/FilterBadgesBar"
 
 function withAdsLayout() {
   const modalContext = useModal()
@@ -20,6 +21,7 @@ function withAdsLayout() {
   return (
     <SearchInputContext.Provider value={searchResults}>
       <AppNavbar />
+      <FilterBadgesBar />
       <div class="z-99 flex h-auto w-screen">
         <main class="relative grow">
           <div class="flex h-[calc(100vh-60px)] justify-end">

@@ -24,7 +24,7 @@ export function InlineFilterBadges() {
 
   return (
     <Show when={hasActiveFilters()}>
-      <div class="flex items-center gap-1 overflow-x-auto scrollbar-hide max-w-[320px]">
+      <div class="flex items-center gap-1.5 flex-wrap gap-y-2">
         <SearchApiDisplay />
         <CategoriesDisplay />
         <ModloadersDisplay />

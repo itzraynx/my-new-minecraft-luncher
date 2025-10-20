@@ -225,20 +225,22 @@ const Presets = () => {
           <div class="flex flex-col gap-3">
             {/* Vanilla preset - full width, featured */}
             <button
-              class="group relative flex flex-col items-center justify-center gap-2 p-4 rounded-xl overflow-hidden border-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+              class="group relative flex flex-col items-center justify-center gap-2 p-4 rounded-xl overflow-hidden border-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md bg-darkSlate-800"
               classList={{
-                "bg-gradient-to-br from-emerald-900/20 via-darkSlate-800/80 to-darkSlate-800 border-emerald-500/30 hover:border-emerald-500/60 hover:shadow-xl hover:shadow-emerald-500/10 hover:scale-[1.01]": creatingPreset() !== vanillaPreset.name,
-                "bg-darkSlate-800 border-primary-500": creatingPreset() === vanillaPreset.name
+                "border-emerald-500/30 hover:border-emerald-500/60 hover:shadow-xl hover:shadow-emerald-500/10 hover:scale-[1.01]": creatingPreset() !== vanillaPreset.name,
+                "border-primary-500": creatingPreset() === vanillaPreset.name
               }}
               disabled={creatingPreset() === vanillaPreset.name}
               onClick={() => handleCreatePreset(vanillaPreset)}
             >
+              {/* Diagonal gradient overlay */}
+              <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/40 via-emerald-600/15 to-transparent" />
               {/* Background gradient effect */}
               <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
-              {/* Recommended badge */}
+              {/* Latest badge */}
               <div class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 backdrop-blur-sm">
-                <Trans key="instance.recommended" />
+                <Trans key="instance.latest" />
               </div>
 
               <div class="relative z-10 flex flex-col items-center gap-2">

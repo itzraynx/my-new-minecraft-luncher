@@ -4,7 +4,6 @@ import ModalLayout from "../../ModalLayout"
 import { Trans, useTransContext } from "@gd/i18n"
 import Custom from "./Custom"
 import Import from "./Import"
-import Presets from "./Presets"
 import { Match, Switch } from "solid-js"
 
 interface Props {
@@ -29,30 +28,21 @@ const InstanceCreation = (props: ModalProps) => {
             <Custom data={data()} />
           </Match>
           <Match when={data()?.id === undefined || data()?.id === null}>
-            <Tabs defaultIndex={data()?.import ? 2 : 0}>
+            <Tabs defaultIndex={data()?.import ? 1 : 0}>
               <TabList heightClass="h-14">
-                <Tab class="w-1/3" centerContent>
-                  <div class="flex items-center gap-2">
-                    <div class="i-hugeicons:zap" />
-                    <Trans key="instance.instance_presets_tab" />
-                  </div>
-                </Tab>
-                <Tab class="w-1/3" centerContent>
+                <Tab class="w-1/2" centerContent>
                   <div class="flex items-center gap-2">
                     <div class="i-hugeicons:add-01" />
                     <Trans key="instance.instance_creation_custom_tab" />
                   </div>
                 </Tab>
-                <Tab class="w-1/3" centerContent>
+                <Tab class="w-1/2" centerContent>
                   <div class="flex items-center gap-2">
                     <div class="i-hugeicons:upload-01" />
                     <Trans key="instance.instance_import_tab" />
                   </div>
                 </Tab>
               </TabList>
-              <TabPanel>
-                <Presets />
-              </TabPanel>
               <TabPanel>
                 <Custom data={data()} />
               </TabPanel>

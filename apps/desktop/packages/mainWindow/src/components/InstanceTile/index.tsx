@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from "solid-js"
+import { createEffect, createSignal, createMemo } from "solid-js"
 import Tile from "../Instance/Tile"
 import {
   getPreparingState,
@@ -124,6 +124,12 @@ const InstanceTile = (props: {
   const type = () =>
     props.isSidebarOpened === undefined ? undefined : variant()
 
+  const instanceImageUrl = createMemo(() =>
+    props.instance.icon_revision
+      ? getInstanceImageUrl(props.instance.id, props.instance.icon_revision)
+      : undefined
+  )
+
   return (
     <Tile
       onClick={() => {
@@ -145,11 +151,7 @@ const InstanceTile = (props: {
       isDeleting={isDeleting()}
       variant={type()}
       size={props.size}
-      img={
-        props.instance.icon_revision
-          ? getInstanceImageUrl(props.instance.id, props.instance.icon_revision)
-          : undefined
-      }
+      img={instanceImageUrl()}
       selected={props.selected}
       isLoading={isLoading()}
       percentage={progress.percentage * 100}

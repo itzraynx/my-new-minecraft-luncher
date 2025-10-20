@@ -1,6 +1,5 @@
 import { Show, createEffect, createSignal } from "solid-js"
 import { AddonTypeDropdown } from "./AddonTypeDropdown"
-import { InlineFilterBadges } from "./InlineFilterBadges"
 import useSearchContext from "./SearchInputContext"
 import { useGDNavigate } from "@/managers/NavigationManager"
 import { useMatch } from "@solidjs/router"
@@ -111,20 +110,10 @@ export function EnhancedSearchBar() {
       </Show>
 
       <div
-        class="transition-opacity duration-300 ease-in-out"
-        classList={{
-          "opacity-0 pointer-events-none w-0": !isExpanded(),
-          "opacity-100 delay-[75ms]": isExpanded()
-        }}
-      >
-        <InlineFilterBadges />
-      </div>
-
-      <div
         class="h-6 w-px bg-darkSlate-500 transition-opacity duration-300 ease-in-out"
         classList={{
           "opacity-0 w-0": !isExpanded(),
-          "opacity-100 delay-[110ms]": isExpanded()
+          "opacity-100 delay-[75ms]": isExpanded()
         }}
       />
 
@@ -132,7 +121,7 @@ export function EnhancedSearchBar() {
         class="transition-opacity duration-300 ease-in-out"
         classList={{
           "opacity-0 pointer-events-none w-0": !isExpanded(),
-          "opacity-100 delay-[150ms]": isExpanded()
+          "opacity-100 delay-[110ms]": isExpanded()
         }}
       >
         <DropdownMenu>

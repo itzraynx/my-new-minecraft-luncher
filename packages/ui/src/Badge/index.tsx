@@ -6,21 +6,21 @@ import { cva } from "class-variance-authority"
 import { cn } from "../util"
 
 const badgeVariants = cva(
-  "w=fit focus:ring-ring inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2",
+  "w=fit focus:ring-ring inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2",
   {
     variants: {
       variant: {
         default:
-          "bg-primary-500 hover:bg-primary-600 text-lightSlate-50 border-transparent",
+          "bg-primary-500 hover:bg-primary-600 text-lightSlate-50 border-0 border-transparent",
         secondary:
-          "bg-darkSlate-500 hover:bg-darkSlate-600 text-lightSlate-50 border-transparent",
+          "bg-darkSlate-800 hover:bg-darkSlate-700 hover:outline-darkSlate-600 text-lightSlate-50 border-0 border-transparent outline-none",
         outline:
-          "text-darkSlate-900 hover:bg-darkSlate-100 border-darkSlate-200",
+          "text-lightSlate-50 bg-darkSlate-800 hover:bg-darkSlate-700 hover:outline-darkSlate-600 border-0 border-transparent outline-none",
         success:
-          "text-lightSlate-50 border-green-500 bg-green-500 hover:bg-green-600",
+          "text-lightSlate-50 border-0 border-green-500 bg-green-500 hover:bg-green-600",
         warning:
-          "text-darkSlate-900 border-yellow-500 bg-yellow-500 hover:bg-yellow-600",
-        error: "text-lightSlate-50 border-red-500 bg-red-500 hover:bg-red-600"
+          "text-darkSlate-900 border-0 border-yellow-500 bg-yellow-500 hover:bg-yellow-600",
+        error: "text-lightSlate-50 border-0 border-red-500 bg-red-500 hover:bg-red-600"
       }
     },
     defaultVariants: {

@@ -199,22 +199,38 @@ const Instance = () => {
 
   const instancePages = () => [
     {
-      label: "Overview",
+      label: (
+        <div class="flex items-center gap-2">
+          <div class="i-hugeicons:dashboard-square-01 text-lg" />
+          <Trans key="ui.overview" />
+        </div>
+      ),
       path: `/library/${params.id}`
     },
     {
-      label: "Addons",
+      label: (
+        <div class="flex items-center gap-2">
+          <div class="i-hugeicons:puzzle text-lg" />
+          <Trans key="ui.addons" />
+        </div>
+      ),
       path: `/library/${params.id}/addons`,
       noPadding: true
     },
     {
-      label: "Settings",
+      label: (
+        <div class="flex items-center gap-2">
+          <div class="i-hugeicons:settings-01 text-lg" />
+          <Trans key="ui.settings" />
+        </div>
+      ),
       path: `/library/${params.id}/settings`
     },
     {
       label: (
         <div class="flex items-center gap-2">
-          Logs
+          <div class="i-hugeicons:file-script text-lg" />
+          <Trans key="ui.logs" />
           <FeatureStatusBadge type="beta" />
         </div>
       ),
@@ -414,7 +430,7 @@ const Instance = () => {
       action: handleOpenFolder
     },
     {
-      icon: "i-mingcute:file-export-fill",
+      icon: "i-hugeicons:file-export",
       label: t("instance.export_instance"),
       action: () => {
         const instanceId = getInstanceIdFromPath(location.pathname)
@@ -702,11 +718,11 @@ const Instance = () => {
                         >
                           <Switch>
                             <Match when={!isRunning()}>
-                              <i class="i-hugeicons:play" />
+                              <i class="i-hugeicons:play text-xl" />
                               <Trans key="instance.play" />
                             </Match>
                             <Match when={isRunning()}>
-                              <i class="i-hugeicons:stop" />
+                              <i class="i-hugeicons:stop text-xl" />
                               <Trans key="instance.stop" />
                             </Match>
                           </Switch>
@@ -796,11 +812,11 @@ const Instance = () => {
                 >
                   <Switch>
                     <Match when={!isRunning()}>
-                      <i class="i-hugeicons:play" />
+                      <i class="i-hugeicons:play text-base" />
                       <Trans key="instance.play" />
                     </Match>
                     <Match when={isRunning()}>
-                      <i class="i-hugeicons:stop" />
+                      <i class="i-hugeicons:stop text-base" />
                       <Trans key="instance.stop" />
                     </Match>
                   </Switch>
@@ -850,6 +866,7 @@ const Instance = () => {
                       )
                     }}
                   >
+                    <div class="i-hugeicons:magic-wand-01" />
                     Fix Now
                   </Button>
                 </div>

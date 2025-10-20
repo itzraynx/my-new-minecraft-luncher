@@ -318,6 +318,7 @@ const Accounts = () => {
                               }
                             }}
                           >
+                            <div class="i-hugeicons:mail-send-01" />
                             <Trans key="settings:send_new_verification_email" />
                           </Button>
                         </TooltipTrigger>
@@ -387,7 +388,7 @@ const Accounts = () => {
                           })
                         }}
                       >
-                        <i class="i-hugeicons:delete-01 block h-6 w-6" />
+                        <i class="i-hugeicons:delete-02 block h-6 w-6" />
                         <Trans key="settings:request_account_deletion" />
                       </Button>
                     </TooltipTrigger>
@@ -408,6 +409,7 @@ const Accounts = () => {
                       gdNavigator.navigate("/")
                     }}
                   >
+                    <div class="i-hugeicons:link-01" />
                     <Trans key="settings:link_gdl_account" />
                   </Button>
                 </div>

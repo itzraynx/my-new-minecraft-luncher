@@ -59,6 +59,7 @@ const ConfirmInstanceDeletion = (props: ModalProps) => {
               modalsContext?.closeModal()
             }}
           >
+            <div class="i-hugeicons:cancel-01" />
             {t("instance_confirm_deletion.cancel")}
           </Button>
           <Button
@@ -68,6 +69,7 @@ const ConfirmInstanceDeletion = (props: ModalProps) => {
               deleteInstanceMutation.mutate(props?.data?.id)
             }}
           >
+            <div class="i-hugeicons:delete-02" />
             {t("instance_confirm_deletion.delete")}
           </Button>
         </div>

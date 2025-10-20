@@ -142,19 +142,23 @@ const AddonExplore = () => {
   const instancePages = () => [
     {
       label: t("ui.overview"),
-      path: `/addon/${params.id}/${params.platform}`
+      path: `/addon/${params.id}/${params.platform}`,
+      icon: "i-hugeicons:dashboard-square-01"
     },
     {
       label: t("ui.changelog"),
-      path: `/addon/${params.id}/${params.platform}/changelog`
+      path: `/addon/${params.id}/${params.platform}/changelog`,
+      icon: "i-hugeicons:note-edit"
     },
     {
       label: t("ui.screenshots"),
-      path: `/addon/${params.id}/${params.platform}/screenshots`
+      path: `/addon/${params.id}/${params.platform}/screenshots`,
+      icon: "i-hugeicons:image-01"
     },
     {
       label: t("ui.versions"),
-      path: `/addon/${params.id}/${params.platform}/versions`
+      path: `/addon/${params.id}/${params.platform}/versions`,
+      icon: "i-hugeicons:package"
     }
   ]
 
@@ -356,7 +360,10 @@ const AddonExplore = () => {
                               )
                             }}
                           >
-                            {page.label}
+                            <div class="flex items-center gap-2">
+                              <div class={`${page.icon} text-lg`} />
+                              {page.label}
+                            </div>
                           </Tab>
                         )}
                       </For>

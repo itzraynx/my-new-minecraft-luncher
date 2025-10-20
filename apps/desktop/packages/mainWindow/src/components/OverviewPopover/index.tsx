@@ -146,7 +146,7 @@ const OverviewPopover = (props: { data: ModRowProps }) => {
             </div>
 
             <div class="text-lightSlate-700 flex items-center gap-2">
-              <div class="text-lightSlate-100 i-hugeicons:download-01" />
+              <div class="text-lightSlate-100 i-hugeicons:download-02" />
               <p class="text-lightSlate-100 m-0 text-sm">
                 <Trans key="modpack.total_download" />
               </p>

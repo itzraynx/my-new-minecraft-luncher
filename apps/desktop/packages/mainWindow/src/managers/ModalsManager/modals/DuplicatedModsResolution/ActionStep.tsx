@@ -81,7 +81,7 @@ const ActionStep = (props: Props) => {
             >
               <div class="flex flex-col gap-2 w-full">
                 <div class="flex items-center gap-2">
-                  <div class="i-hugeicons:delete-01 text-lg text-red-500" />
+                  <div class="i-hugeicons:delete-02 text-lg text-red-500" />
                   <span class="font-semibold">
                     <Trans key="instance.duplicates.action.remove_title" />
                   </span>

@@ -110,7 +110,7 @@ const SummaryStep = (props: Props) => {
                               classList={{
                                 "i-hugeicons:view-off text-yellow-500":
                                   props.action === "disable",
-                                "i-hugeicons:delete-01 text-red-500":
+                                "i-hugeicons:delete-02 text-red-500":
                                   props.action === "remove"
                               }}
                             />

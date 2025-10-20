@@ -46,9 +46,9 @@ const ThirdStep = (props: Props) => {
 
   return (
     <div
-      class={`flex flex-col items-center justify-between ${
-        props.isImportInstance ? "w-full p-4" : "w-120 lg:w-160"
-      } h-full box-border pt-6`}
+      class={`flex flex-col ${
+        props.isImportInstance ? "w-full h-[600px]" : "w-120 lg:w-160 h-full pt-6"
+      } box-border`}
     >
       <Switch>
         <Match when={entities.isLoading}>
@@ -60,8 +60,22 @@ const ThirdStep = (props: Props) => {
           <SingleEntity entity={entity()!} setEntity={setEntity} />
         </Match>
         <Match when={!entity()}>
-          <div class="flex-1 w-full">
-            <ul class="grid gap-2 p-0 grid-cols-3">
+          <div
+            class={`flex flex-col gap-4 flex-1 w-full ${
+              props.isImportInstance ? "pt-4 px-4" : ""
+            }`}
+          >
+            <Show when={props.isImportInstance}>
+              <div class="flex items-center w-full">
+                <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+                <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+                  <div class="i-hugeicons:rocket-02 text-primary-500 text-sm" />
+                  <Trans key="instance.import_instance" />
+                </span>
+                <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+              </div>
+            </Show>
+            <ul class="grid gap-1.5 p-0 grid-cols-3">
               <For
                 each={entities.data?.sort(
                   (a, b) =>

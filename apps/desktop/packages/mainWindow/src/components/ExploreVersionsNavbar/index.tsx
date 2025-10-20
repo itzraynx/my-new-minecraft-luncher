@@ -1,7 +1,7 @@
 import DefaultImg from "/assets/images/default-instance-img.png"
 import { McType } from "@gd/core_module/bindings"
 import { Trans } from "@gd/i18n"
-import { Checkbox, Dropdown } from "@gd/ui"
+import { Checkbox, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@gd/ui"
 import { useSearchParams } from "@solidjs/router"
 import { Match, Switch, createMemo, createSignal } from "solid-js"
 import { createStore } from "solid-js/store"
@@ -60,18 +60,11 @@ const ExploreVersionsNavbar = (props: Props) => {
 
   const modloaders = () => {
     const results = globalStore.modloaders.data
-    const coreModloaders =
-      results?.map((v) => ({
-        label: v.toString(),
-        key: v.toString()
-      })) || []
+    return ["", ...(results?.map((v) => v.toString()) || [])]
+  }
 
-    return [
-      {
-        label: "Select a modloader",
-        key: ""
-      }
-    ].concat(coreModloaders)
+  const getModloaderLabel = (value: string) => {
+    return value || "Select a modloader"
   }
 
   const filteredGameVersions = createMemo(() => {
@@ -89,27 +82,20 @@ const ExploreVersionsNavbar = (props: Props) => {
   })
 
   const filteredMappedGameVersions = () => {
-    const allVersionsLabel = {
-      label: (
-        <span>
-          <Trans key="minecraft_all_versions" />
-        </span>
-      ),
-      key: ""
-    }
+    return ["", ...(filteredGameVersions() || []).map((item) => item.id)]
+  }
 
-    return [
-      allVersionsLabel,
-      ...(filteredGameVersions() || []).map((item) => ({
-        label: (
-          <div class="flex w-full justify-between">
-            <span>{item.id}</span>
-            {mapTypeToColor(item.type)}
-          </div>
-        ),
-        key: item.id
-      }))
-    ]
+  const getGameVersionLabel = (versionId: string) => {
+    if (!versionId) {
+      return <Trans key="minecraft_all_versions" />
+    }
+    const version = filteredGameVersions()?.find((v) => v.id === versionId)
+    return (
+      <div class="flex w-full justify-between">
+        <span>{versionId}</span>
+        {version && mapTypeToColor(version.type)}
+      </div>
+    )
   }
 
   return (
@@ -150,34 +136,62 @@ const ExploreVersionsNavbar = (props: Props) => {
         </Match>
       </Switch>
       <div class="flex items-center gap-2">
-        <Dropdown
-          class="w-full"
-          containerClass="w-full"
+        <Select
+          value={infiniteQuery.query.gameVersion || ""}
           options={filteredMappedGameVersions()}
           disabled={!overrideEnabled()}
-          icon={<div class="i-hugeicons:tag-01" />}
-          value={infiniteQuery.query.gameVersion || null}
           onChange={(val) => {
             infiniteQuery?.setQuery({
-              gameVersion: val.key.toString() || null
+              gameVersion: val || null
             })
           }}
-        />
+          itemComponent={(props) => (
+            <SelectItem item={props.item}>
+              {getGameVersionLabel(props.item.rawValue)}
+            </SelectItem>
+          )}
+        >
+          <SelectTrigger class="w-full">
+            <SelectValue<string>>
+              {(state) => (
+                <div class="flex items-center gap-2">
+                  <div class="i-hugeicons:tag-01" />
+                  {getGameVersionLabel(state.selectedOption() || "")}
+                </div>
+              )}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent />
+        </Select>
       </div>
       <div class="flex items-center gap-2">
-        <Dropdown
-          class="w-full"
-          containerClass="w-full"
+        <Select
+          value={infiniteQuery.query.modLoaderType || ""}
           options={modloaders()}
           disabled={!overrideEnabled()}
-          icon={<div class="i-hugeicons:tag-01" />}
-          value={infiniteQuery.query.modLoaderType || null}
           onChange={(val) => {
             infiniteQuery?.setQuery({
-              modLoaderType: val.key.toString() || null
+              modLoaderType: val || null
             })
           }}
-        />
+          itemComponent={(props) => (
+            <SelectItem item={props.item}>
+              {getModloaderLabel(props.item.rawValue)}
+            </SelectItem>
+          )}
+        >
+          <SelectTrigger class="w-full">
+            <SelectValue<string>>
+              {(state) => (
+                <div class="flex items-center gap-2">
+                  <div class="i-hugeicons:tag-01" />
+                  {getModloaderLabel(state.selectedOption() || "")}
+                </div>
+              )}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent />
+        </Select>
       </div>
     </div>
   )

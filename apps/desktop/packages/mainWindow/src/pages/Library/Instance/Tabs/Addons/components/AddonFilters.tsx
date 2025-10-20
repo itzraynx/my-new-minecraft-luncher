@@ -258,6 +258,7 @@ export const AddonFilters = (props: AddonFiltersProps) => {
                   disabled={props.isInstanceLocked()}
                   class="font-semibold"
                 >
+                  <div class="i-hugeicons:add-01" />
                   <Trans key="instance.add_addons" />
                 </Button>
               </TooltipTrigger>

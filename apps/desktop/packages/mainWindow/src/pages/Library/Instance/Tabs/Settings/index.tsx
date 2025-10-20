@@ -1,7 +1,7 @@
 import { generateSequence } from "@/utils/helpers"
 import { port, queryClient, rspc } from "@/utils/rspcClient"
 import { Trans, useTransContext } from "@gd/i18n"
-import { Button, Dropdown, Input, Radio, Slider, Switch } from "@gd/ui"
+import { Button, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, Input, Radio, Slider, Switch } from "@gd/ui"
 import { useParams, useRouteData } from "@solidjs/router"
 import fetchData from "../../instance.data"
 import { Match, Show, createMemo, Switch as SolidSwitch } from "solid-js"
@@ -39,11 +39,22 @@ const Settings = () => {
 
   const templateGameResolution = () => {
     return [
-      { label: "854 x 480 (100%)", key: "Standard:854x480" },
-      { label: "1046 x 588 (150%)", key: "Standard:1046x588" },
-      { label: "1208 x 679 (200%)", key: "Standard:1208x679" },
-      { label: "1479 x 831 (300%)", key: "Standard:1479x831" }
+      "Standard:854x480",
+      "Standard:1046x588",
+      "Standard:1208x679",
+      "Standard:1479x831"
     ]
+  }
+
+  const getResolutionLabel = (key: string) => {
+    switch (key) {
+      case "Standard:854x480": return "854 x 480 (100%)"
+      case "Standard:1046x588": return "1046 x 588 (150%)"
+      case "Standard:1208x679": return "1208 x 679 (200%)"
+      case "Standard:1479x831": return "1479 x 831 (300%)"
+      case "custom": return t("ui.custom")
+      default: return key
+    }
   }
 
   const gameResolutionDropdownKey = () => {
@@ -251,27 +262,31 @@ const Settings = () => {
               </div>
             </div>
             <div class="flex items-center">
-              <Dropdown
-                class="min-w-100 max-w-2/3"
+              <Select
                 value={javaSelectedProfile()}
                 placeholder={t("placeholders.select_java_profile")}
-                options={
-                  getAllProfiles.data?.map((profile) => ({
-                    key: profile.name,
-                    label: profile.name
-                  })) || []
-                }
+                options={getAllProfiles.data?.map((profile) => profile.name) || []}
                 onChange={(option) => {
-                  updateInstanceMutation.mutate({
-                    javaOverride: {
-                      Set: {
-                        Profile: option.key.toString()
-                      }
-                    },
-                    instance: parseInt(params.id, 10)
-                  })
+                  if (option) {
+                    updateInstanceMutation.mutate({
+                      javaOverride: {
+                        Set: {
+                          Profile: option
+                        }
+                      },
+                      instance: parseInt(params.id, 10)
+                    })
+                  }
                 }}
-              />
+                itemComponent={(props) => (
+                  <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+                )}
+              >
+                <SelectTrigger class="min-w-100 max-w-2/3">
+                  <SelectValue<string>>{(state) => state.selectedOption() || t("placeholders.select_java_profile")}</SelectValue>
+                </SelectTrigger>
+                <SelectContent />
+              </Select>
               <Button
                 type="primary"
                 onClick={() => {
@@ -463,26 +478,25 @@ const Settings = () => {
       </Row>
       <Show when={routeData?.instanceDetails?.data?.gameResolution}>
         <div class="flex gap-4">
-          <Dropdown
+          <Select
             value={gameResolutionDropdownKey()}
             placeholder={t("settings:resolution_presets")}
-            options={[
-              ...templateGameResolution(),
-              { label: t("ui.custom"), key: "custom" }
-            ]}
-            onChange={(option) => {
+            options={[...templateGameResolution(), "custom"]}
+            onChange={(key) => {
+              if (!key) return
+
               let value: {
                 type: "Standard" | "Custom"
                 value: [number, number]
               } | null = null
 
-              if (option.key === "custom") {
+              if (key === "custom") {
                 value = {
                   type: "Custom",
                   value: [854, 480]
                 }
               } else {
-                const [width, height] = option.key
+                const [width, height] = key
                   .toString()
                   .split(":")[1]
                   .split("x")
@@ -499,7 +513,19 @@ const Settings = () => {
                 instance: parseInt(params.id, 10)
               })
             }}
-          />
+            itemComponent={(props) => (
+              <SelectItem item={props.item}>
+                {getResolutionLabel(props.item.rawValue)}
+              </SelectItem>
+            )}
+          >
+            <SelectTrigger>
+              <SelectValue<string>>
+                {(state) => getResolutionLabel(state.selectedOption() || "")}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent />
+          </Select>
           <Show
             when={
               routeData?.instanceDetails?.data?.gameResolution?.type ===

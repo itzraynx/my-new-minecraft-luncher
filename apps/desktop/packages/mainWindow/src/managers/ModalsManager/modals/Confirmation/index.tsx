@@ -34,6 +34,7 @@ const Confirmation = (props: ModalProps) => {
               modalContext?.closeModal()
             }}
           >
+            <div class="i-hugeicons:cancel-01" />
             {t("instance_cancel")}
           </Button>
           <Button
@@ -57,6 +58,7 @@ const Confirmation = (props: ModalProps) => {
               modalContext?.closeModal()
             }}
           >
+            <div class="i-hugeicons:tick-02" />
             {t("instance_confirm")}
           </Button>
         </div>

@@ -1,0 +1,336 @@
+import { Button, toast } from "@gd/ui"
+import { useModal } from "../.."
+import { Trans, useTransContext } from "@gd/i18n"
+import { createSignal, For, Show, createMemo } from "solid-js"
+import { rspc } from "@/utils/rspcClient"
+import { CFFEModLoaderType, ModLoader } from "@gd/core_module/bindings"
+import { useGDNavigate } from "@/managers/NavigationManager"
+import { useGlobalStore } from "@/components/GlobalStoreContext"
+import { getModloaderIcon } from "@/utils/sidebar"
+
+interface PresetOption {
+  name: string
+  loader: CFFEModLoaderType | undefined
+  translationKey: string
+}
+
+const Presets = () => {
+  const [t] = useTransContext()
+  const modalsContext = useModal()
+  const globalStore = useGlobalStore()
+  const navigator = useGDNavigate()
+
+  const [creatingPreset, setCreatingPreset] = createSignal<string | null>(null)
+
+  const forgeVersionsQuery = rspc.createQuery(() => ({
+    queryKey: ["mc.getForgeVersions"],
+    enabled: false
+  }))
+
+  const neoForgeVersionsQuery = rspc.createQuery(() => ({
+    queryKey: ["mc.getNeoforgeVersions"],
+    enabled: false
+  }))
+
+  const fabricVersionsQuery = rspc.createQuery(() => ({
+    queryKey: ["mc.getFabricVersions"],
+    enabled: false
+  }))
+
+  const quiltVersionsQuery = rspc.createQuery(() => ({
+    queryKey: ["mc.getQuiltVersions"],
+    enabled: false
+  }))
+
+  const defaultGroup = rspc.createQuery(() => ({
+    queryKey: ["instance.getDefaultGroup"]
+  }))
+
+  const prepareInstanceMutation = rspc.createMutation(() => ({
+    mutationKey: ["instance.prepareInstance"]
+  }))
+
+  const createInstanceMutation = rspc.createMutation(() => ({
+    mutationKey: ["instance.createInstance"]
+  }))
+
+  const latestMcVersion = createMemo(() => {
+    return globalStore.minecraftVersions.data?.find(
+      (v) => v.type === "release"
+    )?.id
+  })
+
+  const DUMMY_META_VERSION = "${gdlauncher.gameVersion}"
+
+  const presetOptions: PresetOption[] = [
+    { name: "Vanilla", loader: undefined, translationKey: "instance.vanilla" },
+    { name: "Forge", loader: "forge", translationKey: "instance.forge" },
+    {
+      name: "NeoForge",
+      loader: "neoforge",
+      translationKey: "instance.neoforge"
+    },
+    { name: "Fabric", loader: "fabric", translationKey: "instance.fabric" },
+    { name: "Quilt", loader: "quilt", translationKey: "instance.quilt" }
+  ]
+
+  const getLatestLoaderVersion = (loader: CFFEModLoaderType | undefined) => {
+    if (!loader) return undefined
+
+    const mcVersion = latestMcVersion()
+    if (!mcVersion) return undefined
+
+    switch (loader) {
+      case "forge": {
+        const versions = forgeVersionsQuery?.data?.gameVersions.find(
+          (v) => v.id === mcVersion
+        )?.loaders
+        return versions?.[0]?.id
+      }
+      case "neoforge": {
+        const versions = neoForgeVersionsQuery?.data?.gameVersions.find(
+          (v) => v.id === mcVersion
+        )?.loaders
+        return versions?.[0]?.id
+      }
+      case "fabric": {
+        const supported = fabricVersionsQuery?.data?.gameVersions.find(
+          (v) => v.id === mcVersion
+        )
+        if (!supported) return undefined
+        const versions = fabricVersionsQuery?.data?.gameVersions.find(
+          (v) => v.id === DUMMY_META_VERSION
+        )?.loaders
+        return versions?.[0]?.id
+      }
+      case "quilt": {
+        const supported = quiltVersionsQuery?.data?.gameVersions.find(
+          (v) => v.id === mcVersion
+        )
+        if (!supported) return undefined
+        const versions = quiltVersionsQuery?.data?.gameVersions.find(
+          (v) => v.id === DUMMY_META_VERSION
+        )?.loaders
+        return versions?.[0]?.id
+      }
+      default:
+        return undefined
+    }
+  }
+
+  const handleCreatePreset = async (preset: PresetOption) => {
+    const mcVersion = latestMcVersion()
+    if (!mcVersion) {
+      toast.error("No Minecraft version available")
+      return
+    }
+
+    setCreatingPreset(preset.name)
+
+    try {
+      // Fetch modloader versions only when needed
+      let loaderVersion: string | undefined = undefined
+
+      if (preset.loader) {
+        switch (preset.loader) {
+          case "forge":
+            await forgeVersionsQuery.refetch()
+            break
+          case "neoforge":
+            await neoForgeVersionsQuery.refetch()
+            break
+          case "fabric":
+            await fabricVersionsQuery.refetch()
+            break
+          case "quilt":
+            await quiltVersionsQuery.refetch()
+            break
+        }
+
+        loaderVersion = getLatestLoaderVersion(preset.loader)
+
+        if (!loaderVersion) {
+          toast.error(`${preset.name} is not available for Minecraft ${mcVersion}`)
+          setCreatingPreset(null)
+          return
+        }
+      }
+
+      const instanceName = preset.loader
+        ? `${preset.name} ${mcVersion}`
+        : `Vanilla ${mcVersion}`
+
+      const instanceId = await createInstanceMutation.mutateAsync({
+        group: defaultGroup.data || 1,
+        use_loaded_icon: false,
+        notes: "",
+        name: instanceName,
+        version: {
+          Version: {
+            Standard: {
+              release: mcVersion,
+              modloaders: preset.loader && loaderVersion
+                ? [
+                    {
+                      type_: preset.loader,
+                      version: loaderVersion
+                    } as ModLoader
+                  ]
+                : []
+            }
+          }
+        }
+      })
+
+      await prepareInstanceMutation.mutateAsync(instanceId)
+
+      modalsContext?.closeModal()
+      navigator.navigate(`/library`)
+      toast.success("Instance successfully created.")
+    } catch (err) {
+      console.error(err)
+      toast.error("Error while creating the instance.")
+    } finally {
+      setCreatingPreset(null)
+    }
+  }
+
+  const isLoading = () => {
+    return !globalStore.minecraftVersions.data
+  }
+
+  const vanillaPreset = presetOptions[0]
+  const modloaderPresets = presetOptions.slice(1)
+
+  return (
+    <div class="flex flex-col h-[600px] w-full">
+      <div class="flex flex-col gap-3 p-4 flex-1">
+        <div class="flex items-center w-full">
+          <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+          <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+            <div class="i-hugeicons:zap text-primary-500 text-sm" />
+            <Trans key="instance.quick_start_presets" />
+          </span>
+          <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+        </div>
+
+        <Show
+          when={!isLoading()}
+          fallback={
+            <div class="flex items-center justify-center flex-1">
+              <div class="i-hugeicons:loading-03 animate-spin text-4xl text-lightSlate-400" />
+            </div>
+          }
+        >
+          <div class="flex flex-col gap-3">
+            {/* Vanilla preset - full width, featured */}
+            <button
+              class="group relative flex flex-col items-center justify-center gap-2 p-4 rounded-xl overflow-hidden border-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+              classList={{
+                "bg-gradient-to-br from-emerald-900/20 via-darkSlate-800/80 to-darkSlate-800 border-emerald-500/30 hover:border-emerald-500/60 hover:shadow-xl hover:shadow-emerald-500/10 hover:scale-[1.01]": creatingPreset() !== vanillaPreset.name,
+                "bg-darkSlate-800 border-primary-500": creatingPreset() === vanillaPreset.name
+              }}
+              disabled={creatingPreset() === vanillaPreset.name}
+              onClick={() => handleCreatePreset(vanillaPreset)}
+            >
+              {/* Background gradient effect */}
+              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+
+              {/* Recommended badge */}
+              <div class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 backdrop-blur-sm">
+                <Trans key="instance.recommended" />
+              </div>
+
+              <div class="relative z-10 flex flex-col items-center gap-2">
+                <Show
+                  when={creatingPreset() !== vanillaPreset.name}
+                  fallback={
+                    <div class="i-hugeicons:loading-03 animate-spin text-4xl text-primary-500" />
+                  }
+                >
+                  <div class="relative">
+                    <div class="absolute inset-0 blur-lg bg-emerald-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                    <img
+                      class="h-10 w-10 relative z-10 drop-shadow-lg"
+                      src={getModloaderIcon("vanilla")}
+                      alt={vanillaPreset.name}
+                    />
+                  </div>
+                </Show>
+                <div class="flex flex-col items-center gap-1">
+                  <span class="text-lg font-bold text-lightSlate-50">
+                    {t(vanillaPreset.translationKey)}
+                  </span>
+                  <Show when={latestMcVersion()}>
+                    <span class="text-sm text-lightSlate-300">
+                      Minecraft {latestMcVersion()}
+                    </span>
+                  </Show>
+                </div>
+              </div>
+            </button>
+
+            {/* Modloader presets - 2x2 grid */}
+            <div class="grid grid-cols-2 gap-3">
+              <For each={modloaderPresets}>
+                {(preset) => {
+                  const creating = creatingPreset() === preset.name
+
+                  return (
+                    <button
+                      class="group relative flex flex-col items-center justify-center gap-2 p-4 rounded-lg overflow-hidden border backdrop-blur-sm shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      classList={{
+                        "bg-darkSlate-800/50 border-white/5 hover:border-primary-500/50 hover:bg-darkSlate-700/60 hover:shadow-xl hover:shadow-black/20 hover:scale-[1.02]": !creating,
+                        "bg-darkSlate-800 border-primary-500": creating
+                      }}
+                      disabled={creating}
+                      onClick={() => handleCreatePreset(preset)}
+                    >
+                      {/* Subtle gradient overlay on hover */}
+                      <div class="absolute inset-0 bg-gradient-to-br from-primary-500/0 to-primary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+
+                      <div class="relative z-10 flex flex-col items-center gap-2">
+                        <Show
+                          when={!creating}
+                          fallback={
+                            <div class="i-hugeicons:loading-03 animate-spin text-4xl text-primary-500" />
+                          }
+                        >
+                          <div class="relative">
+                            <div class="absolute inset-0 blur-lg bg-primary-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                            <img
+                              class="h-10 w-10 relative z-10 drop-shadow-md"
+                              src={getModloaderIcon(preset.loader || "vanilla")}
+                              alt={preset.name}
+                            />
+                          </div>
+                        </Show>
+                        <div class="flex flex-col items-center gap-0.5">
+                          <span class="text-base font-bold text-lightSlate-50">
+                            {t(preset.translationKey)}
+                          </span>
+                          <Show when={latestMcVersion()}>
+                            <span class="text-xs text-lightSlate-400">
+                              {latestMcVersion()}
+                            </span>
+                          </Show>
+                        </div>
+                      </div>
+                    </button>
+                  )
+                }}
+              </For>
+            </div>
+
+            {/* Footer description */}
+            <div class="text-center text-xs text-lightSlate-500 mt-2">
+              <Trans key="instance.preset_description" />
+            </div>
+          </div>
+        </Show>
+      </div>
+    </div>
+  )
+}
+
+export default Presets

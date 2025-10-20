@@ -10,7 +10,7 @@ import {
   createMemo
 } from "solid-js"
 import { createAsyncEffect } from "@/utils/asyncEffect"
-import { Dropdown } from "@gd/ui"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@gd/ui"
 import { rspc } from "@/utils/rspcClient"
 import fetchData from "./changelog.data"
 import { CFFEFile, CFFEFileIndex } from "@gd/core_module/bindings"
@@ -164,9 +164,8 @@ const Changelog = () => {
       routeData.modpackDetails?.data?.data.latestFiles.length - 1
     ]
 
-  const [options, setOptions] = createSignal<{ key: string; label: string }[]>(
-    []
-  )
+  const [options, setOptions] = createSignal<string[]>([])
+  const [optionLabels, setOptionLabels] = createSignal<Record<string, string>>({})
   const [fileId, setFileId] = createSignal<number | string | undefined>(
     undefined
   )
@@ -186,12 +185,12 @@ const Changelog = () => {
         setReleaseDate(undefined)
         setIsLoadingChangelog(false)
 
-        setOptions(
-          routeData.modrinthProjectVersions.data.map((file) => ({
-            key: file.id,
-            label: file.version_number
-          }))
+        const opts = routeData.modrinthProjectVersions.data.map((file) => file.id)
+        const labels = Object.fromEntries(
+          routeData.modrinthProjectVersions.data.map((file) => [file.id, file.version_number])
         )
+        setOptions(opts)
+        setOptionLabels(labels)
       }
     } else {
       const sortedVersions = sortArrayByGameVersion(
@@ -201,12 +200,12 @@ const Changelog = () => {
       setReleaseDate(undefined)
       setIsLoadingChangelog(false)
 
-      setOptions(
-        (sortedVersions as CFFEFileIndex[]).map((file) => ({
-          key: file.fileId.toString(),
-          label: file.filename
-        }))
+      const opts = (sortedVersions as CFFEFileIndex[]).map((file) => file.fileId.toString())
+      const labels = Object.fromEntries(
+        (sortedVersions as CFFEFileIndex[]).map((file) => [file.fileId.toString(), file.filename])
       )
+      setOptions(opts)
+      setOptionLabels(labels)
     }
   })
 
@@ -334,13 +333,25 @@ const Changelog = () => {
                     Version:
                   </span>
                   <div class="w-full sm:min-w-48 sm:w-auto">
-                    <Dropdown
+                    <Select
+                      value={fileId()?.toString()}
                       options={options()}
-                      onChange={(selectedOption) => {
-                        setFileId(selectedOption.key)
+                      onChange={(key) => {
+                        if (key) setFileId(key)
                       }}
-                      class="w-full bg-darkSlate-700 border-darkSlate-600 hover:border-darkSlate-500 transition-colors"
-                    />
+                      itemComponent={(props) => (
+                        <SelectItem item={props.item}>
+                          {optionLabels()[props.item.rawValue] || props.item.rawValue}
+                        </SelectItem>
+                      )}
+                    >
+                      <SelectTrigger class="w-full bg-darkSlate-700 border-darkSlate-600 hover:border-darkSlate-500 transition-colors">
+                        <SelectValue<string>>
+                          {(state) => optionLabels()[state.selectedOption() || ""] || state.selectedOption() || ""}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent />
+                    </Select>
                   </div>
                 </div>
               </Show>

@@ -1,4 +1,4 @@
-import { splitProps, type ParentProps, type ValidComponent } from "solid-js"
+import { splitProps, type ParentProps, type ValidComponent, createEffect, createSignal, onMount } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import {
   Select as SelectPrimitive,
@@ -73,17 +73,30 @@ export const SelectContent = <T extends ValidComponent = "div">(
   props: PolymorphicProps<T, selectContentProps<T>>
 ) => {
   const [local, rest] = splitProps(props as selectContentProps, ["class"])
+  let listboxRef: HTMLElement | undefined
+
+  const handleListboxRef = (el: HTMLElement) => {
+    listboxRef = el
+
+    // Wait for next tick to ensure items are rendered
+    setTimeout(() => {
+      const selectedItem = listboxRef?.querySelector('[aria-selected="true"]') as HTMLElement
+      if (selectedItem) {
+        selectedItem.scrollIntoView({ block: 'center', behavior: 'instant' })
+      }
+    }, 0)
+  }
 
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         class={cn(
-          "relative z-50 min-w-[8rem] overflow-hidden rounded-md border border-darkSlate-600 bg-darkSlate-800 text-lightSlate-100 shadow-md data-[expanded]:animate-selectEnter data-[closed]:animate-selectLeave",
+          "relative z-[1000] max-h-80 min-w-[8rem] overflow-y-auto rounded-md border border-darkSlate-600 bg-darkSlate-800 text-lightSlate-100 shadow-md data-[expanded]:animate-selectEnter data-[closed]:animate-selectLeave",
           local.class
         )}
         {...rest}
       >
-        <SelectPrimitive.Listbox class="p-1 focus-visible:outline-none" />
+        <SelectPrimitive.Listbox ref={handleListboxRef} class="p-1 focus-visible:outline-none" />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )
@@ -126,7 +139,7 @@ export const SelectItem = <T extends ValidComponent = "li">(
           <title>Checked</title>
         </svg>
       </SelectPrimitive.ItemIndicator>
-      <SelectPrimitive.ItemLabel>{local.children}</SelectPrimitive.ItemLabel>
+      <SelectPrimitive.ItemLabel class="flex-1 w-full">{local.children}</SelectPrimitive.ItemLabel>
     </SelectPrimitive.Item>
   )
 }

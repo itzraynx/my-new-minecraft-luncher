@@ -1,4 +1,14 @@
-import { Button, Checkbox, toast, Dropdown, Input } from "@gd/ui"
+import {
+  Button,
+  toast,
+  Input,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  Badge
+} from "@gd/ui"
 import { ModalProps, useModal } from "../.."
 import { Trans, useTransContext } from "@gd/i18n"
 import {
@@ -22,6 +32,7 @@ import { blobToBase64 } from "@/utils/helpers"
 import { useGDNavigate } from "@/managers/NavigationManager"
 import { ReactiveMap } from "@solid-primitives/map"
 import { useGlobalStore } from "@/components/GlobalStoreContext"
+import { getModloaderIcon } from "@/utils/sidebar"
 
 type MappedMcVersions = ManifestVersion & { hasModloader?: boolean }
 
@@ -317,25 +328,25 @@ const Custom = (props: Pick<ModalProps, "data">) => {
       <Switch>
         <Match when={type === "release"}>
           <span
-            class="text-green-500"
+            class="text-green-400"
             classList={{ "opacity-50": hasNoModloader }}
           >{`[${type}]`}</span>
         </Match>
         <Match when={type === "snapshot"}>
           <span
-            class="text-yellow-500"
+            class="text-yellow-400"
             classList={{ "opacity-50": hasNoModloader }}
           >{`[${type}]`}</span>
         </Match>
         <Match when={type === "old_alpha"}>
           <span
-            class="text-purple-500"
+            class="text-purple-400"
             classList={{ "opacity-50": hasNoModloader }}
           >{`[${type}]`}</span>
         </Match>
         <Match when={type === "old_beta"}>
           <span
-            class="text-red-500"
+            class="text-red-400"
             classList={{ "opacity-50": hasNoModloader }}
           >{`[${type}]`}</span>
         </Match>
@@ -487,25 +498,21 @@ const Custom = (props: Pick<ModalProps, "data">) => {
   })
 
   return (
-    <div class="flex flex-col justify-between h-full w-full">
-      <div class="flex flex-col justify-between gap-4 h-full p-5">
-        <div class="flex flex-col justify-between gap-4">
+    <div class="flex flex-col h-[600px] w-full">
+      <div class="flex flex-col gap-3 p-4 flex-1 overflow-y-auto" style={{ "scrollbar-gutter": "stable" }}>
+        {/* Instance Details Section */}
+        <div class="flex flex-col gap-3">
           <div class="flex items-center w-full">
-            <div
-              class={`flex-1 border-t-1 border-lightSlate-400 border-solid`}
-            />
-            <span
-              class={`px-3 flex text-lightSlate-400 items-center gap-2 text-xl`}
-            >
+            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+            <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+              <div class="i-hugeicons:file-02 text-primary-500 text-sm" />
               <Trans key="general.about" />
             </span>
-            <div
-              class={`flex-1 border-t-1 border-lightSlate-400 border-solid`}
-            />
+            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
           </div>
-          <div class="flex gap-4 w-full">
+          <div class="flex gap-4 w-full items-start">
             <div
-              class="relative flex justify-center items-center bg-darkSlate-800 bg-center bg-cover h-20 rounded-xl w-20 box-border outline-none hover:outline-darkSlate-600 transition-all ease-in-out duration-200"
+              class="relative flex justify-center items-center bg-darkSlate-800 bg-center bg-cover h-20 w-20 rounded-xl box-border cursor-pointer border-2 border-transparent hover:border-primary-500/50 transition-all group flex-shrink-0"
               style={{
                 ...(bgPreview() && {
                   "background-image": `url("${bgPreview()}")`
@@ -527,16 +534,20 @@ const Custom = (props: Pick<ModalProps, "data">) => {
             >
               <Switch>
                 <Match when={!bgPreview()}>
-                  <h3 class="text-center">
-                    <Trans key="instance.select_image" />
-                  </h3>
+                  <div class="flex flex-col items-center gap-0.5">
+                    <div class="i-hugeicons:image-01 text-2xl text-lightSlate-600 group-hover:text-lightSlate-400 transition-colors" />
+                    <span class="text-[10px] text-lightSlate-600 group-hover:text-lightSlate-400 transition-colors">
+                      Add icon
+                    </span>
+                  </div>
                 </Match>
                 <Match when={bgPreview()}>
-                  <div class="absolute top-0 right-0 pb-2 pl-2 bg-darkSlate-700 rounded-bl-2xl">
+                  <div class="absolute top-1 right-1 p-1 bg-darkSlate-900/90 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                     <div
-                      class="text-lightSlate-50 transition-all duration-100 ease-in-out text-lg i-hugeicons:cancel-circle hover:color-red-500"
+                      class="text-lightSlate-50 transition-all text-base i-hugeicons:cancel-circle hover:text-red-500"
                       onClick={(e) => {
                         e.preventDefault()
+                        e.stopPropagation()
                         setBgPreview(null)
                       }}
                     />
@@ -544,182 +555,184 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                 </Match>
               </Switch>
             </div>
-            <div class="flex-1">
-              <div class="mt-0 mb-2 text-sm">
+            <div class="flex-1 flex flex-col gap-2">
+              <label class="text-xs font-medium text-lightSlate-400">
                 <Trans key="instance.instance_name" />
-              </div>
-              <div class="flex gap-4 items-center flex-1 w-full">
-                <Input
-                  class="w-full"
-                  required
-                  placeholder={t("instance.new_instance")}
-                  inputColor="bg-darkSlate-800"
-                  onInput={(e) => {
-                    setCustomTitle(e.currentTarget.value)
-                  }}
-                  value={title()!}
-                  errorMessage={
-                    error() && !title()
-                      ? t("error.missing_field_title")
-                      : undefined
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center w-full">
-            <div
-              class={`flex-1 border-t-1 border-lightSlate-400 border-solid`}
-            />
-            <span
-              class={`px-3 flex text-lightSlate-400 items-center gap-2 text-xl`}
-            >
-              <Trans key="instance.instance_mc_version" />
-            </span>
-            <div
-              class={`flex-1 border-t-1 border-lightSlate-400 border-solid`}
-            />
-          </div>
-          <div>
-            <div class="flex gap-6 w-full items-center">
-              <div class="flex flex-col gap-2 mt-2 min-w-24">
-                <div class="flex gap-2 items-center">
-                  <Checkbox
-                    checked={snapshotVersionFilter()}
-                    onChange={(e) => setSnapshotVersionFilter(e)}
-                  />
-                  <h6 class="m-0 flex items-center">
-                    <Trans key="instance.instance_version_snapshot" />
-                  </h6>
-                </div>
-                <div class="flex gap-2">
-                  <Checkbox
-                    checked={oldAlphaVersionFilter()}
-                    onChange={(e) => setOldAlphaVersionFilter(e)}
-                  />
-                  <h6 class="m-0 flex items-center">
-                    <Trans key="instance.instance_version_old_alpha" />
-                  </h6>
-                </div>
-                <div class="flex gap-2">
-                  <Checkbox
-                    checked={oldBetaVersionFilter()}
-                    onChange={(e) => setOldBetaVersionFilter(e)}
-                  />
-                  <h6 class="m-0 flex items-center">
-                    <Trans key="instance.instance_version_old_beta" />
-                  </h6>
-                </div>
-              </div>
-              <Dropdown
-                disabled={Boolean(
-                  ((forgeVersionsQuery.isFetching ||
-                    fabricVersionsQuery.isFetching ||
-                    quiltVersionsQuery.isFetching ||
-                    neoForgeVersionsQuery.isFetching) &&
-                    loader()) ||
-                    mappedMcVersions().length === 0
-                )}
-                options={mappedMcVersions().map((v) => ({
-                  label: (
-                    <div
-                      class="flex justify-between w-full"
-                      classList={{
-                        "text-lightSlate-700": Boolean(
-                          !v.hasModloader && loader()
-                        )
-                      }}
-                    >
-                      <span>{v.id}</span>
-                      {mapTypeToColor(
-                        v.type,
-                        Boolean(!v.hasModloader && loader())
-                      )}
-                    </div>
-                  ),
-                  key: v.id
-                }))}
-                bgColorClass="bg-darkSlate-800"
-                containerClass="w-full"
+              </label>
+              <Input
                 class="w-full"
-                placeholder={t("error.no_mc_versions")}
-                placement="bottom"
-                value={mcVersion()}
-                onChange={(l) => {
-                  setMcVersion(l.key as string)
-
-                  if (!loader) {
-                    setLoaderVersions([])
-                  } else if (isForge()) {
-                    const versions =
-                      forgeVersionsQuery?.data?.gameVersions.find(
-                        (v) => v.id === l.key
-                      )?.loaders
-
-                    setLoaderVersions(versions || [])
-                  } else if (isNeoForge()) {
-                    const versions =
-                      neoForgeVersionsQuery?.data?.gameVersions.find(
-                        (v) => v.id === l.key
-                      )?.loaders
-
-                    setLoaderVersions(versions || [])
-                  } else if (isFabric()) {
-                    const supported =
-                      fabricVersionsQuery?.data?.gameVersions.find(
-                        (v) => v.id === l.key
-                      ) ?? false
-
-                    const versions =
-                      supported !== false
-                        ? fabricVersionsQuery?.data?.gameVersions.find(
-                            (v) => v.id === DUMMY_META_VERSION
-                          )?.loaders
-                        : []
-
-                    setLoaderVersions(versions || [])
-                  } else if (isQuilt()) {
-                    const supported =
-                      quiltVersionsQuery?.data?.gameVersions.find(
-                        (v) => v.id === l.key
-                      ) ?? false
-
-                    const versions =
-                      supported !== false
-                        ? quiltVersionsQuery?.data?.gameVersions.find(
-                            (v) => v.id === DUMMY_META_VERSION
-                          )?.loaders
-                        : []
-
-                    setLoaderVersions(versions || [])
-                  }
+                required
+                placeholder={t("instance.new_instance")}
+                inputColor="bg-darkSlate-800"
+                onInput={(e) => {
+                  setCustomTitle(e.currentTarget.value)
                 }}
+                value={title()!}
+                errorMessage={
+                  error() && !title()
+                    ? t("error.missing_field_title")
+                    : undefined
+                }
               />
             </div>
           </div>
+        </div>
+
+        {/* Minecraft Version Section */}
+        <div class="flex flex-col gap-3">
           <div class="flex items-center w-full">
-            <div
-              class={`flex-1 border-t-1 border-lightSlate-400 border-solid`}
-            />
-            <span
-              class={`px-3 flex text-lightSlate-400 items-center gap-2 text-xl`}
+            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+            <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+              <div class="i-hugeicons:minecraft text-primary-500 text-sm" />
+              <Trans key="instance.instance_mc_version" />
+            </span>
+            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+          </div>
+          <div class="flex flex-col gap-2 w-full">
+            <Select
+              value={mcVersion()}
+              onChange={(value) => {
+                if (!value) return
+                setMcVersion(value)
+
+                if (!loader()) {
+                  setLoaderVersions([])
+                } else if (isForge()) {
+                  const versions =
+                    forgeVersionsQuery?.data?.gameVersions.find(
+                      (v) => v.id === value
+                    )?.loaders
+                  setLoaderVersions(versions || [])
+                } else if (isNeoForge()) {
+                  const versions =
+                    neoForgeVersionsQuery?.data?.gameVersions.find(
+                      (v) => v.id === value
+                    )?.loaders
+                  setLoaderVersions(versions || [])
+                } else if (isFabric()) {
+                  const supported =
+                    fabricVersionsQuery?.data?.gameVersions.find(
+                      (v) => v.id === value
+                    ) ?? false
+                  const versions =
+                    supported !== false
+                      ? fabricVersionsQuery?.data?.gameVersions.find(
+                          (v) => v.id === DUMMY_META_VERSION
+                        )?.loaders
+                      : []
+                  setLoaderVersions(versions || [])
+                } else if (isQuilt()) {
+                  const supported =
+                    quiltVersionsQuery?.data?.gameVersions.find(
+                      (v) => v.id === value
+                    ) ?? false
+                  const versions =
+                    supported !== false
+                      ? quiltVersionsQuery?.data?.gameVersions.find(
+                          (v) => v.id === DUMMY_META_VERSION
+                        )?.loaders
+                      : []
+                  setLoaderVersions(versions || [])
+                }
+              }}
+              options={mappedMcVersions().map((v) => v.id)}
+              placeholder={t("error.no_mc_versions")}
+              disabled={Boolean(
+                ((forgeVersionsQuery.isFetching ||
+                  fabricVersionsQuery.isFetching ||
+                  quiltVersionsQuery.isFetching ||
+                  neoForgeVersionsQuery.isFetching) &&
+                  loader()) ||
+                  mappedMcVersions().length === 0
+              )}
+              disallowEmptySelection={true}
+              itemComponent={(itemProps) => {
+                const version = mappedMcVersions().find(
+                  (v) => v.id === itemProps.item.rawValue
+                )
+                return (
+                  <SelectItem item={itemProps.item}>
+                    <div class="flex items-center justify-between w-full gap-2">
+                      <span
+                        classList={{
+                          "text-lightSlate-700": Boolean(
+                            version && !version.hasModloader && loader()
+                          )
+                        }}
+                      >
+                        {itemProps.item.rawValue}
+                      </span>
+                      <span class="flex-shrink-0">
+                        {version && mapTypeToColor(version.type, Boolean(!version.hasModloader && loader()))}
+                      </span>
+                    </div>
+                  </SelectItem>
+                )
+              }}
             >
+              <SelectTrigger>
+                <SelectValue<string>>
+                  {(state) => state.selectedOption()}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent />
+            </Select>
+            <div class="flex items-center gap-2 flex-wrap">
+              <Badge
+                variant={snapshotVersionFilter() ? "default" : "secondary"}
+                class="cursor-pointer text-xs px-2.5 py-1"
+                onClick={() => setSnapshotVersionFilter(!snapshotVersionFilter())}
+                title="Snapshot versions"
+              >
+                <div class="flex items-center gap-1">
+                  <div class="i-hugeicons:test-tube text-xs" />
+                  <span>Snapshot</span>
+                </div>
+              </Badge>
+              <Badge
+                variant={oldAlphaVersionFilter() ? "default" : "secondary"}
+                class="cursor-pointer text-xs px-2.5 py-1"
+                onClick={() => setOldAlphaVersionFilter(!oldAlphaVersionFilter())}
+                title="Old alpha versions"
+              >
+                <div class="flex items-center gap-1">
+                  <div class="i-hugeicons:alpha text-xs" />
+                  <span>Alpha</span>
+                </div>
+              </Badge>
+              <Badge
+                variant={oldBetaVersionFilter() ? "default" : "secondary"}
+                class="cursor-pointer text-xs px-2.5 py-1"
+                onClick={() => setOldBetaVersionFilter(!oldBetaVersionFilter())}
+                title="Old beta versions"
+              >
+                <div class="flex items-center gap-1">
+                  <div class="i-hugeicons:beta text-xs" />
+                  <span>Beta</span>
+                </div>
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        {/* Modloader Section */}
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center w-full">
+            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+            <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+              <div class="i-hugeicons:package text-primary-500 text-sm" />
               <Trans key="general.modloader" />
             </span>
-            <div
-              class={`flex-1 border-t-1 border-lightSlate-400 border-solid`}
-            />
+            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
           </div>
-          <div class="flex gap-2 w-full justify-center">
+          <div class="grid grid-cols-5 gap-2">
             <For each={modloaders}>
               {(modloader) => (
-                <div
-                  class="px-3 py-2 bg-darkSlate-800 rounded-lg border-box text-lightSlate-700 hover:text-lightSlate-50"
+                <button
+                  class="group flex flex-col items-center gap-2 p-3 bg-darkSlate-800/50 rounded-lg border-2 transition-all hover:bg-darkSlate-700/60 hover:scale-[1.02]"
                   classList={{
-                    "hover:outline-darkSlate-600 outline-none":
-                      loader() !== modloader.key,
-                    "outline-primary-500 outline text-lightSlate-50":
-                      loader() === modloader.key
+                    "border-transparent": loader() !== modloader.key,
+                    "border-primary-500 bg-darkSlate-700/80": loader() === modloader.key
                   }}
                   onClick={() => {
                     if (modloader.key === "forge") {
@@ -731,23 +744,34 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                     } else if (modloader.key === "quilt") {
                       quiltVersionsQuery.refetch()
                     }
-
                     setLoader(!modloader.key ? undefined : modloader.key)
                   }}
                 >
-                  {modloader.label}
-                </div>
+                  <img
+                    class="h-8 w-8 transition-transform group-hover:scale-110"
+                    src={getModloaderIcon(modloader.key || "vanilla")}
+                    alt={modloader.label}
+                  />
+                  <span class="text-xs font-medium text-lightSlate-300 group-hover:text-lightSlate-50 transition-colors">
+                    {modloader.label}
+                  </span>
+                </button>
               )}
             </For>
           </div>
+
+          {/* Modloader Version - Appears inline when modloader selected */}
           <Show when={loader()}>
-            <div>
-              <h5 class="mt-0 mb-2">
+            <div class="flex flex-col gap-2 pl-4 border-l-2 border-primary-500/30">
+              <label class="text-xs font-medium text-lightSlate-400">
                 <Trans key="instance.instance_loader_version" />
-              </h5>
+              </label>
               <Switch>
                 <Match when={loaderVersions().length > 0}>
-                  <Dropdown
+                  <Select
+                    value={chosenLoaderVersion()}
+                    onChange={(value) => value && setChosenLoaderVersion(value)}
+                    options={loaderVersions()?.map((v) => v.id) || []}
                     disabled={
                       forgeVersionsQuery.isFetching ||
                       fabricVersionsQuery.isFetching ||
@@ -755,79 +779,68 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                       neoForgeVersionsQuery.isFetching ||
                       !loaderVersions()
                     }
-                    options={loaderVersions()?.map((v) => ({
-                      label: v.id,
-                      key: v.id
-                    }))}
-                    bgColorClass="bg-darkSlate-800"
-                    containerClass="w-full"
-                    class="w-full"
-                    value={chosenLoaderVersion()}
-                    placement="bottom"
-                    onChange={(l) => {
-                      const key = l.key as string
-                      if (key) {
-                        setChosenLoaderVersion(key)
-                      }
-                    }}
-                  />
+                    disallowEmptySelection={true}
+                    itemComponent={(itemProps) => (
+                      <SelectItem item={itemProps.item}>
+                        {itemProps.item.rawValue}
+                      </SelectItem>
+                    )}
+                  >
+                    <SelectTrigger>
+                      <SelectValue<string>>
+                        {(state) => state.selectedOption()}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent />
+                  </Select>
                 </Match>
                 <Match when={loaderVersions().length === 0}>
-                  <Dropdown
-                    disabled
-                    options={[{ label: "No elements", key: "none" }]}
-                    bgColorClass="bg-darkSlate-800"
-                    containerClass="w-full"
-                    class="w-full"
-                    value={"none"}
-                    placement="bottom"
-                  />
+                  <div class="flex items-center gap-2 text-sm text-lightSlate-500 bg-darkSlate-800 rounded-md px-3 py-2">
+                    <div class="i-hugeicons:alert-circle text-yellow-500" />
+                    <span>No versions available for Minecraft {mcVersion()}</span>
+                  </div>
                 </Match>
               </Switch>
             </div>
           </Show>
         </div>
-        <div class="flex w-full justify-between mt-8">
-          <Button
-            type="secondary"
-            style={{ width: "100%", "max-width": "200px" }}
-            onClick={() => modalsContext?.closeModal()}
-          >
-            <Trans
-              key="instance.instance_modal_instance_creation_cancel"
-              options={{
-                defaultValue: "Cancel"
-              }}
-            />
-          </Button>
-          <Button
-            disabled={Boolean(
-              (loaderVersions().length === 0 && loader()) ||
-                mappedMcVersions().length === 0 ||
-                !isUpdatingWithDiffs()
-            )}
-            type="primary"
-            style={{ width: "100%", "max-width": "200px" }}
-            onClick={() => {
-              if (instanceData()) handleUpdate()
-              else handleCreate()
-            }}
-          >
-            <Switch>
-              <Match when={!instanceData()}>
+      </div>
+
+      {/* Buttons - outside scrollable area */}
+      <div class="flex w-full justify-end px-4 pb-4 pt-0">
+        <Button
+          disabled={Boolean(
+            (loaderVersions().length === 0 && loader()) ||
+              mappedMcVersions().length === 0 ||
+              !isUpdatingWithDiffs()
+          )}
+          type="primary"
+          style={{ width: "100%", "max-width": "200px" }}
+          onClick={() => {
+            if (instanceData()) handleUpdate()
+            else handleCreate()
+          }}
+        >
+          <Switch>
+            <Match when={!instanceData()}>
+              <div class="flex items-center gap-1.5">
+                <div class="i-hugeicons:add-01" />
                 <Trans
                   key="instance.instance_modal_instance_creation_create"
                   options={{
                     defaultValue: "Create"
                   }}
                 />
-              </Match>
-              <Match when={instanceData()}>
+              </div>
+            </Match>
+            <Match when={instanceData()}>
+              <div class="flex items-center gap-1.5">
+                <div class="i-hugeicons:pencil-edit-01" />
                 <Trans key="instance.instance_modal_instance_update" />
-              </Match>
-            </Switch>
-          </Button>
-        </div>
+              </div>
+            </Match>
+          </Switch>
+        </Button>
       </div>
     </div>
   )

@@ -160,7 +160,7 @@ const ModRow = (props: ModRowProps) => {
             </div>
           </div>
           <div class="flex gap-2 items-center text-lightSlate-700">
-            <i class="text-lightSlate-700 i-hugeicons:download-01" />
+            <i class="text-lightSlate-700 i-hugeicons:download-02" />
             <div class="text-sm whitespace-nowrap">
               {formatDownloadCount(props.data.downloadsCount)}
             </div>

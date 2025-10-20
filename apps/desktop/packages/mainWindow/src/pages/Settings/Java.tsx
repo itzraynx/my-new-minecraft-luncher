@@ -11,7 +11,11 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  Dropdown,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -79,36 +83,40 @@ const Java = () => {
       []
     )
 
-  const availableJavasDropdown = () => {
-    const results = flattenedAvailableJavas()?.map((java) => {
-      return {
-        label: (
-          <div class="flex w-full flex-col gap-2">
-            <div class="flex justify-between">
-              <div class="text-lightSlate-50">{java.version}</div>
-              <div>{java.type}</div>
-            </div>
-            <div class="w-full text-left">
-              <Tooltip>
-                <TooltipTrigger>
-                  <TruncatedPath originalPath={java.path} />
-                </TooltipTrigger>
-                <TooltipContent>{java.path}</TooltipContent>
-              </Tooltip>
-            </div>
-          </div>
-        ),
-        key: java.id
-      }
-    })
+  const availableJavasOptions = () => {
+    const results = flattenedAvailableJavas()?.map((java) => java.id) || []
+    return ["unassigned", ...results]
+  }
 
-    return [
-      {
-        label: "Unassigned",
-        key: "unassigned"
-      },
-      ...results
-    ]
+  const getJavaById = (id: string) => {
+    if (id === "unassigned") return null
+    return flattenedAvailableJavas()?.find((java) => java.id === id)
+  }
+
+  const renderJavaOption = (id: string) => {
+    if (id === "unassigned") {
+      return <div>Unassigned</div>
+    }
+
+    const java = getJavaById(id)
+    if (!java) return <div>{id}</div>
+
+    return (
+      <div class="flex w-full flex-col gap-2">
+        <div class="flex justify-between">
+          <div class="text-lightSlate-50">{java.version}</div>
+          <div>{java.type}</div>
+        </div>
+        <div class="w-full text-left">
+          <Tooltip>
+            <TooltipTrigger>
+              <TruncatedPath originalPath={java.path} />
+            </TooltipTrigger>
+            <TooltipContent>{java.path}</TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
+    )
   }
 
   const javaProfiles = () => [
@@ -417,7 +425,7 @@ const Java = () => {
                                           }
                                         >
                                           <div
-                                            class="text-lightSlate-700 transition-color i-hugeicons:delete-01 text-lg duration-100 ease-in-out hover:text-red-400"
+                                            class="text-lightSlate-700 transition-color i-hugeicons:delete-02 text-lg duration-100 ease-in-out hover:text-red-400"
                                             onClick={() =>
                                               deleteJavaMutation.mutate(java.id)
                                             }
@@ -488,28 +496,41 @@ const Java = () => {
                                   {profile.name}
                                 </h3>
                                 <div class="m-0 flex items-center gap-4">
-                                  <Dropdown
-                                    class="w-70"
+                                  <Select
                                     value={id || "unassigned"}
-                                    options={availableJavasDropdown()}
+                                    options={availableJavasOptions()}
                                     disabled={
                                       profile.isSystem &&
                                       settings.data
                                         ?.autoManageJavaSystemProfiles
                                     }
-                                    onChange={(option) => {
-                                      updateProfile.mutate({
-                                        profileName: profile.name,
-                                        javaId:
-                                          option.key.toString() === "unassigned"
-                                            ? null
-                                            : option.key.toString()
-                                      })
+                                    onChange={(value) => {
+                                      if (value) {
+                                        updateProfile.mutate({
+                                          profileName: profile.name,
+                                          javaId:
+                                            value === "unassigned"
+                                              ? null
+                                              : value
+                                        })
+                                      }
                                     }}
-                                  />
+                                    itemComponent={(props) => (
+                                      <SelectItem item={props.item}>
+                                        {renderJavaOption(props.item.rawValue)}
+                                      </SelectItem>
+                                    )}
+                                  >
+                                    <SelectTrigger class="w-70">
+                                      <SelectValue<string>>
+                                        {(state) => renderJavaOption(state.selectedOption() || "unassigned")}
+                                      </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent />
+                                  </Select>
                                   <Show when={i() === 1}>
                                     <div
-                                      class="text-lightSlate-700 transition-color i-hugeicons:delete-01 text-lg duration-100 ease-in-out hover:text-red-400"
+                                      class="text-lightSlate-700 transition-color i-hugeicons:delete-02 text-lg duration-100 ease-in-out hover:text-red-400"
                                       onClick={() => {
                                         deleteProfile.mutate(profile.name)
                                       }}

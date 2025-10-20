@@ -141,8 +141,9 @@ export function SearchableMultiSelect(props: SearchableMultiSelectProps) {
             <Show
               when={filteredOptions().length > 0}
               fallback={
-                <div class="px-2 py-3 text-sm text-lightSlate-400 text-center">
-                  {props.emptyMessage || "No results found"}
+                <div class="flex flex-col items-center gap-2 px-2 py-3 text-sm text-lightSlate-400 text-center">
+                  <div class="i-hugeicons:search-remove text-2xl" />
+                  <span>{props.emptyMessage || "No results found"}</span>
                 </div>
               }
             >

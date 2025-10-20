@@ -200,7 +200,7 @@ const ModPackVersionUpdate = (props: ModalProps) => {
                 }}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent class="z-[1000] max-h-80 overflow-y-auto" />
+            <SelectContent />
           </Select>
 
           <div class="flex justify-between">

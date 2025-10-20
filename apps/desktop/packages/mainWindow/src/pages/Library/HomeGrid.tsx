@@ -445,10 +445,10 @@ const HomeGrid = () => {
                               <div
                                 class="h-4 w-4 ml-2"
                                 classList={{
-                                  "i-hugeicons:sorting-az-01":
+                                  "i-hugeicons:arrange-by-letters-a-z":
                                     globalStore.settings.data
                                       ?.instancesSortByAsc,
-                                  "i-hugeicons:sorting-za-01":
+                                  "i-hugeicons:arrange-by-letters-z-a":
                                     !globalStore.settings.data
                                       ?.instancesSortByAsc
                                 }}
@@ -506,10 +506,10 @@ const HomeGrid = () => {
                                       <div
                                         class="h-4 w-4 ml-4"
                                         classList={{
-                                          "i-hugeicons:sorting-az-01":
+                                          "i-hugeicons:arrange-by-letters-a-z":
                                             globalStore.settings.data
                                               ?.instancesSortByAsc,
-                                          "i-hugeicons:sorting-za-01":
+                                          "i-hugeicons:arrange-by-letters-z-a":
                                             !globalStore.settings.data
                                               ?.instancesSortByAsc
                                         }}
@@ -540,10 +540,10 @@ const HomeGrid = () => {
                               <div
                                 class="h-4 w-4 ml-2"
                                 classList={{
-                                  "i-hugeicons:sorting-az-01":
+                                  "i-hugeicons:arrange-by-letters-a-z":
                                     globalStore.settings.data
                                       ?.instancesGroupByAsc,
-                                  "i-hugeicons:sorting-za-01":
+                                  "i-hugeicons:arrange-by-letters-z-a":
                                     !globalStore.settings.data
                                       ?.instancesGroupByAsc
                                 }}
@@ -602,10 +602,10 @@ const HomeGrid = () => {
                                       <div
                                         class="h-4 w-4 ml-4"
                                         classList={{
-                                          "i-hugeicons:sorting-az-01":
+                                          "i-hugeicons:arrange-by-letters-a-z":
                                             globalStore.settings.data
                                               ?.instancesGroupByAsc,
-                                          "i-hugeicons:sorting-za-01":
+                                          "i-hugeicons:arrange-by-letters-z-a":
                                             !globalStore.settings.data
                                               ?.instancesGroupByAsc
                                         }}
@@ -757,7 +757,7 @@ const HomeGrid = () => {
                       )
                     }}
                   >
-                    <div class="i-hugeicons:download-square-01 h-4 w-4" />
+                    <div class="i-hugeicons:download-02 h-4 w-4" />
                     Import Instance
                   </ContextMenuItem>
                 </ContextMenuGroup>

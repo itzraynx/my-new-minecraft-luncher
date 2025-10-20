@@ -1,7 +1,7 @@
 import { Trans } from "@gd/i18n"
 import { ModalProps } from "@/managers/ModalsManager"
 import ModalLayout from "@/managers/ModalsManager/ModalLayout"
-import { Button, Dropdown, toast } from "@gd/ui"
+import { Button, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, toast } from "@gd/ui"
 import { rspc } from "@/utils/rspcClient"
 import { Show, createEffect, createSignal, onMount } from "solid-js"
 import {
@@ -66,16 +66,18 @@ const AddManagedJava = (props: ModalProps) => {
   })
 
   const mappedJavaVersions = () =>
-    javaVersions()?.map((versions) => ({
-      key: versions.id,
-      label: versions.name
-    })) || []
+    javaVersions()?.map((versions) => versions.id) || []
+
+  const javaVersionLabels = () => {
+    const labels: Record<string, string> = {}
+    javaVersions()?.forEach((v) => {
+      labels[v.id] = v.name
+    })
+    return labels
+  }
 
   const mappedVendors = () =>
-    javaVendors?.data?.map((vendors) => ({
-      key: vendors as string,
-      label: vendors as string
-    })) || []
+    javaVendors?.data?.map((vendors) => vendors as string) || []
 
   return (
     <ModalLayout noHeader={props.noHeader} title={props?.title}>
@@ -92,13 +94,21 @@ const AddManagedJava = (props: ModalProps) => {
                 />
               </h5>
               <Show when={!javaVendors.isLoading}>
-                <Dropdown
+                <Select
+                  value={vendor()}
                   onChange={(javaVendor) => {
-                    setVendor(javaVendor.key as FEVendor)
+                    if (javaVendor) setVendor(javaVendor as FEVendor)
                   }}
-                  containerClass="border-1 border-solid border-darkSlate-600 rounded-lg"
                   options={mappedVendors()}
-                />
+                  itemComponent={(props) => (
+                    <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+                  )}
+                >
+                  <SelectTrigger class="border-1 border-solid border-darkSlate-600 rounded-lg">
+                    <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent />
+                </Select>
               </Show>
             </div>
             <div class="flex justify-between items-center gap-4 w-full">
@@ -113,13 +123,25 @@ const AddManagedJava = (props: ModalProps) => {
               <Show
                 when={!versionsByVendor.isLoading && javaVersions().length > 0}
               >
-                <Dropdown
-                  onChange={(version) =>
-                    setSelectedJavaVersion(version.key as string)
-                  }
-                  containerClass="border-1 border-solid border-darkSlate-600 rounded-lg w-full"
+                <Select
+                  value={selectedJavaVersion()}
+                  onChange={(version) => {
+                    if (version) setSelectedJavaVersion(version)
+                  }}
                   options={mappedJavaVersions()}
-                />
+                  itemComponent={(props) => (
+                    <SelectItem item={props.item}>
+                      {javaVersionLabels()[props.item.rawValue] || props.item.rawValue}
+                    </SelectItem>
+                  )}
+                >
+                  <SelectTrigger class="border-1 border-solid border-darkSlate-600 rounded-lg w-full">
+                    <SelectValue<string>>
+                      {(state) => javaVersionLabels()[state.selectedOption() || ""] || state.selectedOption() || ""}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent />
+                </Select>
               </Show>
               <Show
                 when={
@@ -140,8 +162,8 @@ const AddManagedJava = (props: ModalProps) => {
               rounded={false}
               loading={loading()}
               onClick={async () => {
-                const id = selectedJavaVersion() || mappedJavaVersions()[0].key
-                const vend = vendor() || mappedVendors()[0].key
+                const id = selectedJavaVersion() || mappedJavaVersions()[0]
+                const vend = vendor() || mappedVendors()[0]
 
                 if (currentOs().arch && currentOs().platform && id && vend) {
                   try {

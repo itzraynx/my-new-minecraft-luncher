@@ -122,7 +122,10 @@ const ModpackDownloadButton = (props: ModDownloadButtonProps) => {
           <Spinner />
         </Show>
         <Show when={!loading()}>
-          <Trans key="instance.download" />
+          <div class="flex items-center gap-1.5">
+            <div class="i-hugeicons:download-02" />
+            <Trans key="instance.download" />
+          </div>
         </Show>
       </Button>
     </div>

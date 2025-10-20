@@ -1,7 +1,7 @@
 import { createEffect, Match, Show, Suspense, Switch } from "solid-js"
 import { Trans, useTransContext } from "@gd/i18n"
 import { port, rspc } from "@/utils/rspcClient"
-import { Collapsable, Dropdown } from "@gd/ui"
+import { Collapsable, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@gd/ui"
 
 interface Props {
   activeUuid: string | null | undefined
@@ -46,51 +46,48 @@ const GDLAccount = (props: Props) => {
   })
 
   const accountOptions = () => {
-    return accounts.data?.map((account) => {
-      return {
-        label: (
-          <div
-            class="flex justify-between items-center gap-4"
-            onClick={() => {
-              setActiveAccountMutation.mutate(account.uuid)
-            }}
-          >
-            <div class="flex items-center gap-4">
-              <img
-                src={`http://127.0.0.1:${port}/account/headImage?uuid=${account.uuid}`}
-                class="w-6 h-6 rounded-md"
-              />
-              <div class="truncate max-w-30">{account.username}</div>
-            </div>
-            <div class="flex items-center gap-2">
-              <Switch>
-                <Match when={account.type.type === "microsoft"}>
-                  <div class="w-4 h-4 i-hugeicons:microsoft" />
-                </Match>
-                <Match when={account.type.type === "offline"}>
-                  <div class="w-4 h-4 i-hugeicons:computer" />
-                </Match>
-              </Switch>
-              <Switch>
-                <Match when={account.status === "ok"}>
-                  <div class="w-4 h-4 text-green-500 i-hugeicons:tick-02" />
-                </Match>
-                <Match when={account.status === "expired"}>
-                  <div class="w-4 h-4 text-yellow-500 i-hugeicons:alert-01" />
-                </Match>
-                <Match when={account.status === "refreshing"}>
-                  <div class="w-4 h-4 text-yellow-500 i-hugeicons:loading-03" />
-                </Match>
-                <Match when={account.status === "invalid"}>
-                  <div class="w-4 h-4 text-red-500 i-hugeicons:cancel-01" />
-                </Match>
-              </Switch>
-            </div>
-          </div>
-        ),
-        key: account?.uuid
-      }
-    })
+    return accounts.data?.map((account) => account.uuid) || []
+  }
+
+  const getAccountContent = (uuid: string) => {
+    const account = accounts.data?.find((acc) => acc.uuid === uuid)
+    if (!account) return null
+
+    return (
+      <div class="flex justify-between items-center gap-4">
+        <div class="flex items-center gap-4">
+          <img
+            src={`http://127.0.0.1:${port}/account/headImage?uuid=${account.uuid}`}
+            class="w-6 h-6 rounded-md"
+          />
+          <div class="truncate max-w-30">{account.username}</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <Switch>
+            <Match when={account.type.type === "microsoft"}>
+              <div class="w-4 h-4 i-hugeicons:microsoft" />
+            </Match>
+            <Match when={account.type.type === "offline"}>
+              <div class="w-4 h-4 i-hugeicons:computer" />
+            </Match>
+          </Switch>
+          <Switch>
+            <Match when={account.status === "ok"}>
+              <div class="w-4 h-4 text-green-500 i-hugeicons:tick-02" />
+            </Match>
+            <Match when={account.status === "expired"}>
+              <div class="w-4 h-4 text-yellow-500 i-hugeicons:alert-01" />
+            </Match>
+            <Match when={account.status === "refreshing"}>
+              <div class="w-4 h-4 text-yellow-500 i-hugeicons:loading-03" />
+            </Match>
+            <Match when={account.status === "invalid"}>
+              <div class="w-4 h-4 text-red-500 i-hugeicons:cancel-01" />
+            </Match>
+          </Switch>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -100,10 +97,30 @@ const GDLAccount = (props: Props) => {
           <div>
             <Trans key="login.link_account" />
           </div>
-          <Dropdown
-            options={accountOptions() || []}
+          <Select
+            options={accountOptions()}
             value={currentlySelectedAccount()?.uuid}
-          />
+            onChange={(uuid) => {
+              if (uuid) {
+                setActiveAccountMutation.mutate(uuid)
+              }
+            }}
+            itemComponent={(props) => (
+              <SelectItem item={props.item}>
+                {getAccountContent(props.item.rawValue)}
+              </SelectItem>
+            )}
+          >
+            <SelectTrigger>
+              <SelectValue<string>>
+                {(state) => {
+                  const uuid = state.selectedOption()
+                  return uuid ? getAccountContent(uuid) : null
+                }}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent />
+          </Select>
         </div>
         <Show when={gdlUser.data}>
           <div class="flex-1 p-4">

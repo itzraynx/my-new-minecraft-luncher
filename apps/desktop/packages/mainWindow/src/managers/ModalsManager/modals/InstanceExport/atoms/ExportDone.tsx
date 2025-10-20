@@ -25,7 +25,7 @@ export default function ExportDone(props: { path: string }) {
             window.openFolder(props.path)
           }}
         >
-          <div class="i-hugeicons:folder-01" />
+          <div class="i-hugeicons:folder-open" />
           <span>{t("instance.open_folder")}</span>
         </Button>
       </Show>

@@ -1,7 +1,6 @@
 import { Trans } from "@gd/i18n"
 import { Checkbox } from "@gd/ui"
 import { For, Show, createEffect } from "solid-js"
-import pictureImage from "/assets/images/icons/picture.png"
 import { createStore } from "solid-js/store"
 import { format } from "date-fns"
 import { getTitleByDays } from "@/utils/helpers"
@@ -41,8 +40,8 @@ const screenshots: ScreenshotsType[] = [
 const NoMods = () => {
   return (
     <div class="h-full min-h-90 w-full flex justify-center items-center">
-      <div class="flex flex-col justify-center items-center text-center">
-        <img src={pictureImage} class="w-16 h-16" />
+      <div class="flex flex-col justify-center items-center text-center gap-4">
+        <div class="i-hugeicons:image-01 w-16 h-16 text-lightSlate-600" />
         <p class="text-lightSlate-700 max-w-100">
           <Trans
             key="instance.no_screenshots_text"

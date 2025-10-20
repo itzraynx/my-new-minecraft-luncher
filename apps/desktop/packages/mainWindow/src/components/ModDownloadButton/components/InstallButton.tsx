@@ -52,7 +52,10 @@ export const InstallButton = (props: InstallButtonProps) => {
                 <Trans key="instance.instance_locked" />
               </Match>
               <Match when={!props.instanceLocked() && !props.fileId}>
-                <Trans key="instance.download" />
+                <div class="flex items-center gap-1.5">
+                  <div class="i-hugeicons:download-02" />
+                  <Trans key="instance.download" />
+                </div>
               </Match>
               <Match
                 when={
@@ -62,10 +65,16 @@ export const InstallButton = (props: InstallButtonProps) => {
                   !props.isInstalled()
                 }
               >
-                <Trans key="instance.switch_version" />
+                <div class="flex items-center gap-1.5">
+                  <div class="i-hugeicons:download-02" />
+                  <Trans key="instance.switch_version" />
+                </div>
               </Match>
               <Match when={!props.instanceLocked() && props.fileId}>
-                <Trans key="instance.download_version" />
+                <div class="flex items-center gap-1.5">
+                  <div class="i-hugeicons:download-02" />
+                  <Trans key="instance.download_version" />
+                </div>
               </Match>
             </Switch>
           </Show>

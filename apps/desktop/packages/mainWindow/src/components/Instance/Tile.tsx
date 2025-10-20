@@ -266,7 +266,7 @@ const Tile = (props: Props) => {
                 <div
                   class="h-4 w-4"
                   classList={{
-                    "i-hugeicons:star": props.instance.favorite,
+                    "text-yellow-500 i-hugeicons:star": props.instance.favorite,
                     "i-hugeicons:star": !props.instance.favorite
                   }}
                 />
@@ -294,7 +294,7 @@ const Tile = (props: Props) => {
                 }}
                 disabled={isLoading() || isInQueue() || props.isDeleting}
               >
-                <div class="i-hugeicons:upload-square-01 h-4 w-4" />
+                <div class="i-hugeicons:file-export h-4 w-4" />
                 {t("instance.export_instance")}
               </ContextMenuItem>
               <ContextMenuSeparator />
@@ -317,7 +317,7 @@ const Tile = (props: Props) => {
                         navigate.navigate(`/library/${props.instance.id}/logs`)
                       }}
                     >
-                      <div class="i-hugeicons:file-management h-4 w-4" />
+                      <div class="i-hugeicons:file-script h-4 w-4" />
                       {t("instance.view_logs")}
                     </ContextMenuItem>
                     <ContextMenuItem
@@ -328,7 +328,7 @@ const Tile = (props: Props) => {
                         )
                       }}
                     >
-                      <div class="i-hugeicons:task-done-01 h-4 w-4" />
+                      <div class="i-hugeicons:puzzle h-4 w-4" />
                       {t("instance.view_mods")}
                     </ContextMenuItem>
                     {!props.isInvalid && (

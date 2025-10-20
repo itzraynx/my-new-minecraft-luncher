@@ -9,6 +9,8 @@ export const getModloaderIcon = (modloader: string) => {
   switch (modloader?.toString().toLowerCase()) {
     case "forge":
       return forgeIcon
+    case "neoforge":
+      return forgeIcon // NeoForge uses Forge icon as fallback
     case "fabric":
       return fabricIcon
     case "quilt":

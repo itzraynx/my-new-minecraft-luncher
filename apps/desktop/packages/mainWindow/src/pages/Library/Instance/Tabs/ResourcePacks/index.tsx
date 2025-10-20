@@ -1,4 +1,4 @@
-import { Button, Checkbox, Dropdown, Input } from "@gd/ui"
+import { Button, Checkbox, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, Input } from "@gd/ui"
 import { For, Show } from "solid-js"
 import { Trans, useTransContext } from "@gd/i18n"
 import ResourcePack from "./ResourcePack"
@@ -169,14 +169,22 @@ const ResourcePacks = () => {
                 }}
               />
             </p>
-            <Dropdown
-              options={[
-                { label: t("instance.sort_by_asc"), key: "asc" },
-                { label: t("instance.sort_by_desc"), key: "desc" }
-              ]}
+            <Select
               value={"asc"}
-              rounded
-            />
+              options={["asc", "desc"]}
+              itemComponent={(props) => (
+                <SelectItem item={props.item}>
+                  {props.item.rawValue === "asc" ? t("instance.sort_by_asc") : t("instance.sort_by_desc")}
+                </SelectItem>
+              )}
+            >
+              <SelectTrigger variant="unstyled">
+                <SelectValue<string>>
+                  {(state) => state.selectedOption() === "asc" ? t("instance.sort_by_asc") : t("instance.sort_by_desc")}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent />
+            </Select>
           </div>
           <Button type="outline" size="medium">
             <Trans

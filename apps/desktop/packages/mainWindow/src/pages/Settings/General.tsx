@@ -1,4 +1,4 @@
-import { Button, Dropdown, Input, Switch } from "@gd/ui"
+import { Button, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, Input, Switch } from "@gd/ui"
 import GDLauncherWideLogo from "/assets/images/gdlauncher_wide_logo_blue.svg"
 import { Trans, useTransContext } from "@gd/i18n"
 import { rspc } from "@/utils/rspcClient"
@@ -44,11 +44,23 @@ const General = () => {
 
   const templateGameResolution = () => {
     return [
-      { label: "854 x 480 (100%)", key: "Standard:854x480" },
-      { label: "1046 x 588 (150%)", key: "Standard:1046x588" },
-      { label: "1208 x 679 (200%)", key: "Standard:1208x679" },
-      { label: "1479 x 831 (300%)", key: "Standard:1479x831" }
+      "Standard:854x480",
+      "Standard:1046x588",
+      "Standard:1208x679",
+      "Standard:1479x831"
     ]
+  }
+
+  const getResolutionLabel = (key: string) => {
+    switch (key) {
+      case "default": return "Default"
+      case "Standard:854x480": return "854 x 480 (100%)"
+      case "Standard:1046x588": return "1046 x 588 (150%)"
+      case "Standard:1208x679": return "1208 x 679 (200%)"
+      case "Standard:1479x831": return "1479 x 831 (300%)"
+      case "custom": return "Custom"
+      default: return key
+    }
   }
 
   const gameResolutionDropdownKey = () => {
@@ -73,21 +85,38 @@ const General = () => {
             <Trans key="settings:release_channel_title" />
           </Title>
           <RightHandSide>
-            <Dropdown
+            <Select
               value={settings.releaseChannel}
-              options={[
-                { label: t("settings:release_channel_stable"), key: "stable" },
-                { label: t("settings:release_channel_beta"), key: "beta" },
-                { label: t("settings:release_channel_alpha"), key: "alpha" }
-              ]}
-              onChange={(channel) => {
-                settingsMutation.mutate({
-                  releaseChannel: {
-                    Set: channel.key as FEReleaseChannel
-                  }
-                })
+              onChange={(value) => {
+                if (value) {
+                  settingsMutation.mutate({
+                    releaseChannel: {
+                      Set: value as FEReleaseChannel
+                    }
+                  })
+                }
               }}
-            />
+              options={["stable", "beta", "alpha"]}
+              itemComponent={(props) => (
+                <SelectItem item={props.item}>
+                  {props.item.rawValue === "stable" && t("settings:release_channel_stable")}
+                  {props.item.rawValue === "beta" && t("settings:release_channel_beta")}
+                  {props.item.rawValue === "alpha" && t("settings:release_channel_alpha")}
+                </SelectItem>
+              )}
+            >
+              <SelectTrigger>
+                <SelectValue<string>>
+                  {(state) => {
+                    const val = state.selectedOption()
+                    return val === "stable" ? t("settings:release_channel_stable") :
+                           val === "beta" ? t("settings:release_channel_beta") :
+                           val === "alpha" ? t("settings:release_channel_alpha") : ""
+                  }}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent />
+            </Select>
           </RightHandSide>
         </Row>
         <Row>
@@ -97,20 +126,27 @@ const General = () => {
             <Trans key="settings:concurrent_downloads_title" />
           </Title>
           <RightHandSide>
-            <Dropdown
-              value={(settings.concurrentDownloads || "1").toString()}
-              options={Array.from({ length: 20 }, (_, i) => ({
-                label: (i + 1).toString(),
-                key: (i + 1).toString()
-              }))}
-              onChange={(downloads) => {
-                settingsMutation.mutate({
-                  concurrentDownloads: {
-                    Set: parseInt(downloads.key as string, 10)
-                  }
-                })
+            <Select
+              value={(settings.concurrentDownloads || 1).toString()}
+              onChange={(value) => {
+                if (value) {
+                  settingsMutation.mutate({
+                    concurrentDownloads: {
+                      Set: parseInt(value, 10)
+                    }
+                  })
+                }
               }}
-            />
+              options={Array.from({ length: 20 }, (_, i) => (i + 1).toString())}
+              itemComponent={(props) => (
+                <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+              )}
+            >
+              <SelectTrigger>
+                <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+              </SelectTrigger>
+              <SelectContent />
+            </Select>
           </RightHandSide>
         </Row>
         <Row>
@@ -119,29 +155,26 @@ const General = () => {
           </Title>
           <RightHandSide>
             <div class="flex flex-col items-end gap-4">
-              <Dropdown
+              <Select
                 value={gameResolutionDropdownKey()}
                 placeholder={t("settings:resolution_presets")}
-                options={[
-                  { label: "Default", key: "default" },
-                  ...templateGameResolution(),
-                  { label: "Custom", key: "custom" }
-                ]}
-                onChange={(option) => {
+                onChange={(key) => {
+                  if (!key) return
+
                   let value: {
                     type: "Standard" | "Custom"
                     value: [number, number]
                   } | null = null
 
-                  if (option.key === "custom") {
+                  if (key === "custom") {
                     value = {
                       type: "Custom",
                       value: [854, 480]
                     }
-                  } else if (option.key === "default") {
+                  } else if (key === "default") {
                     value = null
                   } else {
-                    const [width, height] = option.key
+                    const [width, height] = key
                       .toString()
                       .split(":")[1]
                       .split("x")
@@ -157,7 +190,20 @@ const General = () => {
                     }
                   })
                 }}
-              />
+                options={["default", ...templateGameResolution(), "custom"]}
+                itemComponent={(props) => (
+                  <SelectItem item={props.item}>
+                    {getResolutionLabel(props.item.rawValue)}
+                  </SelectItem>
+                )}
+              >
+                <SelectTrigger>
+                  <SelectValue<string>>
+                    {(state) => getResolutionLabel(state.selectedOption() || "")}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent />
+              </Select>
               <Show when={settings.gameResolution?.type === "Custom"}>
                 <div class="flex flex-col gap-4">
                   <div class="flex items-center justify-end gap-4">
@@ -252,61 +298,12 @@ const General = () => {
             <Trans key="settings:launcher_action_on_game_launch_title" />
           </Title>
           <RightHandSide>
-            <Dropdown
-              value={settings.launcherActionOnGameLaunch.toString()}
-              options={[
-                {
-                  label: t("settings:launcher_action_on_game_launch_none"),
-                  key: "none"
-                },
-                {
-                  label: t(
-                    "settings:launcher_action_on_game_launch_minimize_window"
-                  ),
-                  key: "minimizeWindow"
-                },
-                {
-                  label: t(
-                    "settings:launcher_action_on_game_launch_close_window"
-                  ),
-                  key: "closeWindow"
-                },
-                {
-                  label: t(
-                    "settings:launcher_action_on_game_launch_hide_window"
-                  ),
-                  key: "hideWindow"
-                },
-                {
-                  label: t("settings:launcher_action_on_game_launch_quit_app"),
-                  key: "quitApp"
-                }
-              ]}
-              onChange={(downloads) => {
-                let action: FELauncherActionOnGameLaunch | undefined
+            <Select
+              value={settings.launcherActionOnGameLaunch}
+              onChange={(value) => {
+                if (!value) return
 
-                switch (downloads.key) {
-                  case "minimizeWindow":
-                    action = "minimizeWindow"
-                    break
-                  case "closeWindow":
-                    action = "closeWindow"
-                    break
-                  case "hideWindow":
-                    action = "hideWindow"
-                    break
-                  case "quitApp":
-                    action = "quitApp"
-                    break
-                  case "none":
-                    action = "none"
-                    break
-                }
-
-                if (!action) {
-                  console.error("Invalid action", downloads.key)
-                  return
-                }
+                const action = value as FELauncherActionOnGameLaunch
 
                 settingsMutation.mutate({
                   launcherActionOnGameLaunch: {
@@ -314,7 +311,31 @@ const General = () => {
                   }
                 })
               }}
-            />
+              options={["none", "minimizeWindow", "closeWindow", "hideWindow", "quitApp"]}
+              itemComponent={(props) => (
+                <SelectItem item={props.item}>
+                  {props.item.rawValue === "none" && t("settings:launcher_action_on_game_launch_none")}
+                  {props.item.rawValue === "minimizeWindow" && t("settings:launcher_action_on_game_launch_minimize_window")}
+                  {props.item.rawValue === "closeWindow" && t("settings:launcher_action_on_game_launch_close_window")}
+                  {props.item.rawValue === "hideWindow" && t("settings:launcher_action_on_game_launch_hide_window")}
+                  {props.item.rawValue === "quitApp" && t("settings:launcher_action_on_game_launch_quit_app")}
+                </SelectItem>
+              )}
+            >
+              <SelectTrigger>
+                <SelectValue<string>>
+                  {(state) => {
+                    const val = state.selectedOption()
+                    return val === "none" ? t("settings:launcher_action_on_game_launch_none") :
+                           val === "minimizeWindow" ? t("settings:launcher_action_on_game_launch_minimize_window") :
+                           val === "closeWindow" ? t("settings:launcher_action_on_game_launch_close_window") :
+                           val === "hideWindow" ? t("settings:launcher_action_on_game_launch_hide_window") :
+                           val === "quitApp" ? t("settings:launcher_action_on_game_launch_quit_app") : ""
+                  }}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent />
+            </Select>
           </RightHandSide>
         </Row>
         <Row>
@@ -387,6 +408,7 @@ const General = () => {
                 modalsContext?.openModal({ name: "onBoarding" })
               }}
             >
+              <div class="i-hugeicons:refresh" />
               <Trans key="settings:rerun_onboarding" />
             </Button>
           </RightHandSide>
@@ -427,7 +449,7 @@ const General = () => {
                 </Button>
                 <Button type="secondary">
                   <div class="flex items-center gap-2">
-                    <i class="w-5 h-5 i-hugeicons:delete-01" />
+                    <i class="w-5 h-5 i-hugeicons:delete-02" />
                     <div>
                       <Trans key="settings:reset_all_data" />
                     </div>

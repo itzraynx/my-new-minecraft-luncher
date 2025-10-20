@@ -14,6 +14,7 @@ import {
 import { For, Show, onMount, onCleanup, createEffect } from "solid-js"
 import { Trans, useTransContext } from "@gd/i18n"
 import { AddonType, Mod } from "@gd/core_module/bindings"
+import { getAddonTypeIcon } from "@/utils/addonIcons"
 
 const ADDON_TYPES: AddonType[] = [
   "mods",
@@ -279,7 +280,7 @@ export const AddonFilters = (props: AddonFiltersProps) => {
                   variant={
                     props.enabledAddonTypes[type] ? "default" : "secondary"
                   }
-                  class="cursor-pointer transition-colors"
+                  class="cursor-pointer transition-colors flex items-center gap-1.5"
                   onClick={() => {
                     props.setEnabledAddonTypes(
                       type,
@@ -287,6 +288,7 @@ export const AddonFilters = (props: AddonFiltersProps) => {
                     )
                   }}
                 >
+                  <div class={`${getAddonTypeIcon(type)} text-sm`} />
                   {getAddonTypeLabel(type)}
                   <Show when={props.enabledAddonTypes[type]}>
                     <div class="i-hugeicons:tick-02 ml-1" />

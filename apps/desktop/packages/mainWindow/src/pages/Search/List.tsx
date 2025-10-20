@@ -1,37 +1,19 @@
 import { ListItem } from "./ListItem"
 import { VList } from "@/components/VirtuaWrapper"
 import useSearchContext from "@/components/SearchInputContext"
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  Skeleton,
-  Tabs
-} from "@gd/ui"
-import { Tab, TabList } from "@gd/ui"
-import { For, onMount, Show, createMemo } from "solid-js"
+import { Button, Skeleton } from "@gd/ui"
+import { onMount, Show, createMemo } from "solid-js"
 import { FEUnifiedSearchType } from "@gd/core_module/bindings"
 import { useGDNavigate } from "@/managers/NavigationManager"
-import { useLocation, useParams } from "@solidjs/router"
-import FiltersDisplay from "./FiltersDisplay"
-import { FiltersDropdown } from "./FiltersDropdown"
+import { useParams } from "@solidjs/router"
 import { rspc } from "@/utils/rspcClient"
 import { Trans, useTransContext } from "@gd/i18n"
 import { useGlobalStore } from "@/components/GlobalStoreContext"
-
-interface SearchTab {
-  label: string
-  value: FEUnifiedSearchType
-  icon: string
-  path: string
-}
 
 export function List() {
   const searchContext = useSearchContext()
   const navigator = useGDNavigate()
   const params = useParams()
-  const location = useLocation()
   const [t] = useTransContext()
   const globalStore = useGlobalStore()
 
@@ -65,85 +47,6 @@ export function List() {
     }))
   }
 
-  const shouldShowDataPackTab = createMemo(() => {
-    if (!instanceId() || !searchContext?.selectedInstance?.data) {
-      return null
-    }
-
-    const instanceVersion = searchContext.selectedInstance.data.version
-    const instanceMCVersionPos = globalStore.minecraftVersions.data?.findIndex(
-      (v) => v.id === instanceVersion
-    )
-
-    const Pos1_13 = globalStore.minecraftVersions.data?.findIndex(
-      (v) => v.id === "1.13"
-    )
-
-    // Check version requirements for different addon types
-    if ((instanceMCVersionPos ?? 0) > (Pos1_13 ?? 0)) {
-      return false
-    }
-
-    return true
-  })
-
-  const projectTypeTabs: () => SearchTab[] = () => {
-    let tabs: SearchTab[] = []
-
-    if (!instanceId()) {
-      tabs.push({
-        label: t("search.modpacks"),
-        value: "modpack",
-        icon: "i-hugeicons:folder-01",
-        path: "/search/modpack"
-      })
-    }
-
-    if (
-      !instanceId() ||
-      (instanceId() && (instance.data?.modloaders?.length ?? 0) > 0)
-    ) {
-      tabs.push({
-        label: t("search.mods"),
-        value: "mod",
-        icon: "i-hugeicons:note",
-        path: "/search/mod"
-      })
-    }
-
-    tabs = tabs.concat([
-      {
-        label: t("search.shaders"),
-        value: "shader",
-        icon: "i-hugeicons:paint-brush-01",
-        path: "/search/shader"
-      },
-      {
-        label: t("search.resource_packs"),
-        value: "resourcePack",
-        icon: "i-hugeicons:folder-01",
-        path: "/search/resourcePack"
-      }
-    ])
-
-    if (shouldShowDataPackTab()) {
-      tabs.push({
-        label: t("search.data_packs"),
-        value: "datapack",
-        icon: "i-hugeicons:folder-01",
-        path: "/search/datapack"
-      })
-    }
-
-    tabs.push({
-      label: t("search.worlds"),
-      value: "world",
-      icon: "i-hugeicons:folder-01",
-      path: "/search/world"
-    })
-
-    return tabs
-  }
 
   onMount(() => {
     queueMicrotask(() => {
@@ -180,14 +83,8 @@ export function List() {
 
   return (
     <div class="flex h-full flex-col overflow-hidden">
-      <div class="flex w-full p-6 gap-8">
-        <div
-          class="w-48 items-center"
-          classList={{
-            hidden: !instanceId(),
-            flex: !!instanceId()
-          }}
-        >
+      <Show when={instanceId()}>
+        <div class="flex w-full p-6">
           <Button
             size="small"
             type="outline"
@@ -199,59 +96,8 @@ export function List() {
             <Trans key="search.go_back" />
           </Button>
         </div>
-        <Tabs
-          defaultIndex={projectTypeTabs().findIndex(
-            (tab) => tab.value === type()
-          )}
-        >
-          <TabList aligment="between">
-            <For each={projectTypeTabs()}>
-              {(tab, index) => (
-                <Tab
-                  onClick={() => {
-                    if (
-                      index() ===
-                      projectTypeTabs().findIndex((tab) => tab.value === type())
-                    )
-                      return
-
-                    navigator.navigate(`${tab.path}${location.search}`)
-
-                    queueMicrotask(() => {
-                      searchContext?.setSearchQuery((prev) => ({
-                        ...prev,
-                        projectType: tab.value
-                      }))
-                    })
-                  }}
-                >
-                  {tab.label}
-                </Tab>
-              )}
-            </For>
-          </TabList>
-        </Tabs>
-        <div class="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button type="glass" size="small" class="text-xs">
-                <div class="flex items-center gap-1">
-                  <div class="i-hugeicons:filter" />
-                  <div>
-                    <Trans key="search.filters" />
-                  </div>
-                  <div class="i-hugeicons:arrow-down-01 text-xs" />
-                </div>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <FiltersDropdown />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-      <FiltersDisplay />
-      <div class="flex-1 overflow-hidden">
+      </Show>
+      <div class="flex-1 overflow-hidden pt-6">
         <Show
           when={!searchContext?.isInitialLoading()}
           fallback={<Skeleton.searchList />}

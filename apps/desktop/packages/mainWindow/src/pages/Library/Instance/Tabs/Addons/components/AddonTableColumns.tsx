@@ -15,6 +15,7 @@ import { createColumnHelper } from "@tanstack/solid-table"
 import { Mod as ModType } from "@gd/core_module/bindings"
 import CopyIcon from "@/components/CopyIcon"
 import { getModImageUrl } from "@/utils/instances"
+import { getAddonTypeIcon } from "@/utils/addonIcons"
 
 interface ColumnConfig {
   isInstanceLocked: () => boolean
@@ -213,7 +214,8 @@ export const createAddonColumns = (config: ColumnConfig) => {
       cell: (props) => {
         const mod = props.row.original
         return (
-          <Badge variant="secondary">
+          <Badge variant="secondary" class="flex items-center gap-1.5">
+            <div class={`${getAddonTypeIcon(mod.addon_type)} text-base`} />
             {t(`instance.tabs.${mod.addon_type}`)}
           </Badge>
         )

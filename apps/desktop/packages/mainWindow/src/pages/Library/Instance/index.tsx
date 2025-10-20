@@ -481,6 +481,9 @@ const Instance = () => {
         "overflow-hidden": isFullScreen(),
         "overflow-y-auto overflow-x-hidden": !isFullScreen()
       }}
+      style={{
+        "scrollbar-gutter": "stable"
+      }}
     >
       <header
         ref={(el) => {

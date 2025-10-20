@@ -7,7 +7,6 @@ import {
   Tabs,
   Tooltip,
   Button,
-  Input,
   TooltipContent,
   TooltipTrigger
 } from "@gd/ui"
@@ -23,7 +22,7 @@ import updateAvailable, {
 import { Trans, useTransContext } from "@gd/i18n"
 import { useModal } from "@/managers/ModalsManager"
 import { useGlobalStore } from "./GlobalStoreContext"
-import useSearchContext from "./SearchInputContext"
+import { EnhancedSearchBar } from "./EnhancedSearchBar"
 
 export interface AccountsStatus {
   label: {
@@ -42,8 +41,6 @@ const AppNavbar = () => {
   const globalStore = useGlobalStore()
   const modalsContext = useModal()
   const [t] = useTransContext()
-
-  const searchResults = useSearchContext()
 
   const isLogin = useMatch(() => "/")
   const isSettings = useMatch(() => "/settings")
@@ -105,47 +102,7 @@ const AppNavbar = () => {
           </div>
         </div>
         <div class="flex w-full items-center justify-center gap-4">
-          <Input
-            placeholder={t("search.search_discover_anything")}
-            containerClass="px-10"
-            class="w-80"
-            tabIndex={0}
-            value={searchResults?.searchQuery().searchQuery ?? ""}
-            onFocus={() => {
-              if (isSearch()) {
-                return
-              }
-
-              navigator.navigate("/search")
-            }}
-            onInput={(e) => {
-              searchResults?.setSearchQuery((prev) => ({
-                ...prev,
-                searchQuery: e.target.value
-              }))
-            }}
-            icon={
-              <div class="flex items-center gap-1">
-                <Show
-                  when={
-                    searchResults?.searchQuery().searchQuery?.length || 0 > 0
-                  }
-                >
-                  <div
-                    class="i-hugeicons:cancel-01 text-darkSlate-500 text-xl transition-colors duration-200 ease-in-out hover:text-white"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      searchResults?.setSearchQuery((prev) => ({
-                        ...prev,
-                        searchQuery: ""
-                      }))
-                    }}
-                  />
-                </Show>
-              </div>
-            }
-          />
+          <EnhancedSearchBar />
           <Button
             class="w-max"
             size="small"

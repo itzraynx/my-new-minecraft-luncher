@@ -116,12 +116,12 @@ export const createAddonColumns = (config: ColumnConfig) => {
             <Show
               when={imageUrl}
               fallback={
-                <div class="h-8 w-8 rounded bg-darkSlate-600 flex items-center justify-center">
+                <div class="bg-darkSlate-600 flex h-8 w-8 items-center justify-center rounded">
                   <div class="i-hugeicons:file-01 text-lightSlate-400 text-lg" />
                 </div>
               }
             >
-              <div class="h-8 w-8 rounded overflow-hidden flex items-center justify-center bg-darkSlate-600">
+              <div class="bg-darkSlate-600 flex h-8 w-8 items-center justify-center overflow-hidden rounded">
                 <img
                   src={imageUrl!}
                   class="h-full w-full object-cover"
@@ -157,11 +157,11 @@ export const createAddonColumns = (config: ColumnConfig) => {
 
         return (
           <div
-            class="flex items-center gap-2 group"
+            class="group flex items-center gap-2"
             onMouseEnter={() => setShowCopy(true)}
             onMouseLeave={() => setShowCopy(false)}
           >
-            <div class="flex flex-col flex-1">
+            <div class="flex flex-1 flex-col">
               <div class="flex items-center gap-2">
                 <span class="font-medium">{displayName}</span>
                 <div
@@ -176,7 +176,7 @@ export const createAddonColumns = (config: ColumnConfig) => {
                 </div>
               </div>
               <Show when={mod.metadata?.name}>
-                <span class="text-sm text-lightSlate-600">{mod.filename}</span>
+                <span class="text-lightSlate-600 text-sm">{mod.filename}</span>
               </Show>
             </div>
           </div>
@@ -215,7 +215,9 @@ export const createAddonColumns = (config: ColumnConfig) => {
         const mod = props.row.original
         return (
           <Badge variant="secondary" class="flex items-center gap-1.5">
-            <div class={`${getAddonTypeIcon(mod.addon_type)} text-base flex-shrink-0`} />
+            <div
+              class={`${getAddonTypeIcon(mod.addon_type)} shrink-0 text-base`}
+            />
             {t(`instance.tabs.${mod.addon_type}`)}
           </Badge>
         )
@@ -268,7 +270,7 @@ export const createAddonColumns = (config: ColumnConfig) => {
           <div class="relative h-6 w-6">
             <Tooltip>
               <TooltipTrigger>
-                <div class="absolute -top-0.5 -left-0.5 h-4 w-4 rounded-full bg-darkSlate-800 p-0.5">
+                <div class="bg-darkSlate-800 absolute -left-0.5 -top-0.5 h-4 w-4 rounded-full p-0.5">
                   <img
                     src={CurseforgeLogo}
                     class="h-full w-full"
@@ -280,7 +282,7 @@ export const createAddonColumns = (config: ColumnConfig) => {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger>
-                <div class="absolute bottom-0.5 right-0.5 h-4 w-4 rounded-full bg-darkSlate-800 p-0.5 shadow-sm">
+                <div class="bg-darkSlate-800 absolute bottom-0.5 right-0.5 h-4 w-4 rounded-full p-0.5 shadow-sm">
                   <img
                     src={ModrinthLogo}
                     class="h-full w-full"
@@ -322,7 +324,7 @@ export const createAddonColumns = (config: ColumnConfig) => {
                   fallback={<Spinner class="h-5 w-5 text-blue-400" />}
                 >
                   <div
-                    class="i-hugeicons:download-02 text-lg transition-colors cursor-pointer"
+                    class="i-hugeicons:download-02 cursor-pointer text-lg transition-colors"
                     classList={{
                       "text-green-500 hover:text-green-400": !isDisabled(),
                       "text-gray-400 cursor-not-allowed": isDisabled()
@@ -402,7 +404,7 @@ export const createAddonColumns = (config: ColumnConfig) => {
               <Tooltip>
                 <TooltipTrigger>
                   <div
-                    class="i-hugeicons:arrow-left-right text-lg text-lightSlate-400 hover:text-lightSlate-200 cursor-pointer transition-colors"
+                    class="i-hugeicons:arrow-left-right text-lightSlate-400 hover:text-lightSlate-200 cursor-pointer text-lg transition-colors"
                     onClick={() => config.onSwitchVersion(mod)}
                   />
                 </TooltipTrigger>

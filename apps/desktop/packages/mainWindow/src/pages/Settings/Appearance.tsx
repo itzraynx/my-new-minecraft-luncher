@@ -33,11 +33,11 @@ const Appearance = () => {
         <PageTitle>
           <Trans key="settings:Appearance" />
         </PageTitle>
-        <Row forceContentBelow class="w-full border-box max-w-full">
+        <Row forceContentBelow class="border-box w-full max-w-full">
           <Title description={<Trans key="settings:default_themes_text" />}>
             <Trans key="settings:default_themes_title" />
           </Title>
-          <div class="w-full flex flex-wrap gap-6">
+          <div class="flex w-full flex-wrap gap-6">
             <For each={themes}>
               {(theme) => {
                 const shade1 = getThemeColor(theme, "darkSlate-900")
@@ -47,7 +47,7 @@ const Appearance = () => {
                 return (
                   <div>
                     <div
-                      class="relative p-2 w-42 rounded-md hover:scale-105 transition-transform duration-300 ease-in-out"
+                      class="w-42 relative rounded-md p-2 transition-transform duration-300 ease-in-out hover:scale-105"
                       style={{ "background-color": shade1 }}
                       classList={{
                         "scale-105": themeName() === theme
@@ -67,12 +67,12 @@ const Appearance = () => {
                       }}
                     >
                       <div
-                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-darkSlate-500 shadow-md rounded-full p-2 opacity-0 transition-opacity duration-300 ease-in-out"
+                        class="bg-darkSlate-500 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-2 opacity-0 shadow-md transition-opacity duration-300 ease-in-out"
                         classList={{
                           "opacity-100": themeName() === theme
                         }}
                       >
-                        <div class="i-hugeicons:tick-02 w-6 h-6" />
+                        <div class="i-hugeicons:tick-02 h-6 w-6" />
                       </div>
 
                       <ThemePreview
@@ -81,8 +81,8 @@ const Appearance = () => {
                         shade3={shade3}
                       />
                     </div>
-                    <div class="flex gap-2 items-center w-full box-border px-2 py-4 justify-start">
-                      <p class="m-0 text-lightSlate-700">
+                    <div class="box-border flex w-full items-center justify-start gap-2 px-2 py-4">
+                      <p class="text-lightSlate-700 m-0">
                         <Trans key={`settings:theme_${theme}`} />
                       </p>
                     </div>
@@ -92,11 +92,11 @@ const Appearance = () => {
             </For>
           </div>
         </Row>
-        <Row forceContentBelow class="w-full border-box max-w-full">
+        <Row forceContentBelow class="border-box w-full max-w-full">
           <Title description={<Trans key="settings:custom_themes_text" />}>
             <Trans key="settings:custom_themes_title" />
           </Title>
-          <div class="w-full flex flex-wrap gap-6">
+          <div class="flex w-full flex-wrap gap-6">
             <Trans key="general.coming_soon" />
           </div>
         </Row>

@@ -128,7 +128,7 @@ function LevelFormatter(props: {
 }) {
   return (
     <span
-      class={`pr-2 py-2 font-bold ${color[props.level]} bg-darkSlate-900 z-10 rounded-md italic`}
+      class={`py-2 pr-2 font-bold ${color[props.level]} bg-darkSlate-900 z-10 rounded-md italic`}
       classList={{
         "text-xs": props.fontMultiplier === 0,
         "text-sm": props.fontMultiplier === 1,

@@ -49,23 +49,23 @@ const SingleImport = (props: {
   })
 
   return (
-    <div class="flex gap-2 px-4 justify-between rounded-md">
+    <div class="flex justify-between gap-2 rounded-md px-4">
       <span class="font-semibold">{props.instanceName}</span>
       <Switch>
         <Match when={state() === "failed" || props.importState === "error"}>
           <div>
-            <div class="text-2xl i-ph:x-bold text-red-600" />
+            <div class="i-ph:x-bold text-2xl text-red-600" />
           </div>
         </Match>
         <Match when={state() === "idle"}>
-          <div class="flex w-30 items-center gap-4">
+          <div class="w-30 flex items-center gap-4">
             <Progress value={progress()} />
             <div class="font-semibold">{progress()}%</div>
           </div>
         </Match>
 
         <Match when={state() === "completed"}>
-          <div class="text-2xl i-ic:round-check text-green-600" />
+          <div class="i-ic:round-check text-2xl text-green-600" />
         </Match>
       </Switch>
     </div>

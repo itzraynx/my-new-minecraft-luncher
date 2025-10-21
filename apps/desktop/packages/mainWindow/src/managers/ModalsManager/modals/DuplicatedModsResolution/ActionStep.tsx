@@ -24,11 +24,11 @@ const ActionStep = (props: Props) => {
   }
 
   return (
-    <div class="flex flex-col justify-between h-full">
+    <div class="flex h-full flex-col justify-between">
       <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-3 mb-2">
+        <div class="mb-2 flex items-center gap-3">
           <div class="i-hugeicons:settings-01 text-primary-500 text-3xl" />
-          <h2 class="text-xl font-bold m-0">
+          <h2 class="m-0 text-xl font-bold">
             <Trans key="instance.duplicates.action.title" />
           </h2>
         </div>
@@ -37,9 +37,9 @@ const ActionStep = (props: Props) => {
           <Trans key="instance.duplicates.action.question" />
         </p>
 
-        <div class="flex flex-col gap-3 mt-4">
+        <div class="mt-4 flex flex-col gap-3">
           <div
-            class="border border-darkSlate-500 rounded-lg p-5 transition-all duration-200"
+            class="border-darkSlate-500 rounded-lg border p-5 transition-all duration-200"
             classList={{
               "bg-darkSlate-600 border-primary-500":
                 selectedAction() === "disable",
@@ -52,14 +52,14 @@ const ActionStep = (props: Props) => {
               checked={selectedAction() === "disable"}
               onChange={handleSelect}
             >
-              <div class="flex flex-col gap-2 w-full">
+              <div class="flex w-full flex-col gap-2">
                 <div class="flex items-center gap-2">
                   <div class="i-hugeicons:view-off-slash text-lg" />
                   <span class="font-semibold">
                     <Trans key="instance.duplicates.action.disable_title" />
                   </span>
                 </div>
-                <p class="text-sm text-lightSlate-600 m-0 ml-6">
+                <p class="text-lightSlate-600 m-0 ml-6 text-sm">
                   <Trans key="instance.duplicates.action.disable_description" />
                 </p>
               </div>
@@ -67,7 +67,7 @@ const ActionStep = (props: Props) => {
           </div>
 
           <div
-            class="border border-darkSlate-500 rounded-lg p-5 transition-all duration-200"
+            class="border-darkSlate-500 rounded-lg border p-5 transition-all duration-200"
             classList={{
               "bg-darkSlate-600 border-red-500": selectedAction() === "remove",
               "bg-darkSlate-700 hover:bg-darkSlate-650":
@@ -79,14 +79,14 @@ const ActionStep = (props: Props) => {
               checked={selectedAction() === "remove"}
               onChange={handleSelect}
             >
-              <div class="flex flex-col gap-2 w-full">
+              <div class="flex w-full flex-col gap-2">
                 <div class="flex items-center gap-2">
                   <div class="i-hugeicons:delete-02 text-lg text-red-500" />
                   <span class="font-semibold">
                     <Trans key="instance.duplicates.action.remove_title" />
                   </span>
                 </div>
-                <p class="text-sm text-lightSlate-600 m-0 ml-6">
+                <p class="text-lightSlate-600 m-0 ml-6 text-sm">
                   <Trans key="instance.duplicates.action.remove_description" />
                 </p>
               </div>
@@ -95,7 +95,7 @@ const ActionStep = (props: Props) => {
         </div>
       </div>
 
-      <div class="flex justify-between mt-6">
+      <div class="mt-6 flex justify-between">
         <Button type="secondary" size="large" onClick={() => props.prevStep()}>
           <Trans key="instance.duplicates.action.button_back" />
         </Button>

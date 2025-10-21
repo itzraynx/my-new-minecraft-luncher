@@ -43,8 +43,8 @@ export default function ModloadersDisplay() {
                   }}
                 >
                   <Show when={shouldHideFilters()}>
-                    <div class="absolute rounded-[5px] h-full w-full flex items-center justify-center bg-black/20 top-0 left-0">
-                      <div class="i-hugeicons:view-off-slash w-4 h-4 text-lightSlate-300 " />
+                    <div class="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-[5px] bg-black/20">
+                      <div class="i-hugeicons:view-off-slash text-lightSlate-300 h-4 w-4 " />
                     </div>
                   </Show>
                   <img class="h-4 w-4" src={getModloaderIcon(modloader)} />

@@ -45,7 +45,7 @@ const InstanceExport = (props: ModalProps) => {
       title={props?.title}
       noPadding={true}
     >
-      <div class="flex flex-col p-4 w-120">
+      <div class="w-120 flex flex-col p-4">
         <Switch>
           <Match when={exportStep() === 0}>
             <ExportFormat />

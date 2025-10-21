@@ -40,7 +40,7 @@ const AdTrackingSettingsSlider = (props: Props) => {
   }
 
   return (
-    <div class="w-full flex flex-col justify-center items-center box-border pt-15">
+    <div class="pt-15 box-border flex w-full flex-col items-center justify-center">
       <div class="h-100">
         <Slider
           vertical

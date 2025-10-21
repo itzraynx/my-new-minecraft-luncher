@@ -30,10 +30,7 @@ const ModPackVersionUpdate = (props: ModalProps) => {
   const modalContext = useModal()
 
   const instance = rspc.createQuery(() => ({
-    queryKey: [
-      "instance.getInstanceDetails",
-      instanceId()
-    ]
+    queryKey: ["instance.getInstanceDetails", instanceId()]
   }))
 
   const changeModpackMutation = rspc.createMutation(() => ({
@@ -139,7 +136,7 @@ const ModPackVersionUpdate = (props: ModalProps) => {
         value:
           data.platform === "curseforge"
             ? {
-                project_id: data.projectId as number,
+                project_id: data.projectId,
                 file_id: parseInt(version)
               }
             : {
@@ -159,7 +156,7 @@ const ModPackVersionUpdate = (props: ModalProps) => {
       title={props?.title}
       noPadding={true}
     >
-      <div class="flex flex-col p-4 w-120 gap-4">
+      <div class="w-120 flex flex-col gap-4 p-4">
         <Show when={response().isLoading || instance.isLoading}>
           <Spinner />
         </Show>
@@ -171,10 +168,12 @@ const ModPackVersionUpdate = (props: ModalProps) => {
             placeholder=""
             disallowEmptySelection={true}
             itemComponent={(itemProps) => {
-              const version = versions().find((v) => v.id === itemProps.item.rawValue)
+              const version = versions().find(
+                (v) => v.id === itemProps.item.rawValue
+              )
               return (
                 <SelectItem item={itemProps.item}>
-                  <div class="flex justify-between w-full">
+                  <div class="flex w-full justify-between">
                     <span>{version?.name}</span>
                     <Show when={version?.isCurrent}>
                       <span class="text-green-500">[ Current ]</span>
@@ -190,7 +189,7 @@ const ModPackVersionUpdate = (props: ModalProps) => {
                   const selectedId = state.selectedOption()
                   const version = versions().find((v) => v.id === selectedId)
                   return (
-                    <div class="flex justify-between w-full">
+                    <div class="flex w-full justify-between">
                       <span>{version?.name}</span>
                       <Show when={version?.isCurrent}>
                         <span class="text-green-500">[ Current ]</span>

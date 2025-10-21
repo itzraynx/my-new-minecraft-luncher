@@ -161,31 +161,31 @@ const CacheStatusPopover: Component<CacheStatusPopoverProps> = (props) => {
 
   const renderCurrentTask = (task: any) => {
     return (
-      <div class="relative bg-gradient-to-r from-darkSlate-800 to-darkSlate-700 rounded-xl p-4 border border-darkSlate-600/50">
-        <div class="flex items-start justify-between mb-3">
-          <div class="flex-1 min-w-0">
-            <h4 class="font-medium text-lightSlate-50 text-sm truncate mb-1">
+      <div class="from-darkSlate-800 to-darkSlate-700 border-darkSlate-600/50 relative rounded-xl border bg-gradient-to-r p-4">
+        <div class="mb-3 flex items-start justify-between">
+          <div class="min-w-0 flex-1">
+            <h4 class="text-lightSlate-50 mb-1 truncate text-sm font-medium">
               {formatTaskName(task)}
             </h4>
             <Show
               when={task.active_subtasks && task.active_subtasks.length > 0}
             >
-              <p class="text-xs text-lightSlate-400 truncate">
+              <p class="text-lightSlate-400 truncate text-xs">
                 {formatSubtaskName(task.active_subtasks[0])}
               </p>
             </Show>
           </div>
 
-          <div class="flex items-center gap-2 ml-3">
+          <div class="ml-3 flex items-center gap-2">
             <Show when={task.progress?.type === "Failed"}>
-              <div class="flex items-center gap-1 px-2 py-1 bg-red-500/20 text-red-300 rounded-md text-xs">
-                <div class="w-1.5 h-1.5 bg-red-400 rounded-full" />
+              <div class="flex items-center gap-1 rounded-md bg-red-500/20 px-2 py-1 text-xs text-red-300">
+                <div class="h-1.5 w-1.5 rounded-full bg-red-400" />
                 <Trans key="TaskStatusFailed" />
               </div>
             </Show>
             <Show when={task.progress?.type !== "Failed"}>
-              <div class="flex items-center gap-1 px-2 py-1 bg-blue-500/20 text-blue-300 rounded-md text-xs">
-                <div class="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" />
+              <div class="flex items-center gap-1 rounded-md bg-blue-500/20 px-2 py-1 text-xs text-blue-300">
+                <div class="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-400" />
                 <Trans key="TaskStatusRunning" />
               </div>
             </Show>
@@ -194,9 +194,9 @@ const CacheStatusPopover: Component<CacheStatusPopoverProps> = (props) => {
 
         <Show when={task.progress?.type === "Known"}>
           <div class="mb-3">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs text-lightSlate-400">Progress</span>
-              <span class="text-xs text-lightSlate-300 font-medium">
+            <div class="mb-1 flex items-center justify-between">
+              <span class="text-lightSlate-400 text-xs">Progress</span>
+              <span class="text-lightSlate-300 text-xs font-medium">
                 {getProgressPercentage(task)}%
               </span>
             </div>
@@ -217,18 +217,18 @@ const CacheStatusPopover: Component<CacheStatusPopoverProps> = (props) => {
         </Show>
 
         <Show when={task.active_subtasks && task.active_subtasks.length > 0}>
-          <div class="mt-3 pt-3 border-t border-darkSlate-600/50">
-            <div class="text-xs text-lightSlate-400 mb-2">Subtasks</div>
+          <div class="border-darkSlate-600/50 mt-3 border-t pt-3">
+            <div class="text-lightSlate-400 mb-2 text-xs">Subtasks</div>
             <div class="space-y-2">
               <For each={task.active_subtasks}>
                 {(subtask) => (
-                  <div class="flex items-center justify-between text-xs py-1">
+                  <div class="flex items-center justify-between py-1 text-xs">
                     <span class="text-lightSlate-400 flex items-center gap-2">
-                      <div class="w-1 h-1 bg-lightSlate-500 rounded-full" />
+                      <div class="bg-lightSlate-500 h-1 w-1 rounded-full" />
                       {formatSubtaskName(subtask)}
                     </span>
                     <Show when={getSubtaskProgress(subtask)}>
-                      <span class="text-lightSlate-300 font-mono bg-darkSlate-600/50 px-1.5 py-0.5 rounded">
+                      <span class="text-lightSlate-300 bg-darkSlate-600/50 rounded px-1.5 py-0.5 font-mono">
                         {getSubtaskProgress(subtask)}
                       </span>
                     </Show>
@@ -240,7 +240,7 @@ const CacheStatusPopover: Component<CacheStatusPopoverProps> = (props) => {
         </Show>
 
         <Show when={task.progress?.type === "Failed"}>
-          <div class="mt-3 p-2 bg-red-500/10 border border-red-500/20 rounded-lg">
+          <div class="mt-3 rounded-lg border border-red-500/20 bg-red-500/10 p-2">
             <div class="text-xs text-red-300">
               {task.progress?.value?.message || t("CacheErrorGeneric")}
             </div>
@@ -253,19 +253,19 @@ const CacheStatusPopover: Component<CacheStatusPopoverProps> = (props) => {
   return (
     <Popover>
       <PopoverTrigger>{props.children}</PopoverTrigger>
-      <PopoverContent class="w-[420px] bg-darkSlate-900/95 backdrop-blur-xl border-darkSlate-600/50 shadow-2xl">
+      <PopoverContent class="bg-darkSlate-900/95 border-darkSlate-600/50 w-[420px] shadow-2xl backdrop-blur-xl">
         <div class="p-5">
-          <div class="flex items-center justify-between mb-6">
+          <div class="mb-6 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="p-2 bg-blue-500/10 rounded-lg">
-                <div class="i-hugeicons:tick-02 text-blue-400 text-lg" />
+              <div class="rounded-lg bg-blue-500/10 p-2">
+                <div class="i-hugeicons:tick-02 text-lg text-blue-400" />
               </div>
               <div>
-                <h3 class="text-lg font-semibold text-lightSlate-50">
+                <h3 class="text-lightSlate-50 text-lg font-semibold">
                   <Trans key="TaskStatusTitle" />
                 </h3>
                 <Show when={tasksQuery.data && tasksQuery.data.length > 0}>
-                  <p class="text-xs text-lightSlate-400 mt-0.5">
+                  <p class="text-lightSlate-400 mt-0.5 text-xs">
                     <Trans
                       key={
                         tasksQuery.data?.length === 1
@@ -280,8 +280,8 @@ const CacheStatusPopover: Component<CacheStatusPopoverProps> = (props) => {
             </div>
 
             <Show when={tasksQuery.data && tasksQuery.data.length > 0}>
-              <div class="flex items-center gap-1 px-2 py-1 bg-green-500/10 text-green-400 rounded-md text-xs">
-                <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+              <div class="flex items-center gap-1 rounded-md bg-green-500/10 px-2 py-1 text-xs text-green-400">
+                <div class="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
                 Active
               </div>
             </Show>
@@ -291,22 +291,22 @@ const CacheStatusPopover: Component<CacheStatusPopoverProps> = (props) => {
             <Show
               when={tasksQuery.data && tasksQuery.data.length > 0}
               fallback={
-                <div class="text-center py-12">
-                  <div class="flex justify-center mb-4">
-                    <div class="p-4 bg-lightSlate-800/30 rounded-full">
-                      <div class="i-hugeicons:tick-double-02 text-3xl text-lightSlate-400" />
+                <div class="py-12 text-center">
+                  <div class="mb-4 flex justify-center">
+                    <div class="bg-lightSlate-800/30 rounded-full p-4">
+                      <div class="i-hugeicons:tick-double-02 text-lightSlate-400 text-3xl" />
                     </div>
                   </div>
-                  <h4 class="text-lightSlate-300 font-medium mb-2">
+                  <h4 class="text-lightSlate-300 mb-2 font-medium">
                     <Trans key="TaskStatusNoActiveTasks" />
                   </h4>
-                  <p class="text-xs text-lightSlate-500 max-w-xs mx-auto leading-relaxed">
+                  <p class="text-lightSlate-500 mx-auto max-w-xs text-xs leading-relaxed">
                     <Trans key="TaskStatusOperationsInfo" />
                   </p>
                 </div>
               }
             >
-              <div class="space-y-3 max-h-96 overflow-y-auto">
+              <div class="max-h-96 space-y-3 overflow-y-auto">
                 <For each={tasksQuery.data}>
                   {(task) => renderCurrentTask(task)}
                 </For>

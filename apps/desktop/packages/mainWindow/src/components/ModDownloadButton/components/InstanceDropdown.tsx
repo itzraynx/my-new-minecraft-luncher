@@ -151,9 +151,9 @@ export const InstanceDropdown = (props: InstanceDropdownProps) => {
           <Trans key="instance.add_to_an_instance" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent class="p-0 w-80">
+      <DropdownMenuContent class="w-80 p-0">
         <div
-          class="p-2 border-b border-darkSlate-600"
+          class="border-darkSlate-600 border-b p-2"
           onClick={(e) => {
             e.stopPropagation()
             if (inputRef) {
@@ -163,7 +163,7 @@ export const InstanceDropdown = (props: InstanceDropdownProps) => {
           onKeyDown={(e) => e.stopPropagation()}
           onKeyUp={(e) => e.stopPropagation()}
         >
-          <div style="height: 32px;">
+          <div style={{ height: "32px" }}>
             <Input
               ref={inputRef}
               placeholder="Search instances..."
@@ -187,7 +187,7 @@ export const InstanceDropdown = (props: InstanceDropdownProps) => {
         <Show
           when={props.filteredInstances().length > 0}
           fallback={
-            <div class="px-2 py-3 text-sm text-lightSlate-400 text-center">
+            <div class="text-lightSlate-400 px-2 py-3 text-center text-sm">
               No instances found
             </div>
           }

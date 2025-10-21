@@ -19,12 +19,12 @@ const FirstStep = (props: Props) => {
   )
 
   return (
-    <div class="flex flex-col justify-between box-border h-full lg:w-160">
+    <div class="lg:w-160 box-border flex h-full flex-col justify-between">
       <div class="flex flex-col lg:w-[35rem]">
-        <h1 class="text-center text-lg m-0 font-bold mt-10">
+        <h1 class="m-0 mt-10 text-center text-lg font-bold">
           <Trans key="onboarding.welcome_gdlauncher_title" />
         </h1>
-        <pre class="text-lightSlate-700 text-left text-xs max-w-140 whitespace-pre-line lg:text-base leading-5">
+        <pre class="text-lightSlate-700 max-w-140 whitespace-pre-line text-left text-xs leading-5 lg:text-base">
           <Trans
             key="onboarding.welcome_gdlauncher_text"
             options={{

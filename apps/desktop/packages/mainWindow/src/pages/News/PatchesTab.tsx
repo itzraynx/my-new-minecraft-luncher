@@ -46,7 +46,7 @@ const PatchesTab = (props: PatchesTabProps) => {
 
   return (
     <div class="p-6">
-      <h1 class="text-2xl font-medium mb-6">
+      <h1 class="mb-6 text-2xl font-medium">
         <Trans key="news.minecraft_patches">Minecraft Patch Notes</Trans>
       </h1>
 
@@ -54,16 +54,16 @@ const PatchesTab = (props: PatchesTabProps) => {
         <Match
           when={!patchNotes.isPending && (patchNotes.data?.length || 0) > 0}
         >
-          <div class="relative patch-timeline">
-            <div class="absolute left-8 top-8 bottom-8 w-px bg-gradient-to-b from-lightSlate-600 to-lightSlate-700"></div>
+          <div class="patch-timeline relative">
+            <div class="from-lightSlate-600 to-lightSlate-700 absolute bottom-8 left-8 top-8 w-px bg-gradient-to-b" />
 
             <For each={patchNotes.data}>
               {(item) => (
-                <div class="relative flex group mb-8">
-                  <div class="relative flex flex-col items-center mr-8 z-10">
+                <div class="group relative mb-8 flex">
+                  <div class="relative z-10 mr-8 flex flex-col items-center">
                     <div class="relative">
                       <div
-                        class={`flex items-center justify-center w-16 h-16 rounded-full font-bold text-sm border-2 shadow-lg transition-transform group-hover:scale-110 ${getVersionTypeColor(item.versionType)}`}
+                        class={`flex h-16 w-16 items-center justify-center rounded-full border-2 text-sm font-bold shadow-lg transition-transform group-hover:scale-110 ${getVersionTypeColor(item.versionType)}`}
                       >
                         <div class="text-center">
                           <div class="text-xs font-semibold">
@@ -77,7 +77,7 @@ const PatchesTab = (props: PatchesTabProps) => {
                         </div>
                       </div>
                       <div
-                        class={`absolute -top-1 -right-1 w-6 h-6 rounded-full border-2 border-darkSlate-800 flex items-center justify-center text-xs font-bold ${getVersionTypeColor(item.versionType)}`}
+                        class={`border-darkSlate-800 absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border-2 text-xs font-bold ${getVersionTypeColor(item.versionType)}`}
                       >
                         <i class={getVersionTypeIcon(item.versionType)} />
                       </div>
@@ -85,36 +85,36 @@ const PatchesTab = (props: PatchesTabProps) => {
                   </div>
 
                   <div
-                    class="flex-1 cursor-pointer p-6 rounded-xl border border-darkSlate-600 bg-darkSlate-700 shadow-lg transition-transform hover:scale-[1.02]"
+                    class="border-darkSlate-600 bg-darkSlate-700 flex-1 cursor-pointer rounded-xl border p-6 shadow-lg transition-transform hover:scale-[1.02]"
                     onClick={() => {
                       props.onNavigateToDetail?.()
                       navigator.navigate(`/news/${item.id}`)
                     }}
                   >
                     <div class="flex gap-4">
-                      <div class="flex-shrink-0">
+                      <div class="shrink-0">
                         <img
                           src={item.image}
                           alt={item.title}
-                          class="w-20 h-20 object-cover rounded-lg border border-lightSlate-600/50 shadow-md"
+                          class="border-lightSlate-600/50 h-20 w-20 rounded-lg border object-cover shadow-md"
                         />
                       </div>
 
                       <div class="flex-1">
-                        <div class="flex items-start justify-between mb-3">
-                          <h3 class="text-xl font-bold text-white leading-tight">
+                        <div class="mb-3 flex items-start justify-between">
+                          <h3 class="text-xl font-bold leading-tight text-white">
                             {item.title}
                           </h3>
-                          <div class="flex items-center gap-2 ml-4">
+                          <div class="ml-4 flex items-center gap-2">
                             <span
-                              class={`text-xs px-3 py-1 rounded-full border font-semibold ${getVersionTypeColor(item.versionType)}`}
+                              class={`rounded-full border px-3 py-1 text-xs font-semibold ${getVersionTypeColor(item.versionType)}`}
                             >
                               {item.versionType}
                             </span>
                           </div>
                         </div>
 
-                        <p class="text-lightSlate-300 text-sm mb-4 line-clamp-3 leading-relaxed">
+                        <p class="text-lightSlate-300 mb-4 line-clamp-3 text-sm leading-relaxed">
                           {item.description}
                         </p>
 
@@ -126,7 +126,7 @@ const PatchesTab = (props: PatchesTabProps) => {
                               day: "numeric"
                             })}
                           </span>
-                          <div class="flex items-center text-primary-400 text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div class="text-primary-400 flex items-center text-sm opacity-0 transition-opacity group-hover:opacity-100">
                             <span class="mr-2 font-medium">Read More</span>
                             <i class="i-hugeicons:arrow-right-01" />
                           </div>
@@ -143,18 +143,18 @@ const PatchesTab = (props: PatchesTabProps) => {
           <div class="space-y-6">
             <For each={Array.from({ length: 5 })}>
               {() => (
-                <div class="relative flex mb-8">
-                  <div class="relative flex flex-col items-center mr-8">
-                    <div class="w-16 h-16 bg-darkSlate-500 skeleton-shimmer rounded-full"></div>
+                <div class="relative mb-8 flex">
+                  <div class="relative mr-8 flex flex-col items-center">
+                    <div class="bg-darkSlate-500 skeleton-shimmer h-16 w-16 rounded-full" />
                   </div>
-                  <div class="flex-1 p-6 rounded-xl border border-darkSlate-600 bg-darkSlate-700">
+                  <div class="border-darkSlate-600 bg-darkSlate-700 flex-1 rounded-xl border p-6">
                     <div class="flex gap-4">
-                      <div class="w-20 h-20 bg-darkSlate-500 skeleton-shimmer rounded-lg"></div>
+                      <div class="bg-darkSlate-500 skeleton-shimmer h-20 w-20 rounded-lg" />
                       <div class="flex-1 space-y-3">
-                        <div class="h-6 bg-darkSlate-500 skeleton-shimmer rounded w-3/4"></div>
-                        <div class="h-4 bg-darkSlate-500 skeleton-shimmer rounded w-full"></div>
-                        <div class="h-4 bg-darkSlate-500 skeleton-shimmer rounded w-2/3"></div>
-                        <div class="h-4 bg-darkSlate-500 skeleton-shimmer rounded w-1/3"></div>
+                        <div class="bg-darkSlate-500 skeleton-shimmer h-6 w-3/4 rounded" />
+                        <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-full rounded" />
+                        <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-2/3 rounded" />
+                        <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-1/3 rounded" />
                       </div>
                     </div>
                   </div>

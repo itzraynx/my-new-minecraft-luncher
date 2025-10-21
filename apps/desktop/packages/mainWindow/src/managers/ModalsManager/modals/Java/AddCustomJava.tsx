@@ -21,9 +21,9 @@ const AddCustomJava = (props: ModalProps) => {
 
   return (
     <ModalLayout width="w-100" noHeader={props.noHeader} title={props?.title}>
-      <div class="flex items-center h-full flex-col justify-center w-full">
-        <div class="flex flex-col gap-8 w-full">
-          <div class="flex justify-between items-center gap-4 w-full">
+      <div class="flex h-full w-full flex-col items-center justify-center">
+        <div class="flex w-full flex-col gap-8">
+          <div class="flex w-full items-center justify-between gap-4">
             <Input
               class="w-full"
               value={value()}
@@ -32,15 +32,15 @@ const AddCustomJava = (props: ModalProps) => {
               icon={
                 <Switch>
                   <Match when={validateJavaPath.isPending}>
-                    <div class="flex i-hugeicons:loading-03 animate-spin text-lightSlate-700" />
+                    <div class="i-hugeicons:loading-03 text-lightSlate-700 flex animate-spin" />
                   </Match>
                   <Match when={value()}>
                     <Switch>
                       <Match when={validPath() === true}>
-                        <div class="flex i-hugeicons:tick-double-02 text-emerald-500" />
+                        <div class="i-hugeicons:tick-double-02 flex text-emerald-500" />
                       </Match>
                       <Match when={validPath() === false}>
-                        <div class="flex i-hugeicons:alert-02 text-yellow-500" />
+                        <div class="i-hugeicons:alert-02 flex text-yellow-500" />
                       </Match>
                     </Switch>
                   </Match>

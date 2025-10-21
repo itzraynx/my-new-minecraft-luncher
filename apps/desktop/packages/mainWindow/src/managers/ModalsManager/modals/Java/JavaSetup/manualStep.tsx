@@ -5,11 +5,11 @@ import { Trans } from "@gd/i18n"
 const ManualStep = (props: StepsProps) => {
   return (
     <div class="w-110 h-65">
-      <div class="flex flex-col justify-between w-full h-full">
-        <div class="flex flex-col justify-center items-center h-13 py-4 border-dashed border-2 border-primary-500">
-          <div class="flex flex-col justify-center items-center gap-2">
-            <div class="text-lightSlate-700 text-xl w-6 i-hugeicons:folder-open" />
-            <p class="m-0 text-lightSlate-700">
+      <div class="flex h-full w-full flex-col justify-between">
+        <div class="h-13 border-primary-500 flex flex-col items-center justify-center border-2 border-dashed py-4">
+          <div class="flex flex-col items-center justify-center gap-2">
+            <div class="text-lightSlate-700 i-hugeicons:folder-open w-6 text-xl" />
+            <p class="text-lightSlate-700 m-0">
               <Trans
                 key="java.select_java_zip"
                 options={{
@@ -29,7 +29,7 @@ const ManualStep = (props: StepsProps) => {
             }}
           />
         </p>
-        <div class="w-full flex justify-between gap-4">
+        <div class="flex w-full justify-between gap-4">
           <Button
             rounded
             type="secondary"

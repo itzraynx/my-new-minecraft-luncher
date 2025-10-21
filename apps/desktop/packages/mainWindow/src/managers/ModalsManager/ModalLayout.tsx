@@ -34,7 +34,7 @@ const ModalLayout = (props: Props) => {
       }}
     >
       <div
-        class={`h-full relative flex flex-col bg-darkSlate-700 rounded-2xl ease-in-out origin-center duration-100 ${
+        class={`bg-darkSlate-700 relative flex h-full origin-center flex-col rounded-2xl duration-100 ease-in-out ${
           props.class ?? ""
         }`}
         classList={{
@@ -43,10 +43,10 @@ const ModalLayout = (props: Props) => {
       >
         <Show when={props.background}>{props.background}</Show>
         <Show when={!props.noHeader}>
-          <div class="flex items-center justify-between bg-darkSlate-800 px-5 box-border h-12 rounded-t-2xl">
+          <div class="bg-darkSlate-800 box-border flex h-12 items-center justify-between rounded-t-2xl px-5">
             <h3>{props.title}</h3>
             <div
-              class="h-5 w-5 text-darkSlate-300 i-hugeicons:cancel-01 hover:text-lightSlate-100 duration-100 ease-in-out"
+              class="text-darkSlate-300 i-hugeicons:cancel-01 hover:text-lightSlate-100 h-5 w-5 duration-100 ease-in-out"
               onClick={() => {
                 if (!props.preventClose) {
                   navigator.navigate(location.pathname)

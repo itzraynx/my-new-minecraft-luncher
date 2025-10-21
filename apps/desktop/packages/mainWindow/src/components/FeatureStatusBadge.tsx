@@ -29,7 +29,7 @@ export default function FeatureStatusBadge(props: Props) {
 
   return (
     <div
-      class={`flex items-center justify-center rounded-md px-2 py-1 text-center font-bold text-[0.6rem] uppercase ${colors()}`}
+      class={`flex items-center justify-center rounded-md px-2 py-1 text-center text-[0.6rem] font-bold uppercase ${colors()}`}
     >
       {text()}
     </div>

@@ -47,13 +47,15 @@ const ThirdStep = (props: Props) => {
   return (
     <div
       class={`flex flex-col ${
-        props.isImportInstance ? "w-full h-[600px]" : "w-120 lg:w-160 h-full pt-6"
+        props.isImportInstance
+          ? "h-[600px] w-full"
+          : "w-120 lg:w-160 h-full pt-6"
       } box-border`}
     >
       <Switch>
         <Match when={entities.isLoading}>
-          <div class="w-full h-full flex items-center justify-center">
-            <div class="i-formkit:spinner animate-spin w-10 h-10 text-sky-800" />
+          <div class="flex h-full w-full items-center justify-center">
+            <div class="i-formkit:spinner h-10 w-10 animate-spin text-sky-800" />
           </div>
         </Match>
         <Match when={entity()}>
@@ -61,21 +63,21 @@ const ThirdStep = (props: Props) => {
         </Match>
         <Match when={!entity()}>
           <div
-            class={`flex flex-col gap-4 flex-1 w-full ${
-              props.isImportInstance ? "pt-4 px-4" : ""
+            class={`flex w-full flex-1 flex-col gap-4 ${
+              props.isImportInstance ? "px-4 pt-4" : ""
             }`}
           >
             <Show when={props.isImportInstance}>
-              <div class="flex items-center w-full">
-                <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
-                <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+              <div class="flex w-full items-center">
+                <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
+                <span class="text-lightSlate-400 flex items-center gap-2 px-3 text-base">
                   <div class="i-hugeicons:rocket-02 text-primary-500 text-sm" />
                   <Trans key="instance.import_instance" />
                 </span>
-                <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+                <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
               </div>
             </Show>
-            <ul class="grid gap-1.5 p-0 grid-cols-3">
+            <ul class="grid grid-cols-3 gap-1.5 p-0">
               <For
                 each={entities.data?.sort(
                   (a, b) =>
@@ -95,7 +97,7 @@ const ThirdStep = (props: Props) => {
             </ul>
           </div>
           <Show when={!props.isImportInstance}>
-            <div class="w-full flex justify-between">
+            <div class="flex w-full justify-between">
               <Button
                 onClick={() => {
                   props.prevStep()

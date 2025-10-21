@@ -48,7 +48,7 @@ const DuplicatedModsResolution = (props: ModalProps) => {
     setSelectedVersions(initial)
   }
 
-  const totalSteps = 3 // Intro + Select Mods + Action + Summary
+  // Intro + Select Mods + Action + Summary (total 4 steps, 0-indexed so max is 3)
 
   const resolutionSteps = [
     {
@@ -166,8 +166,8 @@ const DuplicatedModsResolution = (props: ModalProps) => {
       title={props?.title}
       noPadding={true}
     >
-      <div class="select-none box-border flex flex-col p-6 w-200 h-[700px]">
-        <div class="w-full mb-8 h-20 flex items-center justify-center overflow-x-auto overflow-y-hidden">
+      <div class="w-200 box-border flex h-[700px] select-none flex-col p-6">
+        <div class="mb-8 flex h-20 w-full items-center justify-center overflow-x-auto overflow-y-hidden">
           <div class="w-[90%]">
             <Steps steps={resolutionSteps} currentStep={currentStep()} />
           </div>

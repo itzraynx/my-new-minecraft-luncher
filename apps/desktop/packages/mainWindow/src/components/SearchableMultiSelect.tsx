@@ -70,16 +70,16 @@ export function SearchableMultiSelect(props: SearchableMultiSelectProps) {
 
   const renderOption = (option: SearchableOption) => (
     <div
-      class={`flex items-center gap-2 px-2 py-2 text-sm rounded cursor-pointer transition-colors ${
+      class={`flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-sm transition-colors ${
         option.disabled
-          ? "opacity-50 cursor-not-allowed"
+          ? "cursor-not-allowed opacity-50"
           : "hover:bg-darkSlate-700 focus:bg-darkSlate-700"
       }`}
       onClick={() => handleToggle(option)}
     >
       {/* Custom Checkbox */}
       <div
-        class={`flex h-4 w-4 items-center justify-center rounded border border-darkSlate-500 flex-shrink-0 ${
+        class={`border-darkSlate-500 flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
           isSelected(option)
             ? "bg-primary-500 border-primary-500"
             : "bg-darkSlate-700"
@@ -91,7 +91,7 @@ export function SearchableMultiSelect(props: SearchableMultiSelectProps) {
       </div>
 
       <Show when={option.icon}>
-        <div class="h-4 w-4 flex-shrink-0">{option.icon}</div>
+        <div class="h-4 w-4 shrink-0">{option.icon}</div>
       </Show>
       <span class="flex-1 truncate">{option.label}</span>
     </div>
@@ -104,9 +104,9 @@ export function SearchableMultiSelect(props: SearchableMultiSelectProps) {
       </div>
 
       <Show when={isOpen()}>
-        <div class="absolute top-full left-0 right-0 z-50 mt-1 rounded-md border border-darkSlate-600 bg-darkSlate-800 shadow-lg">
+        <div class="border-darkSlate-600 bg-darkSlate-800 absolute left-0 right-0 top-full z-50 mt-1 rounded-md border shadow-lg">
           <div
-            class="p-2 border-b border-darkSlate-600"
+            class="border-darkSlate-600 border-b p-2"
             onClick={(e) => {
               e.stopPropagation()
               if (inputRef) {
@@ -133,7 +133,7 @@ export function SearchableMultiSelect(props: SearchableMultiSelectProps) {
           <div
             class={
               shouldVirtualize()
-                ? "p-1 max-h-[200px]"
+                ? "max-h-[200px] p-1"
                 : "max-h-[200px] overflow-y-auto p-1"
             }
             style={props.maxHeight ? { "max-height": props.maxHeight } : {}}
@@ -141,7 +141,7 @@ export function SearchableMultiSelect(props: SearchableMultiSelectProps) {
             <Show
               when={filteredOptions().length > 0}
               fallback={
-                <div class="flex flex-col items-center gap-2 px-2 py-3 text-sm text-lightSlate-400 text-center">
+                <div class="text-lightSlate-400 flex flex-col items-center gap-2 px-2 py-3 text-center text-sm">
                   <div class="i-hugeicons:search-remove text-2xl" />
                   <span>{props.emptyMessage || "No results found"}</span>
                 </div>
@@ -158,7 +158,7 @@ export function SearchableMultiSelect(props: SearchableMultiSelectProps) {
                 <VList
                   data={filteredOptions()}
                   itemSize={props.itemHeight ?? 32}
-                  class="overflow-y-auto h-full"
+                  class="h-full overflow-y-auto"
                 >
                   {(item) => renderOption(item)}
                 </VList>

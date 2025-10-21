@@ -20,7 +20,7 @@ const SecondStep = (props: Props) => {
   }))
 
   return (
-    <div class="flex flex-col justify-between h-full lg:w-160 box-border">
+    <div class="lg:w-160 box-border flex h-full flex-col justify-between">
       <RowsContainer>
         <Row>
           <Title
@@ -68,7 +68,7 @@ const SecondStep = (props: Props) => {
           <Trans key="onboarding.manage_more_options_from_settings" />
         </Row>
       </RowsContainer>
-      <div class="flex justify-between w-full">
+      <div class="flex w-full justify-between">
         <Button
           type="secondary"
           size="large"

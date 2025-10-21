@@ -6,7 +6,7 @@ const PrivacyNotice = () => {
   const accountsLength = useGlobalStore().currentlySelectedAccount()
 
   return (
-    <div class="flex-1 flex flex-col justify-between text-left gap-4 leading-5 p-4 text-lightSlate-700">
+    <div class="text-lightSlate-700 flex flex-1 flex-col justify-between gap-4 p-4 text-left leading-5">
       <div class="flex flex-col gap-2 overflow-y-auto">
         <Show when={accountsLength}>
           <div>
@@ -41,7 +41,7 @@ const PrivacyNotice = () => {
         </div>
       </div>
       <div
-        class="text-xs underline whitespace-nowrap text-lightSlate-50 cursor-pointer"
+        class="text-lightSlate-50 cursor-pointer whitespace-nowrap text-xs underline"
         onClick={() => {
           window?.openCMPWindow()
         }}

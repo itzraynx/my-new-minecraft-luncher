@@ -35,7 +35,7 @@ function Settings() {
     },
     {
       name: (
-        <div class="relative flex gap-2 items-center">
+        <div class="relative flex items-center gap-2">
           {"Appearance"}
           <div class="absolute -top-14 right-0">
             <FeatureStatusBadge type="beta" />
@@ -70,7 +70,7 @@ function Settings() {
   return (
     <>
       <ContentWrapper zeroPadding>
-        <div class="w-full box-border sticky top-0 z-50 px-6">
+        <div class="sticky top-0 z-50 box-border w-full px-6">
           <Tabs
             orientation="horizontal"
             defaultIndex={settings.findIndex(
@@ -86,9 +86,9 @@ function Settings() {
                         navigator.navigate(item.path)
                       }}
                     >
-                      <div class="flex flex-col gap-2 justify-center items-center">
+                      <div class="flex flex-col items-center justify-center gap-2">
                         <i class={"w-5 h-5 " + item.icon} />
-                        <div class="text-center whitespace-nowrap">
+                        <div class="whitespace-nowrap text-center">
                           {item.name}
                         </div>
                       </div>
@@ -99,11 +99,11 @@ function Settings() {
             </div>
           </Tabs>
         </div>
-        <div class="pt-4 h-1 w-1" />
+        <div class="h-1 w-1 pt-4" />
         <div class="px-6">
           <Outlet />
         </div>
-        <div class="pb-4 h-1 w-1" />
+        <div class="h-1 w-1 pb-4" />
       </ContentWrapper>
     </>
   )

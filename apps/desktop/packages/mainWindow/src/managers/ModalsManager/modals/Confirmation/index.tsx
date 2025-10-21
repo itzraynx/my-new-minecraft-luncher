@@ -27,7 +27,7 @@ const Confirmation = (props: ModalProps) => {
           <p>{t("instance_unpair_confirmation")}</p>
         </Show>
         <p>{t("instance_confirm_continue")}</p>
-        <div class="flex justify-between mt-8">
+        <div class="mt-8 flex justify-between">
           <Button
             type="primary"
             onClick={() => {

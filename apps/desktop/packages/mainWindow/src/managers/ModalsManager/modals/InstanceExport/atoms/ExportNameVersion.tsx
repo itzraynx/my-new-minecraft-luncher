@@ -4,7 +4,7 @@ import { Input } from "@gd/ui"
 export const ExportNameVersion = () => {
   const [t] = useTransContext()
   return (
-    <div class="w-full flex flex-col gap-2">
+    <div class="flex w-full flex-col gap-2">
       <span>{t("instance.instance_name")}</span>
       <Input
         inputColor="bg-darkSlate-900"

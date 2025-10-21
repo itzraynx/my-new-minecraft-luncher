@@ -38,7 +38,7 @@ const JavaProfileCreationModal = (props: ModalProps) => {
       height="h-120"
       width="w-100"
     >
-      <div class="flex flex-col justify-between h-full">
+      <div class="flex h-full flex-col justify-between">
         <div class="flex flex-col gap-4">
           <h4>
             <Trans key="profile_name" />

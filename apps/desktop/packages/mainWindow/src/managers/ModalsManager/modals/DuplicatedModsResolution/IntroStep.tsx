@@ -8,11 +8,11 @@ interface Props {
 
 const IntroStep = (props: Props) => {
   return (
-    <div class="flex flex-col justify-between box-border h-full">
+    <div class="box-border flex h-full flex-col justify-between">
       <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="i-hugeicons:alert-01 text-yellow-500 text-3xl" />
-          <h2 class="text-xl font-bold m-0">
+        <div class="mb-2 flex items-center gap-3">
+          <div class="i-hugeicons:alert-01 text-3xl text-yellow-500" />
+          <h2 class="m-0 text-xl font-bold">
             <Trans key="instance.duplicates.intro.title" />
           </h2>
         </div>
@@ -28,11 +28,11 @@ const IntroStep = (props: Props) => {
           <Trans key="instance.duplicates.intro.warning_text" />
         </p>
 
-        <div class="bg-darkSlate-600 rounded-lg p-4 mt-2">
-          <h3 class="text-sm font-semibold mb-2 m-0">
+        <div class="bg-darkSlate-600 mt-2 rounded-lg p-4">
+          <h3 class="m-0 mb-2 text-sm font-semibold">
             <Trans key="instance.duplicates.intro.wizard_title" />
           </h3>
-          <ul class="text-lightSlate-700 text-sm space-y-2 m-0 pl-5">
+          <ul class="text-lightSlate-700 m-0 space-y-2 pl-5 text-sm">
             <li>
               <Trans key="instance.duplicates.intro.wizard_step_1" />
             </li>
@@ -46,7 +46,7 @@ const IntroStep = (props: Props) => {
         </div>
       </div>
 
-      <div class="flex w-full justify-end mt-6">
+      <div class="mt-6 flex w-full justify-end">
         <Button type="primary" size="large" onClick={() => props.nextStep()}>
           <Trans key="instance.duplicates.intro.button_start" />
         </Button>

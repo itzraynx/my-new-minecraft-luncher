@@ -19,7 +19,7 @@ const PrivacyStatement = (props: ModalProps) => {
     <ModalLayout noHeader={props.noHeader} title={props?.title}>
       <Suspense>
         <div class="h-130 w-190 overflow-hidden">
-          <div class="overflow-y-auto max-h-full" innerHTML={sanitizedHtml()} />
+          <div class="max-h-full overflow-y-auto" innerHTML={sanitizedHtml()} />
         </div>
       </Suspense>
     </ModalLayout>

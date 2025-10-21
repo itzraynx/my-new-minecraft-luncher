@@ -8,9 +8,9 @@ interface Props {
 const FilesSelection = (props: Props) => {
   const [t] = useTransContext()
   return (
-    <div class="w-full flex flex-col gap-2 pt-2">
+    <div class="flex w-full flex-col gap-2 pt-2">
       <span>{t("instance.select_files_text")}</span>
-      <div class="w-full rounded-md bg-darkSlate-900 overflow-y-scroll h-44">
+      <div class="bg-darkSlate-900 h-44 w-full overflow-y-scroll rounded-md">
         <ExportCheckboxParent instanceId={props.instanceId} />
       </div>
     </div>

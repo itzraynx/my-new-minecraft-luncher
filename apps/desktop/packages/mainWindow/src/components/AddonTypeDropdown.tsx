@@ -11,7 +11,6 @@ import { useLocation } from "@solidjs/router"
 import useSearchContext from "./SearchInputContext"
 import { rspc } from "@/utils/rspcClient"
 import { useTransContext } from "@gd/i18n"
-import { useGlobalStore } from "./GlobalStoreContext"
 import { getAddonTypeIcon } from "@/utils/addonIcons"
 
 interface AddonTypeOption {
@@ -26,7 +25,6 @@ export function AddonTypeDropdown() {
   const navigator = useGDNavigate()
   const location = useLocation()
   const [t] = useTransContext()
-  const globalStore = useGlobalStore()
 
   const instanceId = () => searchContext?.selectedInstanceId() || NaN
 
@@ -110,7 +108,7 @@ export function AddonTypeDropdown() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger class="flex items-center gap-2 px-2.5 py-1.5 rounded text-lightSlate-50 hover:text-white hover:bg-darkSlate-600 data-[expanded]:bg-darkSlate-600 data-[expanded]:text-white transition-colors">
+      <DropdownMenuTrigger class="text-lightSlate-50 hover:bg-darkSlate-600 data-[expanded]:bg-darkSlate-600 flex items-center gap-2 rounded px-2.5 py-1.5 transition-colors hover:text-white data-[expanded]:text-white">
         <div class={`${currentOption()?.icon} text-lg`} />
         <span class="text-sm font-medium">{currentOption()?.label}</span>
         <div class="i-hugeicons:arrow-down-01 text-xs" />

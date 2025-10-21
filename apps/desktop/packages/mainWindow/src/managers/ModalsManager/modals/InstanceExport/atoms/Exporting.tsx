@@ -38,8 +38,8 @@ export default function Exporting() {
   })
 
   return (
-    <div class="w-full gap-4 h-full flex flex-col items-center justify-center">
-      <img src={LoadingGif} class="w-40 h-40" alt="loading" />
+    <div class="flex h-full w-full flex-col items-center justify-center gap-4">
+      <img src={LoadingGif} class="h-40 w-40" alt="loading" />
       <span>{t("instance.exporting_instance")}</span>
       <Progress color="bg-primary-500" value={progress()} />
       <span>{`${progress()}% ${t("instance.export_completed")}`}</span>

@@ -10,7 +10,13 @@ import {
   createMemo
 } from "solid-js"
 import { createAsyncEffect } from "@/utils/asyncEffect"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@gd/ui"
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue
+} from "@gd/ui"
 import { rspc } from "@/utils/rspcClient"
 import fetchData from "./changelog.data"
 import { CFFEFile, CFFEFileIndex } from "@gd/core_module/bindings"
@@ -24,24 +30,24 @@ const ChangelogCard = (props: {
   releaseDate?: string
 }) => {
   return (
-    <div class="bg-darkSlate-700 rounded-xl border border-darkSlate-600 shadow-lg overflow-hidden">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 bg-darkSlate-750 border-b border-darkSlate-600">
+    <div class="bg-darkSlate-700 border-darkSlate-600 overflow-hidden rounded-xl border shadow-lg">
+      <div class="bg-darkSlate-750 border-darkSlate-600 flex flex-col gap-3 border-b p-4 sm:flex-row sm:items-center sm:justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-1 h-6 bg-blue-500 rounded-full flex-shrink-0"></div>
+          <div class="h-6 w-1 shrink-0 rounded-full bg-blue-500" />
           <div>
-            <h3 class="font-semibold text-lightSlate-50 text-sm sm:text-base">
+            <h3 class="text-lightSlate-50 text-sm font-semibold sm:text-base">
               Release Notes
             </h3>
             <Show
               when={props.releaseDate}
               fallback={
-                <p class="text-xs text-lightSlate-600">
+                <p class="text-lightSlate-600 text-xs">
                   No release date available
                 </p>
               }
             >
-              <div class="flex items-center gap-2 text-xs text-lightSlate-600">
-                <div class="i-hugeicons:calendar-01 flex-shrink-0"></div>
+              <div class="text-lightSlate-600 flex items-center gap-2 text-xs">
+                <div class="i-hugeicons:calendar-01 shrink-0" />
                 <span>{format(new Date(props.releaseDate!), "PPP")}</span>
                 <span class="text-lightSlate-700">•</span>
                 <span class="text-lightSlate-500">
@@ -55,14 +61,14 @@ const ChangelogCard = (props: {
         </div>
         <div class="flex items-center gap-2">
           <Show when={props.platform === "curseforge"}>
-            <div class="flex items-center gap-1.5 text-orange-500 bg-orange-500/10 px-2 py-1 rounded-full text-xs">
-              <div class="i-simple-icons:curseforge w-3 h-3 flex-shrink-0"></div>
+            <div class="flex items-center gap-1.5 rounded-full bg-orange-500/10 px-2 py-1 text-xs text-orange-500">
+              <div class="i-simple-icons:curseforge h-3 w-3 shrink-0" />
               <span class="font-medium">CurseForge</span>
             </div>
           </Show>
           <Show when={props.platform === "modrinth"}>
-            <div class="flex items-center gap-1.5 text-green-500 bg-green-500/10 px-2 py-1 rounded-full text-xs">
-              <div class="i-simple-icons:modrinth w-3 h-3 flex-shrink-0"></div>
+            <div class="flex items-center gap-1.5 rounded-full bg-green-500/10 px-2 py-1 text-xs text-green-500">
+              <div class="i-simple-icons:modrinth h-3 w-3 shrink-0" />
               <span class="font-medium">Modrinth</span>
             </div>
           </Show>
@@ -72,24 +78,24 @@ const ChangelogCard = (props: {
       <div class="p-4 sm:p-6">
         <Show when={props.type === "html"}>
           <div
-            class="prose prose-invert max-w-none prose-sm sm:prose-base
-                   prose-headings:text-lightSlate-100 prose-headings:font-semibold
-                   prose-p:text-lightSlate-300 prose-p:leading-relaxed prose-p:mb-4
-                   prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300
-                   prose-strong:text-lightSlate-200 prose-strong:font-semibold
-                   prose-ul:text-lightSlate-300 prose-ol:text-lightSlate-300
-                   prose-li:my-1 prose-li:leading-relaxed
-                   prose-code:text-pink-400 prose-code:bg-darkSlate-600 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-                   prose-pre:bg-darkSlate-600 prose-pre:border prose-pre:border-darkSlate-500 prose-pre:rounded-lg prose-pre:overflow-x-auto
-                   prose-blockquote:border-l-blue-500 prose-blockquote:bg-darkSlate-600 prose-blockquote:p-4 prose-blockquote:rounded-r-lg
-                   prose-hr:border-darkSlate-600
-                   prose-table:text-sm prose-table:border-collapse prose-th:border prose-th:border-darkSlate-500 prose-th:bg-darkSlate-600 prose-th:p-2
-                   prose-td:border prose-td:border-darkSlate-500 prose-td:p-2"
+            class="prose prose-invert prose-sm sm:prose-base prose-headings:text-lightSlate-100
+                   prose-headings:font-semibold prose-p:text-lightSlate-300
+                   prose-p:leading-relaxed prose-p:mb-4 prose-a:text-blue-400
+                   prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-lightSlate-200
+                   prose-strong:font-semibold prose-ul:text-lightSlate-300
+                   prose-ol:text-lightSlate-300 prose-li:my-1
+                   prose-li:leading-relaxed prose-code:text-pink-400
+                   prose-code:bg-darkSlate-600 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-pre:bg-darkSlate-600
+                   prose-pre:border prose-pre:border-darkSlate-500 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-blockquote:border-l-blue-500
+                   prose-blockquote:bg-darkSlate-600 prose-blockquote:p-4 prose-blockquote:rounded-r-lg prose-hr:border-darkSlate-600
+                   prose-table:text-sm
+                   prose-table:border-collapse prose-th:border prose-th:border-darkSlate-500 prose-th:bg-darkSlate-600 prose-th:p-2 prose-td:border
+                   prose-td:border-darkSlate-500 prose-td:p-2 max-w-none"
             innerHTML={props.content}
           />
         </Show>
         <Show when={props.type === "text"}>
-          <pre class="whitespace-pre-wrap text-lightSlate-300 leading-relaxed font-mono text-xs sm:text-sm bg-darkSlate-600 p-3 sm:p-4 rounded-lg border border-darkSlate-500 overflow-x-auto">
+          <pre class="text-lightSlate-300 bg-darkSlate-600 border-darkSlate-500 overflow-x-auto whitespace-pre-wrap rounded-lg border p-3 font-mono text-xs leading-relaxed sm:p-4 sm:text-sm">
             {props.content}
           </pre>
         </Show>
@@ -101,24 +107,24 @@ const ChangelogCard = (props: {
 const EnhancedChangelogSkeleton = () => {
   return (
     <div class="w-full space-y-6">
-      <div class="bg-darkSlate-700 rounded-xl border border-darkSlate-600 overflow-hidden">
-        <div class="flex items-center justify-between p-4 bg-darkSlate-750 border-b border-darkSlate-600">
+      <div class="bg-darkSlate-700 border-darkSlate-600 overflow-hidden rounded-xl border">
+        <div class="bg-darkSlate-750 border-darkSlate-600 flex items-center justify-between border-b p-4">
           <div class="flex items-center gap-3">
-            <div class="w-1 h-6 bg-darkSlate-500 rounded-full animate-pulse"></div>
+            <div class="bg-darkSlate-500 h-6 w-1 animate-pulse rounded-full" />
             <div>
-              <div class="h-5 w-24 bg-darkSlate-500 rounded animate-pulse mb-1"></div>
-              <div class="h-3 w-32 bg-darkSlate-500 rounded animate-pulse"></div>
+              <div class="bg-darkSlate-500 mb-1 h-5 w-24 animate-pulse rounded" />
+              <div class="bg-darkSlate-500 h-3 w-32 animate-pulse rounded" />
             </div>
           </div>
-          <div class="h-6 w-20 bg-darkSlate-500 rounded-full animate-pulse"></div>
+          <div class="bg-darkSlate-500 h-6 w-20 animate-pulse rounded-full" />
         </div>
-        <div class="p-6 space-y-4">
-          <div class="h-4 w-3/4 bg-darkSlate-500 rounded animate-pulse"></div>
-          <div class="h-4 w-full bg-darkSlate-500 rounded animate-pulse"></div>
-          <div class="h-4 w-2/3 bg-darkSlate-500 rounded animate-pulse"></div>
-          <div class="h-4 w-5/6 bg-darkSlate-500 rounded animate-pulse"></div>
-          <div class="h-4 w-1/2 bg-darkSlate-500 rounded animate-pulse"></div>
-          <div class="h-4 w-4/5 bg-darkSlate-500 rounded animate-pulse"></div>
+        <div class="space-y-4 p-6">
+          <div class="bg-darkSlate-500 h-4 w-3/4 animate-pulse rounded" />
+          <div class="bg-darkSlate-500 h-4 w-full animate-pulse rounded" />
+          <div class="bg-darkSlate-500 h-4 w-2/3 animate-pulse rounded" />
+          <div class="bg-darkSlate-500 h-4 w-5/6 animate-pulse rounded" />
+          <div class="bg-darkSlate-500 h-4 w-1/2 animate-pulse rounded" />
+          <div class="bg-darkSlate-500 h-4 w-4/5 animate-pulse rounded" />
         </div>
       </div>
     </div>
@@ -127,23 +133,23 @@ const EnhancedChangelogSkeleton = () => {
 
 const EmptyChangelogState = () => {
   return (
-    <div class="flex flex-col items-center justify-center py-12 sm:py-16 px-4 sm:px-6 text-center">
-      <div class="w-16 h-16 sm:w-24 sm:h-24 bg-darkSlate-600 rounded-full flex items-center justify-center mb-6">
-        <div class="i-hugeicons:note text-2xl sm:text-3xl text-lightSlate-500"></div>
+    <div class="flex flex-col items-center justify-center px-4 py-12 text-center sm:px-6 sm:py-16">
+      <div class="bg-darkSlate-600 mb-6 flex h-16 w-16 items-center justify-center rounded-full sm:h-24 sm:w-24">
+        <div class="i-hugeicons:note text-lightSlate-500 text-2xl sm:text-3xl" />
       </div>
-      <h3 class="text-lg sm:text-xl font-semibold text-lightSlate-200 mb-2">
+      <h3 class="text-lightSlate-200 mb-2 text-lg font-semibold sm:text-xl">
         No changelog available
       </h3>
-      <p class="text-lightSlate-600 max-w-md leading-relaxed text-sm sm:text-base">
+      <p class="text-lightSlate-600 max-w-md text-sm leading-relaxed sm:text-base">
         This version doesn't have any changelog information available. Try
         selecting a different version or check back later.
       </p>
-      <div class="mt-6 sm:mt-8 p-3 sm:p-4 bg-darkSlate-700 rounded-lg border border-darkSlate-600 text-left max-w-md w-full">
-        <div class="flex items-center gap-2 text-lightSlate-400 text-sm mb-2">
-          <div class="i-hugeicons:information-circle flex-shrink-0"></div>
+      <div class="bg-darkSlate-700 border-darkSlate-600 mt-6 w-full max-w-md rounded-lg border p-3 text-left sm:mt-8 sm:p-4">
+        <div class="text-lightSlate-400 mb-2 flex items-center gap-2 text-sm">
+          <div class="i-hugeicons:information-circle shrink-0" />
           <span class="font-medium">Tip</span>
         </div>
-        <p class="text-xs sm:text-sm text-lightSlate-600 leading-relaxed">
+        <p class="text-lightSlate-600 text-xs leading-relaxed sm:text-sm">
           Some mod authors don't provide detailed changelogs for every release.
           You can check the mod's project page for more information about
           updates.
@@ -165,7 +171,9 @@ const Changelog = () => {
     ]
 
   const [options, setOptions] = createSignal<string[]>([])
-  const [optionLabels, setOptionLabels] = createSignal<Record<string, string>>({})
+  const [optionLabels, setOptionLabels] = createSignal<Record<string, string>>(
+    {}
+  )
   const [fileId, setFileId] = createSignal<number | string | undefined>(
     undefined
   )
@@ -185,9 +193,14 @@ const Changelog = () => {
         setReleaseDate(undefined)
         setIsLoadingChangelog(false)
 
-        const opts = routeData.modrinthProjectVersions.data.map((file) => file.id)
+        const opts = routeData.modrinthProjectVersions.data.map(
+          (file) => file.id
+        )
         const labels = Object.fromEntries(
-          routeData.modrinthProjectVersions.data.map((file) => [file.id, file.version_number])
+          routeData.modrinthProjectVersions.data.map((file) => [
+            file.id,
+            file.version_number
+          ])
         )
         setOptions(opts)
         setOptionLabels(labels)
@@ -200,9 +213,14 @@ const Changelog = () => {
       setReleaseDate(undefined)
       setIsLoadingChangelog(false)
 
-      const opts = (sortedVersions as CFFEFileIndex[]).map((file) => file.fileId.toString())
+      const opts = (sortedVersions as CFFEFileIndex[]).map((file) =>
+        file.fileId.toString()
+      )
       const labels = Object.fromEntries(
-        (sortedVersions as CFFEFileIndex[]).map((file) => [file.fileId.toString(), file.filename])
+        (sortedVersions as CFFEFileIndex[]).map((file) => [
+          file.fileId.toString(),
+          file.filename
+        ])
       )
       setOptions(opts)
       setOptionLabels(labels)
@@ -311,28 +329,28 @@ const Changelog = () => {
   const hasContent = createMemo(() => changeLog() && changeLog()?.trim() !== "")
 
   return (
-    <div class="w-full min-h-screen bg-darkSlate-800">
+    <div class="bg-darkSlate-800 min-h-screen w-full">
       <Suspense fallback={<EnhancedChangelogSkeleton />}>
-        <div class="sticky top-0 z-10 bg-darkSlate-800/95 backdrop-blur-sm border-b border-darkSlate-600">
+        <div class="bg-darkSlate-800/95 border-darkSlate-600 sticky top-0 z-10 border-b backdrop-blur-sm">
           <div class="flex flex-col gap-4 p-4 md:p-6">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h1 class="text-xl md:text-2xl font-bold text-lightSlate-50 mb-1">
+                <h1 class="text-lightSlate-50 mb-1 text-xl font-bold md:text-2xl">
                   Changelog
                 </h1>
-                <p class="text-sm text-lightSlate-600">
+                <p class="text-lightSlate-600 text-sm">
                   View version history and updates
                 </p>
               </div>
               <Show when={routeData.modpackDetails.data}>
-                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                  <span class="text-sm font-medium text-lightSlate-400 sm:hidden">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <span class="text-lightSlate-400 text-sm font-medium sm:hidden">
                     Version:
                   </span>
-                  <span class="hidden sm:inline text-sm font-medium text-lightSlate-400">
+                  <span class="text-lightSlate-400 hidden text-sm font-medium sm:inline">
                     Version:
                   </span>
-                  <div class="w-full sm:min-w-48 sm:w-auto">
+                  <div class="w-full sm:w-auto sm:min-w-48">
                     <Select
                       value={fileId()?.toString()}
                       options={options()}
@@ -341,13 +359,18 @@ const Changelog = () => {
                       }}
                       itemComponent={(props) => (
                         <SelectItem item={props.item}>
-                          {optionLabels()[props.item.rawValue] || props.item.rawValue}
+                          {optionLabels()[props.item.rawValue] ||
+                            props.item.rawValue}
                         </SelectItem>
                       )}
                     >
-                      <SelectTrigger class="w-full bg-darkSlate-700 border-darkSlate-600 hover:border-darkSlate-500 transition-colors">
+                      <SelectTrigger class="bg-darkSlate-700 border-darkSlate-600 hover:border-darkSlate-500 w-full transition-colors">
                         <SelectValue<string>>
-                          {(state) => optionLabels()[state.selectedOption() || ""] || state.selectedOption() || ""}
+                          {(state) =>
+                            optionLabels()[state.selectedOption() || ""] ||
+                            state.selectedOption() ||
+                            ""
+                          }
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent />

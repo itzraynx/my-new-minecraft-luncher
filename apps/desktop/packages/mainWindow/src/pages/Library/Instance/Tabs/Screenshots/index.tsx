@@ -39,9 +39,9 @@ const screenshots: ScreenshotsType[] = [
 
 const NoMods = () => {
   return (
-    <div class="h-full min-h-90 w-full flex justify-center items-center">
-      <div class="flex flex-col justify-center items-center text-center gap-4">
-        <div class="i-hugeicons:image-01 w-16 h-16 text-lightSlate-600" />
+    <div class="min-h-90 flex h-full w-full items-center justify-center">
+      <div class="flex flex-col items-center justify-center gap-4 text-center">
+        <div class="i-hugeicons:image-01 text-lightSlate-600 h-16 w-16" />
         <p class="text-lightSlate-700 max-w-100">
           <Trans
             key="instance.no_screenshots_text"
@@ -101,10 +101,10 @@ const Screenshots = () => {
 
   return (
     <div>
-      <div class="flex flex-col sticky top-30 bg-darkSlate-800 z-10 pt-10 transition-all duration-100 ease-in-out">
-        <div class="flex justify-between text-lightSlate-700 z-10 mb-5">
+      <div class="top-30 bg-darkSlate-800 sticky z-10 flex flex-col pt-10 transition-all duration-100 ease-in-out">
+        <div class="text-lightSlate-700 z-10 mb-5 flex justify-between">
           <div class="flex gap-4">
-            <div class="flex items-center gap-2 cursor-pointer">
+            <div class="flex cursor-pointer items-center gap-2">
               <Checkbox checked={true} disabled={false} />
               <Trans
                 key="instance.select_all_screenshots"
@@ -113,7 +113,7 @@ const Screenshots = () => {
                 }}
               />
             </div>
-            <div class="flex items-center gap-2 cursor-pointer hover:text-lightSlate-50 transition duration-100 ease-in-out">
+            <div class="hover:text-lightSlate-50 flex cursor-pointer items-center gap-2 transition duration-100 ease-in-out">
               <span class="i-hugeicons:folder-open text-2xl" />
               <Trans
                 key="instance.open_screenshots_folder"
@@ -122,7 +122,7 @@ const Screenshots = () => {
                 }}
               />
             </div>
-            <div class="flex items-center gap-2 cursor-pointer hover:text-lightSlate-50 transition duration-100 ease-in-out">
+            <div class="hover:text-lightSlate-50 flex cursor-pointer items-center gap-2 transition duration-100 ease-in-out">
               <span class="i-hugeicons:unavailable text-2xl" />
               <Trans
                 key="instance.disable_screenshot"
@@ -131,7 +131,7 @@ const Screenshots = () => {
                 }}
               />
             </div>
-            <div class="flex items-center gap-2 cursor-pointer hover:text-lightSlate-50 transition duration-100 ease-in-out">
+            <div class="hover:text-lightSlate-50 flex cursor-pointer items-center gap-2 transition duration-100 ease-in-out">
               <span class="i-hugeicons:delete-02 text-2xl" />
               <Trans
                 key="instance.delete_screenshot"
@@ -152,19 +152,19 @@ const Screenshots = () => {
           </div>
         </div>
       </div>
-      <div class="h-full overflow-y-hidden flex flex-col gap-10">
+      <div class="flex h-full flex-col gap-10 overflow-y-hidden">
         <Show when={screenshots.length > 0} fallback={<NoMods />}>
           <For each={Object.entries(filteredScreenshots)}>
             {([days, screenshots]) => (
               <div class="flex flex-col">
                 <h3 class="mt-0">{getTitleByDays(days)}</h3>
-                <div class="w-full flex gap-6 flex-wrap h-auto">
+                <div class="flex h-auto w-full flex-wrap gap-6">
                   <For each={screenshots}>
                     {(screenshot) => (
                       <div class="flex flex-col">
-                        <img class="w-60 h-32" src={screenshot.img} />
-                        <div class="flex justify-between items-center mt-2">
-                          <p class="m-0 text-lightSlate-700 text-md">
+                        <img class="h-32 w-60" src={screenshot.img} />
+                        <div class="mt-2 flex items-center justify-between">
+                          <p class="text-lightSlate-700 text-md m-0">
                             {format(new Date(screenshot.date), "dd-MM-yyyy")}
                           </p>
                           <div class="text-lightSlate-700 i-hugeicons:more-horizontal" />

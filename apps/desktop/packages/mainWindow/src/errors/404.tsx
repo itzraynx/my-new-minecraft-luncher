@@ -3,7 +3,7 @@ import { Trans } from "@gd/i18n"
 export default function NotFound() {
   return (
     <div>
-      <section class="text-gray-700 p-8">
+      <section class="p-8 text-gray-700">
         <h1 class="text-2xl font-bold">
           <Trans
             key="404_message"

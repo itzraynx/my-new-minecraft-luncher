@@ -838,18 +838,18 @@ const Instance = () => {
             >
               <Show when={duplicatedMods().length > 0}>
                 <div
-                  class="bg-yellow-900/20 border border-yellow-600/30 rounded-xl p-4 flex items-center justify-between mb-4"
+                  class="mb-4 flex items-center justify-between rounded-xl border border-yellow-600/30 bg-yellow-900/20 p-4"
                   classList={{
                     "mx-6 mt-4": location.pathname.includes("/addons")
                   }}
                 >
                   <div class="flex items-center gap-3">
-                    <div class="i-hugeicons:alert-01 text-yellow-500 text-2xl" />
+                    <div class="i-hugeicons:alert-01 text-2xl text-yellow-500" />
                     <div>
-                      <h3 class="font-semibold text-yellow-200 m-0 mb-1">
+                      <h3 class="m-0 mb-1 font-semibold text-yellow-200">
                         Duplicated Mods Detected
                       </h3>
-                      <p class="text-sm text-yellow-300/70 m-0">
+                      <p class="m-0 text-sm text-yellow-300/70">
                         {duplicatedMods().length} mod
                         {duplicatedMods().length > 1 ? "s have" : " has"}{" "}
                         multiple versions installed. This may cause conflicts.

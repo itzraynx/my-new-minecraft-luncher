@@ -33,7 +33,7 @@ export function FiltersDropdown() {
             <Trans key="search.filters" />
           </div>
           <div
-            class="text-lightSlate-900 hover:text-lightSlate-50 text-xs transition-colors duration-200 ease-[cubic-bezier(.4,0,.2,1)] cursor-pointer"
+            class="text-lightSlate-900 hover:text-lightSlate-50 cursor-pointer text-xs transition-colors duration-200 ease-[cubic-bezier(.4,0,.2,1)]"
             onClick={resetAllFilters}
           >
             <Trans key="general.reset_filters" />

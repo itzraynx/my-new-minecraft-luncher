@@ -20,7 +20,8 @@ const badgeVariants = cva(
           "text-lightSlate-50 border-0 border-green-500 bg-green-500 hover:bg-green-600",
         warning:
           "text-darkSlate-900 border-0 border-yellow-500 bg-yellow-500 hover:bg-yellow-600",
-        error: "text-lightSlate-50 border-0 border-red-500 bg-red-500 hover:bg-red-600"
+        error:
+          "text-lightSlate-50 border-0 border-red-500 bg-red-500 hover:bg-red-600"
       }
     },
     defaultVariants: {

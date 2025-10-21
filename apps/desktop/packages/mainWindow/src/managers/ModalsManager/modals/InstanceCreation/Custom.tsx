@@ -498,21 +498,24 @@ const Custom = (props: Pick<ModalProps, "data">) => {
   })
 
   return (
-    <div class="flex flex-col h-[600px] w-full">
-      <div class="flex flex-col gap-3 p-4 flex-1 overflow-y-auto" style={{ "scrollbar-gutter": "stable" }}>
+    <div class="flex h-[600px] w-full flex-col">
+      <div
+        class="flex flex-1 flex-col gap-3 overflow-y-auto p-4"
+        style={{ "scrollbar-gutter": "stable" }}
+      >
         {/* Instance Details Section */}
         <div class="flex flex-col gap-3">
-          <div class="flex items-center w-full">
-            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
-            <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+          <div class="flex w-full items-center">
+            <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
+            <span class="text-lightSlate-400 flex items-center gap-2 px-3 text-base">
               <div class="i-hugeicons:file-02 text-primary-500 text-sm" />
               <Trans key="general.about" />
             </span>
-            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+            <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
           </div>
-          <div class="flex gap-4 w-full items-start">
+          <div class="flex w-full items-start gap-4">
             <div
-              class="relative flex justify-center items-center bg-darkSlate-800 bg-center bg-cover h-20 w-20 rounded-xl box-border cursor-pointer border-0 outline-none hover:outline-darkSlate-600 transition-all group flex-shrink-0"
+              class="bg-darkSlate-800 hover:outline-darkSlate-600 group relative box-border flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center rounded-xl border-0 bg-cover bg-center outline-none transition-all"
               style={{
                 ...(bgPreview() && {
                   "background-image": `url("${bgPreview()}")`
@@ -535,16 +538,16 @@ const Custom = (props: Pick<ModalProps, "data">) => {
               <Switch>
                 <Match when={!bgPreview()}>
                   <div class="flex flex-col items-center gap-0.5">
-                    <div class="i-hugeicons:image-01 text-2xl text-lightSlate-600 group-hover:text-lightSlate-400 transition-colors" />
-                    <span class="text-[10px] text-lightSlate-600 group-hover:text-lightSlate-400 transition-colors">
+                    <div class="i-hugeicons:image-01 text-lightSlate-600 group-hover:text-lightSlate-400 text-2xl transition-colors" />
+                    <span class="text-lightSlate-600 group-hover:text-lightSlate-400 text-[10px] transition-colors">
                       Add icon
                     </span>
                   </div>
                 </Match>
                 <Match when={bgPreview()}>
-                  <div class="absolute top-1 right-1 p-1 bg-darkSlate-900/90 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="bg-darkSlate-900/90 absolute right-1 top-1 rounded-lg p-1 opacity-0 transition-opacity group-hover:opacity-100">
                     <div
-                      class="text-lightSlate-50 transition-all text-base i-hugeicons:cancel-circle hover:text-red-500"
+                      class="text-lightSlate-50 i-hugeicons:cancel-circle text-base transition-all hover:text-red-500"
                       onClick={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
@@ -555,8 +558,8 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                 </Match>
               </Switch>
             </div>
-            <div class="flex-1 flex flex-col gap-2">
-              <label class="text-xs font-medium text-lightSlate-400">
+            <div class="flex flex-1 flex-col gap-2">
+              <label class="text-lightSlate-400 text-xs font-medium">
                 <Trans key="instance.instance_name" />
               </label>
               <Input
@@ -580,15 +583,15 @@ const Custom = (props: Pick<ModalProps, "data">) => {
 
         {/* Minecraft Version Section */}
         <div class="flex flex-col gap-3">
-          <div class="flex items-center w-full">
-            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
-            <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+          <div class="flex w-full items-center">
+            <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
+            <span class="text-lightSlate-400 flex items-center gap-2 px-3 text-base">
               <div class="i-hugeicons:minecraft text-primary-500 text-sm" />
               <Trans key="instance.instance_mc_version" />
             </span>
-            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+            <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
           </div>
-          <div class="flex flex-col gap-2 w-full">
+          <div class="flex w-full flex-col gap-2">
             <Select
               value={mcVersion()}
               onChange={(value) => {
@@ -598,10 +601,9 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                 if (!loader()) {
                   setLoaderVersions([])
                 } else if (isForge()) {
-                  const versions =
-                    forgeVersionsQuery?.data?.gameVersions.find(
-                      (v) => v.id === value
-                    )?.loaders
+                  const versions = forgeVersionsQuery?.data?.gameVersions.find(
+                    (v) => v.id === value
+                  )?.loaders
                   setLoaderVersions(versions || [])
                 } else if (isNeoForge()) {
                   const versions =
@@ -652,7 +654,7 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                 )
                 return (
                   <SelectItem item={itemProps.item}>
-                    <div class="flex items-center justify-between w-full gap-2">
+                    <div class="flex w-full items-center justify-between gap-2">
                       <span
                         classList={{
                           "text-lightSlate-700": Boolean(
@@ -662,8 +664,12 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                       >
                         {itemProps.item.rawValue}
                       </span>
-                      <span class="flex-shrink-0">
-                        {version && mapTypeToColor(version.type, Boolean(!version.hasModloader && loader()))}
+                      <span class="shrink-0">
+                        {version &&
+                          mapTypeToColor(
+                            version.type,
+                            Boolean(!version.hasModloader && loader())
+                          )}
                       </span>
                     </div>
                   </SelectItem>
@@ -677,11 +683,13 @@ const Custom = (props: Pick<ModalProps, "data">) => {
               </SelectTrigger>
               <SelectContent />
             </Select>
-            <div class="flex items-center gap-2 flex-wrap">
+            <div class="flex flex-wrap items-center gap-2">
               <Badge
                 variant={snapshotVersionFilter() ? "default" : "secondary"}
-                class="cursor-pointer text-xs px-2.5 py-1"
-                onClick={() => setSnapshotVersionFilter(!snapshotVersionFilter())}
+                class="cursor-pointer px-2.5 py-1 text-xs"
+                onClick={() =>
+                  setSnapshotVersionFilter(!snapshotVersionFilter())
+                }
                 title="Snapshot versions"
               >
                 <div class="flex items-center gap-1">
@@ -691,8 +699,10 @@ const Custom = (props: Pick<ModalProps, "data">) => {
               </Badge>
               <Badge
                 variant={oldAlphaVersionFilter() ? "default" : "secondary"}
-                class="cursor-pointer text-xs px-2.5 py-1"
-                onClick={() => setOldAlphaVersionFilter(!oldAlphaVersionFilter())}
+                class="cursor-pointer px-2.5 py-1 text-xs"
+                onClick={() =>
+                  setOldAlphaVersionFilter(!oldAlphaVersionFilter())
+                }
                 title="Old alpha versions"
               >
                 <div class="flex items-center gap-1">
@@ -702,7 +712,7 @@ const Custom = (props: Pick<ModalProps, "data">) => {
               </Badge>
               <Badge
                 variant={oldBetaVersionFilter() ? "default" : "secondary"}
-                class="cursor-pointer text-xs px-2.5 py-1"
+                class="cursor-pointer px-2.5 py-1 text-xs"
                 onClick={() => setOldBetaVersionFilter(!oldBetaVersionFilter())}
                 title="Old beta versions"
               >
@@ -717,19 +727,19 @@ const Custom = (props: Pick<ModalProps, "data">) => {
 
         {/* Modloader Section */}
         <div class="flex flex-col gap-3">
-          <div class="flex items-center w-full">
-            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
-            <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+          <div class="flex w-full items-center">
+            <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
+            <span class="text-lightSlate-400 flex items-center gap-2 px-3 text-base">
               <div class="i-hugeicons:package text-primary-500 text-sm" />
               <Trans key="general.modloader" />
             </span>
-            <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+            <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
           </div>
           <div class="grid grid-cols-5 gap-3">
             <For each={modloaders}>
               {(modloader) => (
                 <button
-                  class="group flex flex-col items-center gap-2 p-3 bg-darkSlate-800 rounded-lg border-0 border-transparent outline-none hover:outline-darkSlate-600 hover:bg-darkSlate-700 transition-all duration-200 ease-in-out"
+                  class="bg-darkSlate-800 hover:outline-darkSlate-600 hover:bg-darkSlate-700 group flex flex-col items-center gap-2 rounded-lg border-0 border-transparent p-3 outline-none transition-all duration-200 ease-in-out"
                   classList={{
                     "!outline-primary-500": loader() === modloader.key
                   }}
@@ -751,7 +761,7 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                     src={getModloaderIcon(modloader.key || "vanilla")}
                     alt={modloader.label}
                   />
-                  <span class="text-xs font-medium text-lightSlate-300 group-hover:text-lightSlate-50 transition-colors">
+                  <span class="text-lightSlate-300 group-hover:text-lightSlate-50 text-xs font-medium transition-colors">
                     {modloader.label}
                   </span>
                 </button>
@@ -761,19 +771,21 @@ const Custom = (props: Pick<ModalProps, "data">) => {
 
           {/* Modloader Version - Appears inline when modloader selected */}
           <Show when={loader()}>
-            <div class="flex flex-col gap-2 pl-4 border-l-2 border-primary-500/30">
-              <label class="text-xs font-medium text-lightSlate-400">
+            <div class="border-primary-500/30 flex flex-col gap-2 border-l-2 pl-4">
+              <label class="text-lightSlate-400 text-xs font-medium">
                 <Trans key="instance.instance_loader_version" />
               </label>
               <Switch>
-                <Match when={
-                  (forgeVersionsQuery.isFetching ||
-                   fabricVersionsQuery.isFetching ||
-                   quiltVersionsQuery.isFetching ||
-                   neoForgeVersionsQuery.isFetching) &&
-                  loaderVersions().length === 0
-                }>
-                  <div class="h-10 bg-darkSlate-800 rounded-md animate-pulse" />
+                <Match
+                  when={
+                    (forgeVersionsQuery.isFetching ||
+                      fabricVersionsQuery.isFetching ||
+                      quiltVersionsQuery.isFetching ||
+                      neoForgeVersionsQuery.isFetching) &&
+                    loaderVersions().length === 0
+                  }
+                >
+                  <div class="bg-darkSlate-800 h-10 animate-pulse rounded-md" />
                 </Match>
                 <Match when={loaderVersions().length > 0}>
                   <Select
@@ -802,16 +814,20 @@ const Custom = (props: Pick<ModalProps, "data">) => {
                     <SelectContent />
                   </Select>
                 </Match>
-                <Match when={
-                  loaderVersions().length === 0 &&
-                  !forgeVersionsQuery.isFetching &&
-                  !fabricVersionsQuery.isFetching &&
-                  !quiltVersionsQuery.isFetching &&
-                  !neoForgeVersionsQuery.isFetching
-                }>
-                  <div class="flex items-center gap-2 text-sm text-lightSlate-500 bg-darkSlate-800 rounded-md px-3 py-2">
+                <Match
+                  when={
+                    loaderVersions().length === 0 &&
+                    !forgeVersionsQuery.isFetching &&
+                    !fabricVersionsQuery.isFetching &&
+                    !quiltVersionsQuery.isFetching &&
+                    !neoForgeVersionsQuery.isFetching
+                  }
+                >
+                  <div class="text-lightSlate-500 bg-darkSlate-800 flex items-center gap-2 rounded-md px-3 py-2 text-sm">
                     <div class="i-hugeicons:alert-circle text-yellow-500" />
-                    <span>No versions available for Minecraft {mcVersion()}</span>
+                    <span>
+                      No versions available for Minecraft {mcVersion()}
+                    </span>
                   </div>
                 </Match>
               </Switch>

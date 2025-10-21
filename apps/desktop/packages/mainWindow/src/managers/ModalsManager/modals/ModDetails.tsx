@@ -115,8 +115,8 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
           <Show
             when={getModImage()}
             fallback={
-              <div class="h-24 w-24 rounded-lg bg-darkSlate-700 flex items-center justify-center shadow-lg">
-                <div class="i-hugeicons:zip-01 text-4xl text-lightSlate-600" />
+              <div class="bg-darkSlate-700 flex h-24 w-24 items-center justify-center rounded-lg shadow-lg">
+                <div class="i-hugeicons:zip-01 text-lightSlate-600 text-4xl" />
               </div>
             }
           >
@@ -129,12 +129,12 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
           <div class="flex flex-1 flex-col gap-2">
             <div class="flex items-start justify-between">
               <div>
-                <h2 class="text-2xl font-bold flex items-center gap-2">
+                <h2 class="flex items-center gap-2 text-2xl font-bold">
                   {displayName()}
                   <CopyIcon text={displayName()} />
                 </h2>
                 <Show when={mod().filename !== displayName()}>
-                  <p class="text-sm text-lightSlate-600">{mod().filename}</p>
+                  <p class="text-lightSlate-600 text-sm">{mod().filename}</p>
                 </Show>
               </div>
               <Badge variant={mod().enabled ? "success" : "secondary"}>
@@ -217,7 +217,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                   <h3 class="mb-2 font-semibold">
                     {t("modals.mod_details.description")}
                   </h3>
-                  <p class="text-sm text-lightSlate-300">
+                  <p class="text-lightSlate-300 text-sm">
                     {mod().metadata?.description ||
                       modDescription() ||
                       t("modals.mod_details.no_description")}
@@ -230,7 +230,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                   <h3 class="mb-2 font-semibold">
                     {t("modals.mod_details.authors")}
                   </h3>
-                  <p class="text-sm text-lightSlate-300">
+                  <p class="text-lightSlate-300 text-sm">
                     {mod().metadata!.authors}
                   </p>
                 </div>
@@ -280,7 +280,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                   <span class="text-lightSlate-600">
                     {t("modals.mod_details.file_id")}:
                   </span>
-                  <div class="font-mono mt-1 flex items-center gap-2">
+                  <div class="mt-1 flex items-center gap-2 font-mono">
                     {mod().id}
                     <CopyIcon text={mod().id} />
                   </div>
@@ -291,7 +291,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                     <span class="text-lightSlate-600">
                       {t("modals.mod_details.mod_id")}:
                     </span>
-                    <div class="font-mono mt-1 flex items-center gap-2">
+                    <div class="mt-1 flex items-center gap-2 font-mono">
                       {mod().metadata!.modid}
                       <CopyIcon text={mod().metadata!.modid} />
                     </div>
@@ -303,7 +303,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                     <span class="text-lightSlate-600">
                       {t("modals.mod_details.curseforge_project_id")}:
                     </span>
-                    <div class="font-mono mt-1 flex items-center gap-2">
+                    <div class="mt-1 flex items-center gap-2 font-mono">
                       {mod().curseforge!.project_id}
                       <CopyIcon
                         text={mod().curseforge!.project_id.toString()}
@@ -314,7 +314,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                     <span class="text-lightSlate-600">
                       {t("modals.mod_details.curseforge_file_id")}:
                     </span>
-                    <div class="font-mono mt-1 flex items-center gap-2">
+                    <div class="mt-1 flex items-center gap-2 font-mono">
                       {mod().curseforge!.file_id}
                       <CopyIcon text={mod().curseforge!.file_id.toString()} />
                     </div>
@@ -326,7 +326,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                     <span class="text-lightSlate-600">
                       {t("modals.mod_details.modrinth_project_id")}:
                     </span>
-                    <div class="font-mono mt-1 flex items-center gap-2">
+                    <div class="mt-1 flex items-center gap-2 font-mono">
                       {mod().modrinth!.project_id}
                       <CopyIcon text={mod().modrinth!.project_id} />
                     </div>
@@ -335,7 +335,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                     <span class="text-lightSlate-600">
                       {t("modals.mod_details.modrinth_version_id")}:
                     </span>
-                    <div class="font-mono mt-1 flex items-center gap-2">
+                    <div class="mt-1 flex items-center gap-2 font-mono">
                       {mod().modrinth!.version_id}
                       <CopyIcon text={mod().modrinth!.version_id} />
                     </div>
@@ -355,7 +355,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                       <span class="text-lightSlate-600">
                         {t("modals.mod_details.sha1")}:
                       </span>
-                      <div class="font-mono mt-1 flex items-start gap-2">
+                      <div class="mt-1 flex items-start gap-2 font-mono">
                         <span class="flex-1 break-all">
                           {mod().metadata!.sha_1}
                         </span>
@@ -368,7 +368,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                       <span class="text-lightSlate-600">
                         {t("modals.mod_details.sha512")}:
                       </span>
-                      <div class="font-mono mt-1 flex items-start gap-2">
+                      <div class="mt-1 flex items-start gap-2 font-mono">
                         <span class="flex-1 break-all">
                           {mod().metadata!.sha_512}
                         </span>
@@ -381,7 +381,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                       <span class="text-lightSlate-600">
                         {t("modals.mod_details.murmur2_signed")}:
                       </span>
-                      <div class="font-mono mt-1 flex items-start gap-2">
+                      <div class="mt-1 flex items-start gap-2 font-mono">
                         <span class="flex-1 break-all">
                           {mod().metadata!.murmur_2}
                         </span>
@@ -392,7 +392,7 @@ const ModDetails: Component<ModDetailsProps> = (props) => {
                       <span class="text-lightSlate-600">
                         {t("modals.mod_details.murmur2_unsigned")}:
                       </span>
-                      <div class="font-mono mt-1 flex items-start gap-2">
+                      <div class="mt-1 flex items-start gap-2 font-mono">
                         <span class="flex-1 break-all">
                           {(
                             parseInt(mod().metadata!.murmur_2) >>> 0

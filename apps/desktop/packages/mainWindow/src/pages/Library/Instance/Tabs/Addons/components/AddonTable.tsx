@@ -5,7 +5,6 @@ import {
   createSignal,
   onCleanup,
   createMemo,
-  createEffect,
   Accessor
 } from "solid-js"
 import {
@@ -568,7 +567,9 @@ export const AddonTable = (props: AddonTableProps) => {
               await props.mutations.handleToggleMod(mod)
             }
           },
-          icon: mod.enabled ? "i-hugeicons:toggle-off" : "i-hugeicons:toggle-off",
+          icon: mod.enabled
+            ? "i-hugeicons:toggle-off"
+            : "i-hugeicons:toggle-off",
           id: "toggle",
           disabled: props.isInstanceLocked()
         }
@@ -1171,7 +1172,7 @@ export const AddonTable = (props: AddonTableProps) => {
                     }
                   >
                     <ContextMenuSub gutter={8} shift={-5}>
-                      <ContextMenuSubTrigger class="relative data-[state=open]:bg-darkSlate-700">
+                      <ContextMenuSubTrigger class="data-[state=open]:bg-darkSlate-700 relative">
                         <div class="flex items-center gap-2">
                           <Show when={item.icon}>
                             <div class={item.icon} />

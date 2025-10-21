@@ -12,7 +12,7 @@ const Categories = (props: Props) => {
   const categories = () => props.modProps.data.categories
 
   return (
-    <div class="flex gap-2 scrollbar-hide">
+    <div class="scrollbar-hide flex gap-2">
       <Show
         when={!props.isRowSmall}
         fallback={

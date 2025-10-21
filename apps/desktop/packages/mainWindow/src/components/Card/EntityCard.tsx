@@ -17,27 +17,27 @@ const EntityCard = (props: EntityCardProps) => {
     <li
       class={`h-32 w-32 rounded-lg p-4 text-center ${
         props.entity.supported ? "cursor-pointer" : ""
-      } gap-3 shadow-md  transform flex-col ${
+      } flex-col gap-3  shadow-md ${
         props.entity.selection_type ? "hover:bg-[#1d2029ca]" : ""
-      }  hover:shadow-lg list-none flex items-center  ${
+      }  flex list-none items-center hover:shadow-lg  ${
         props.entity.supported ? "" : "bg-opacity-50"
-      } backdrop-blur-lg justify-center inline-block ${
+      } inline-block justify-center backdrop-blur-lg ${
         props.className ? props.className : "h-20 w-auto"
       } bg-[#1D2028] ${
-        props.selected ? "border-solid border-1 border-primary-500" : ""
+        props.selected ? "border-1 border-primary-500 border-solid" : ""
       }`}
       onClick={props.onClick}
     >
       {/* <div class={`${props.icon} text-red-400 text-5xl`}></div> */}
       {/* absolute left-0 right-0 text-center ml-auto mr-auto top-[30%] */}
       <Show when={!props.entity.supported}>
-        <span class="text-teal-600 font-bold">{t("SOON")}</span>
+        <span class="font-bold text-teal-600">{t("SOON")}</span>
       </Show>
       <div class="relative">
         <img
           src={props.icon}
           alt="icon"
-          class={`w-10 h-10 ${props.entity.supported ? "" : "opacity-20"}`}
+          class={`h-10 w-10 ${props.entity.supported ? "" : "opacity-20"}`}
         />
       </div>
 

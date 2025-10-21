@@ -54,14 +54,14 @@ const RowContainer = (props: Props & AdditionalProps) => {
       <Match when={props.modVersion}>
         <div class="contents">
           {/* Version name column */}
-          <div class="flex flex-col justify-center py-2 min-w-0">
-            <div class="flex items-center gap-2 min-w-0">
+          <div class="flex min-w-0 flex-col justify-center py-2">
+            <div class="flex min-w-0 items-center gap-2">
               <Show when={props.isInstalled}>
-                <div class="i-hugeicons:tick-02 text-green-400 text-sm" />
+                <div class="i-hugeicons:tick-02 text-sm text-green-400" />
               </Show>
               <Tooltip placement="top">
                 <TooltipTrigger>
-                  <h4 class="text-lightSlate-50 text-sm font-medium leading-tight truncate">
+                  <h4 class="text-lightSlate-50 truncate text-sm font-medium leading-tight">
                     {props.modVersion.name.replaceAll(".zip", "")}
                   </h4>
                 </TooltipTrigger>
@@ -88,10 +88,10 @@ const RowContainer = (props: Props & AdditionalProps) => {
                   </TooltipTrigger>
                   <TooltipContent>
                     <div class="flex flex-col gap-1">
-                      <div class="font-medium text-xs">
+                      <div class="text-xs font-medium">
                         Additional versions:
                       </div>
-                      <div class="flex flex-wrap gap-1 max-w-xs">
+                      <div class="flex max-w-xs flex-wrap gap-1">
                         <For each={props.modVersion.gameVersions.slice(2)}>
                           {(version) => (
                             <Badge variant="secondary" class="text-xs">
@@ -108,12 +108,12 @@ const RowContainer = (props: Props & AdditionalProps) => {
           </div>
 
           {/* Published date column */}
-          <div class="flex items-center text-lightSlate-300 text-sm">
+          <div class="text-lightSlate-300 flex items-center text-sm">
             {format(new Date(props.modVersion.datePublished), "MMM dd, yyyy")}
           </div>
 
           {/* Downloads column */}
-          <div class="flex items-center text-lightSlate-300 text-sm">
+          <div class="text-lightSlate-300 flex items-center text-sm">
             {formatDownloadCount(props.modVersion.downloads)}
           </div>
 
@@ -176,10 +176,10 @@ const RowContainer = (props: Props & AdditionalProps) => {
               <div class="bg-darkSlate-600 h-3 w-12 rounded" />
             </div>
           </div>
-          <div class="bg-darkSlate-600 animate-pulse h-4 rounded" />
-          <div class="bg-darkSlate-600 animate-pulse h-4 rounded" />
-          <div class="bg-darkSlate-600 animate-pulse h-4 rounded" />
-          <div class="bg-darkSlate-600 animate-pulse h-8 w-20 rounded" />
+          <div class="bg-darkSlate-600 h-4 animate-pulse rounded" />
+          <div class="bg-darkSlate-600 h-4 animate-pulse rounded" />
+          <div class="bg-darkSlate-600 h-4 animate-pulse rounded" />
+          <div class="bg-darkSlate-600 h-8 w-20 animate-pulse rounded" />
         </div>
       </Match>
     </Switch>

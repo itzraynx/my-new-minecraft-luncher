@@ -1,4 +1,13 @@
-import { Button, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, Input, Switch } from "@gd/ui"
+import {
+  Button,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  Input,
+  Switch
+} from "@gd/ui"
 import GDLauncherWideLogo from "/assets/images/gdlauncher_wide_logo_blue.svg"
 import { Trans, useTransContext } from "@gd/i18n"
 import { rspc } from "@/utils/rspcClient"
@@ -53,13 +62,20 @@ const General = () => {
 
   const getResolutionLabel = (key: string) => {
     switch (key) {
-      case "default": return "Default"
-      case "Standard:854x480": return "854 x 480 (100%)"
-      case "Standard:1046x588": return "1046 x 588 (150%)"
-      case "Standard:1208x679": return "1208 x 679 (200%)"
-      case "Standard:1479x831": return "1479 x 831 (300%)"
-      case "custom": return "Custom"
-      default: return key
+      case "default":
+        return "Default"
+      case "Standard:854x480":
+        return "854 x 480 (100%)"
+      case "Standard:1046x588":
+        return "1046 x 588 (150%)"
+      case "Standard:1208x679":
+        return "1208 x 679 (200%)"
+      case "Standard:1479x831":
+        return "1479 x 831 (300%)"
+      case "custom":
+        return "Custom"
+      default:
+        return key
     }
   }
 
@@ -99,9 +115,12 @@ const General = () => {
               options={["stable", "beta", "alpha"]}
               itemComponent={(props) => (
                 <SelectItem item={props.item}>
-                  {props.item.rawValue === "stable" && t("settings:release_channel_stable")}
-                  {props.item.rawValue === "beta" && t("settings:release_channel_beta")}
-                  {props.item.rawValue === "alpha" && t("settings:release_channel_alpha")}
+                  {props.item.rawValue === "stable" &&
+                    t("settings:release_channel_stable")}
+                  {props.item.rawValue === "beta" &&
+                    t("settings:release_channel_beta")}
+                  {props.item.rawValue === "alpha" &&
+                    t("settings:release_channel_alpha")}
                 </SelectItem>
               )}
             >
@@ -109,9 +128,13 @@ const General = () => {
                 <SelectValue<string>>
                   {(state) => {
                     const val = state.selectedOption()
-                    return val === "stable" ? t("settings:release_channel_stable") :
-                           val === "beta" ? t("settings:release_channel_beta") :
-                           val === "alpha" ? t("settings:release_channel_alpha") : ""
+                    return val === "stable"
+                      ? t("settings:release_channel_stable")
+                      : val === "beta"
+                        ? t("settings:release_channel_beta")
+                        : val === "alpha"
+                          ? t("settings:release_channel_alpha")
+                          : ""
                   }}
                 </SelectValue>
               </SelectTrigger>
@@ -143,7 +166,9 @@ const General = () => {
               )}
             >
               <SelectTrigger>
-                <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+                <SelectValue<string>>
+                  {(state) => state.selectedOption()}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent />
             </Select>
@@ -199,7 +224,9 @@ const General = () => {
               >
                 <SelectTrigger>
                   <SelectValue<string>>
-                    {(state) => getResolutionLabel(state.selectedOption() || "")}
+                    {(state) =>
+                      getResolutionLabel(state.selectedOption() || "")
+                    }
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent />
@@ -311,14 +338,27 @@ const General = () => {
                   }
                 })
               }}
-              options={["none", "minimizeWindow", "closeWindow", "hideWindow", "quitApp"]}
+              options={[
+                "none",
+                "minimizeWindow",
+                "closeWindow",
+                "hideWindow",
+                "quitApp"
+              ]}
               itemComponent={(props) => (
                 <SelectItem item={props.item}>
-                  {props.item.rawValue === "none" && t("settings:launcher_action_on_game_launch_none")}
-                  {props.item.rawValue === "minimizeWindow" && t("settings:launcher_action_on_game_launch_minimize_window")}
-                  {props.item.rawValue === "closeWindow" && t("settings:launcher_action_on_game_launch_close_window")}
-                  {props.item.rawValue === "hideWindow" && t("settings:launcher_action_on_game_launch_hide_window")}
-                  {props.item.rawValue === "quitApp" && t("settings:launcher_action_on_game_launch_quit_app")}
+                  {props.item.rawValue === "none" &&
+                    t("settings:launcher_action_on_game_launch_none")}
+                  {props.item.rawValue === "minimizeWindow" &&
+                    t(
+                      "settings:launcher_action_on_game_launch_minimize_window"
+                    )}
+                  {props.item.rawValue === "closeWindow" &&
+                    t("settings:launcher_action_on_game_launch_close_window")}
+                  {props.item.rawValue === "hideWindow" &&
+                    t("settings:launcher_action_on_game_launch_hide_window")}
+                  {props.item.rawValue === "quitApp" &&
+                    t("settings:launcher_action_on_game_launch_quit_app")}
                 </SelectItem>
               )}
             >
@@ -326,11 +366,25 @@ const General = () => {
                 <SelectValue<string>>
                   {(state) => {
                     const val = state.selectedOption()
-                    return val === "none" ? t("settings:launcher_action_on_game_launch_none") :
-                           val === "minimizeWindow" ? t("settings:launcher_action_on_game_launch_minimize_window") :
-                           val === "closeWindow" ? t("settings:launcher_action_on_game_launch_close_window") :
-                           val === "hideWindow" ? t("settings:launcher_action_on_game_launch_hide_window") :
-                           val === "quitApp" ? t("settings:launcher_action_on_game_launch_quit_app") : ""
+                    return val === "none"
+                      ? t("settings:launcher_action_on_game_launch_none")
+                      : val === "minimizeWindow"
+                        ? t(
+                            "settings:launcher_action_on_game_launch_minimize_window"
+                          )
+                        : val === "closeWindow"
+                          ? t(
+                              "settings:launcher_action_on_game_launch_close_window"
+                            )
+                          : val === "hideWindow"
+                            ? t(
+                                "settings:launcher_action_on_game_launch_hide_window"
+                              )
+                            : val === "quitApp"
+                              ? t(
+                                  "settings:launcher_action_on_game_launch_quit_app"
+                                )
+                              : ""
                   }}
                 </SelectValue>
               </SelectTrigger>
@@ -416,7 +470,7 @@ const General = () => {
         <Row class="bg-darkSlate-900 rounded-xl px-6 py-4">
           <img
             src={GDLauncherWideLogo}
-            class="h-14 cursor-pointer hover:opacity-80 transition-opacity duration-200 ease-in-out"
+            class="h-14 cursor-pointer transition-opacity duration-200 ease-in-out hover:opacity-80"
             onClick={() => {
               modalsContext?.openModal({
                 name: "changelogs"
@@ -425,10 +479,10 @@ const General = () => {
           />
           <RightHandSide>
             <div>
-              <div class="flex justify-end gap-4 flex-col items-center 2xl:flex-row">
+              <div class="flex flex-col items-center justify-end gap-4 2xl:flex-row">
                 <Button type="secondary" onClick={handleClearCache}>
                   <div class="flex items-center gap-2">
-                    <i class="w-5 h-5 i-hugeicons:delete-02" />
+                    <i class="i-hugeicons:delete-02 h-5 w-5" />
                     <div>
                       <Trans key="settings:clear_cache_button" />
                     </div>
@@ -441,7 +495,7 @@ const General = () => {
                   }}
                 >
                   <div class="flex items-center gap-2">
-                    <i class="w-5 h-5 i-hugeicons:arrow-reload-horizontal" />
+                    <i class="i-hugeicons:arrow-reload-horizontal h-5 w-5" />
                     <div>
                       <Trans key="settings:restart_app" />
                     </div>
@@ -449,14 +503,14 @@ const General = () => {
                 </Button>
                 <Button type="secondary">
                   <div class="flex items-center gap-2">
-                    <i class="w-5 h-5 i-hugeicons:delete-02" />
+                    <i class="i-hugeicons:delete-02 h-5 w-5" />
                     <div>
                       <Trans key="settings:reset_all_data" />
                     </div>
                   </div>
                 </Button>
               </div>
-              <div class="text-darkSlate-300 mt-4 text-4">
+              <div class="text-darkSlate-300 text-4 mt-4">
                 {"v"} {__APP_VERSION__}
               </div>
             </div>

@@ -82,7 +82,6 @@ export const bytesToMB = (bytes: number) => {
 
 export const streamToJson = async function* (
   stream: ReadableStream<Uint8Array>
-  // eslint-disable-next-line no-undef
 ): AsyncIterable<unknown> {
   const reader = stream.getReader()
   const decoder = new TextDecoder()

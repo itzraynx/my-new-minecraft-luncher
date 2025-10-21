@@ -41,8 +41,8 @@ export default function FiltersDisplay() {
 
   return (
     <Show when={hasActiveFilters()}>
-      <div class="px-6 pt-2 pb-4 border-b border-darkSlate-700/50">
-        <div class="flex items-center gap-2 flex-wrap">
+      <div class="border-darkSlate-700/50 border-b px-6 pb-4 pt-2">
+        <div class="flex flex-wrap items-center gap-2">
           <Button
             onClick={clearAllFilters}
             type="glass"
@@ -52,7 +52,7 @@ export default function FiltersDisplay() {
             <div class="i-hugeicons:cancel-circle h-4 w-4" />
             Clear all
           </Button>
-          <div class="w-px h-4 bg-darkSlate-600" />
+          <div class="bg-darkSlate-600 h-4 w-px" />
           <InstanceDisplay />
           <SearchApiDisplay />
           <CategoriesDisplay />

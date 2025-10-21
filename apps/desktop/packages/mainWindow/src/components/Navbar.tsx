@@ -13,13 +13,12 @@ import {
 import { useGDNavigate } from "@/managers/NavigationManager"
 import { AccountsDropdown } from "./AccountsDropdown"
 import { AccountStatus, AccountType } from "@gd/core_module/bindings"
-import { createStore } from "solid-js/store"
 import { port } from "@/utils/rspcClient"
 import updateAvailable, {
   updateDownloaded,
   updateProgress
 } from "@/utils/updater"
-import { Trans, useTransContext } from "@gd/i18n"
+import { Trans } from "@gd/i18n"
 import { useModal } from "@/managers/ModalsManager"
 import { useGlobalStore } from "./GlobalStoreContext"
 import { EnhancedSearchBar } from "./EnhancedSearchBar"
@@ -40,13 +39,11 @@ const AppNavbar = () => {
   const navigator = useGDNavigate()
   const globalStore = useGlobalStore()
   const modalsContext = useModal()
-  const [t] = useTransContext()
 
   const isLogin = useMatch(() => "/")
   const isSettings = useMatch(() => "/settings")
   const isSettingsNested = useMatch(() => "/settings/*")
   const isNews = useMatch(() => "/news/*")
-  const isSearch = useMatch(() => "/search/*")
   const selectedIndex = () => {
     if (isSettings() || isSettingsNested()) return 0
     if (isNews()) return 1
@@ -201,7 +198,7 @@ const AppNavbar = () => {
           <div class="mr-6 flex justify-end lg:min-w-fit">
             <Show when={globalStore.accounts.data}>
               <AccountsDropdown
-                accounts={accounts}
+                accounts={accounts()}
                 value={globalStore.currentlySelectedAccountUuid.data}
               />
             </Show>

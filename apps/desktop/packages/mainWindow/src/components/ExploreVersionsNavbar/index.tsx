@@ -1,7 +1,14 @@
 import DefaultImg from "/assets/images/default-instance-img.png"
 import { McType } from "@gd/core_module/bindings"
 import { Trans } from "@gd/i18n"
-import { Checkbox, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@gd/ui"
+import {
+  Checkbox,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue
+} from "@gd/ui"
 import { useSearchParams } from "@solidjs/router"
 import { Match, Switch, createMemo, createSignal } from "solid-js"
 import { createStore } from "solid-js/store"

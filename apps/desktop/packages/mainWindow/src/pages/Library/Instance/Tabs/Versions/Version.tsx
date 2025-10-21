@@ -30,28 +30,28 @@ const Active = () => {
           defaultValue: "Active"
         }}
       />
-      <div class="text-green-500 text-2xl i-hugeicons:tick-02" />
+      <div class="i-hugeicons:tick-02 text-2xl text-green-500" />
     </div>
   )
 }
 
 const Version = (props: Props) => {
   return (
-    <div class="w-full h-14 flex items-center py-2 box-border">
-      <div class="flex gap-4 justify-between items-center w-full">
-        <div class="flex gap-4 justify-between items-center">
+    <div class="box-border flex h-14 w-full items-center py-2">
+      <div class="flex w-full items-center justify-between gap-4">
+        <div class="flex items-center justify-between gap-4">
           <div class="flex items-center gap-2">
             <div class="flex flex-col">
-              <p class="mt-0 mb-2">{props.version.displayName}</p>
+              <p class="mb-2 mt-0">{props.version.displayName}</p>
               <div class="flex gap-2">
-                <div class="m-0 text-sm flex items-center gap-2 text-darkSlate-300">
+                <div class="text-darkSlate-300 m-0 flex items-center gap-2 text-sm">
                   {props.version.gameVersions[1]}{" "}
                   {props.version.gameVersions[0]}
-                  <div class="h-2 w-px bg-darkSlate-300" />
-                  <p class="m-0 text-darkSlate-300 text-md">
+                  <div class="bg-darkSlate-300 h-2 w-px" />
+                  <p class="text-darkSlate-300 text-md m-0">
                     {format(new Date(props.version.fileDate), "dd-MM-yyyy")}
                   </p>
-                  <div class="h-2 w-px bg-darkSlate-300" />
+                  <div class="bg-darkSlate-300 h-2 w-px" />
                   <span class={getColor(props.version.releaseType)}>
                     {props.version.releaseType}
                   </span>
@@ -64,14 +64,14 @@ const Version = (props: Props) => {
           when={props.mainFileId === props.version.id}
           fallback={<Active />}
         >
-          <div class="group text-darkSlate-300 transition ease-in-out flex items-center gap-2 cursor-pointer hover:text-lightSlate-700">
+          <div class="text-darkSlate-300 hover:text-lightSlate-700 group flex cursor-pointer items-center gap-2 transition ease-in-out">
             <Trans
               key="instance.switch_version"
               options={{
                 defaultValue: "Switch Version"
               }}
             />
-            <div class="text-darkSlate-300 text-2xl i-hugeicons:download-02 group-hover:text-lightSlate-700" />
+            <div class="text-darkSlate-300 i-hugeicons:download-02 group-hover:text-lightSlate-700 text-2xl" />
           </div>
         </Show>
       </div>

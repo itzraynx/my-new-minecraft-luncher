@@ -27,12 +27,12 @@ const SummaryStep = (props: Props) => {
   }
 
   return (
-    <div class="flex flex-col h-full">
+    <div class="flex h-full flex-col">
       {/* Fixed Header - won't scroll */}
-      <div class="flex-shrink-0 flex flex-col gap-4">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="i-hugeicons:checkmark-badge-01 text-green-500 text-3xl" />
-          <h2 class="text-xl font-bold m-0">
+      <div class="flex shrink-0 flex-col gap-4">
+        <div class="mb-2 flex items-center gap-3">
+          <div class="i-hugeicons:checkmark-badge-01 text-3xl text-green-500" />
+          <h2 class="m-0 text-xl font-bold">
             <Trans key="instance.duplicates.summary.title" />
           </h2>
         </div>
@@ -41,14 +41,14 @@ const SummaryStep = (props: Props) => {
           <Trans key="instance.duplicates.summary.description" />
         </p>
 
-        <div class="bg-darkSlate-600 rounded-lg p-4 mb-2">
-          <div class="flex items-center gap-2 mb-3">
+        <div class="bg-darkSlate-600 mb-2 rounded-lg p-4">
+          <div class="mb-3 flex items-center gap-2">
             <div class="i-hugeicons:information-circle text-primary-500" />
-            <h3 class="text-sm font-semibold m-0">
+            <h3 class="m-0 text-sm font-semibold">
               <Trans key="instance.duplicates.summary.action_title" />
             </h3>
           </div>
-          <p class="text-sm text-lightSlate-700 m-0 ml-6">
+          <p class="text-lightSlate-700 m-0 ml-6 text-sm">
             <Show
               when={props.action === "disable"}
               fallback={
@@ -62,17 +62,17 @@ const SummaryStep = (props: Props) => {
       </div>
 
       {/* Scrollable Content - only this section scrolls */}
-      <div class="flex-1 overflow-y-auto overflow-x-hidden pr-2 mt-2">
+      <div class="mt-2 flex-1 overflow-y-auto overflow-x-hidden pr-2">
         <div class="flex flex-col gap-3">
           <For each={props.mods}>
             {(mod) => (
-              <div class="border border-darkSlate-500 rounded-lg p-4 bg-darkSlate-700">
-                <div class="flex items-start gap-3 mb-3">
+              <div class="border-darkSlate-500 bg-darkSlate-700 rounded-lg border p-4">
+                <div class="mb-3 flex items-start gap-3">
                   <Show
                     when={mod.modId && mod.platform}
                     fallback={
-                      <div class="w-10 h-10 rounded-lg bg-darkSlate-600 flex items-center justify-center">
-                        <div class="i-hugeicons:puzzle text-xl text-darkSlate-400" />
+                      <div class="bg-darkSlate-600 flex h-10 w-10 items-center justify-center rounded-lg">
+                        <div class="i-hugeicons:puzzle text-darkSlate-400 text-xl" />
                       </div>
                     }
                   >
@@ -83,15 +83,15 @@ const SummaryStep = (props: Props) => {
                         mod.platform!
                       )}
                       alt={mod.name}
-                      class="w-10 h-10 rounded-lg"
+                      class="h-10 w-10 rounded-lg"
                     />
                   </Show>
                   <div class="flex-1">
-                    <h4 class="font-semibold text-sm m-0 mb-1">{mod.name}</h4>
+                    <h4 class="m-0 mb-1 text-sm font-semibold">{mod.name}</h4>
 
                     <Show when={getSelectedVersion(mod)}>
                       {(version) => (
-                        <div class="bg-darkSlate-800 rounded p-2 mb-2">
+                        <div class="bg-darkSlate-800 mb-2 rounded p-2">
                           <div class="flex items-center gap-2 text-xs">
                             <div class="i-hugeicons:tick-02 text-green-500" />
                             <span class="text-green-400">
@@ -108,7 +108,7 @@ const SummaryStep = (props: Props) => {
                     <div class="space-y-1">
                       <For each={getUnselectedVersions(mod)}>
                         {(version) => (
-                          <div class="flex items-center gap-2 text-xs text-lightSlate-600">
+                          <div class="text-lightSlate-600 flex items-center gap-2 text-xs">
                             <div
                               class="text-sm"
                               classList={{
@@ -147,7 +147,7 @@ const SummaryStep = (props: Props) => {
       </div>
 
       {/* Fixed Footer - won't scroll */}
-      <div class="flex-shrink-0 flex justify-between mt-6">
+      <div class="mt-6 flex shrink-0 justify-between">
         <Button
           type="secondary"
           size="large"

@@ -75,7 +75,7 @@ const App = (props: Props) => {
   return (
     <div class="relative w-screen">
       <div class="z-10 flex h-auto w-screen">
-        <main class="max-w-screen relative flex-grow">
+        <main class="max-w-screen relative grow">
           <Route />
         </main>
       </div>

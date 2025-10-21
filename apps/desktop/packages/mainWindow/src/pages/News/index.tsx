@@ -48,24 +48,24 @@ const NewsPage = () => {
   }
 
   return (
-    <div class="h-full flex flex-col">
-      <div class="h-full flex flex-col">
+    <div class="flex h-full flex-col">
+      <div class="flex h-full flex-col">
         <Tabs
           orientation="horizontal"
           index={selectedTab()}
           onChange={handleTabChange}
         >
-          <div class="sticky top-0 z-50 bg-darkSlate-800 px-6 flex-shrink-0">
+          <div class="bg-darkSlate-800 sticky top-0 z-50 shrink-0 px-6">
             <TabList>
               <Tab>
                 <div class="flex items-center gap-2 py-3">
-                  <i class="i-hugeicons:news-01 w-5 h-5" />
+                  <i class="i-hugeicons:news-01 h-5 w-5" />
                   <Trans key="news.minecraft_news">News</Trans>
                 </div>
               </Tab>
               <Tab>
                 <div class="flex items-center gap-2 py-3">
-                  <i class="i-hugeicons:note w-5 h-5" />
+                  <i class="i-hugeicons:note h-5 w-5" />
                   <Trans key="news.minecraft_patches">Patch Notes</Trans>
                 </div>
               </Tab>

@@ -80,7 +80,7 @@ const ExportCheckboxParent = (props: Props) => {
   return (
     <>
       <div class="flex items-center gap-2 pt-2">
-        <div class="w-6 h-6 " />
+        <div class="h-6 w-6 " />
         <Checkbox
           onChange={handleSelectAll}
           checked={allSelected()}

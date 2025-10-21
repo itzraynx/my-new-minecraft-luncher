@@ -42,9 +42,9 @@ function shouldShowCompatibilityWarning(
 
 function FilterWarning() {
   return (
-    <div class="px-3 py-2 mx-2 mb-2 bg-yellow-900/20 border border-yellow-600/30 rounded-md">
+    <div class="mx-2 mb-2 rounded-md border border-yellow-600/30 bg-yellow-900/20 px-3 py-2">
       <div class="flex items-start gap-2 text-sm text-yellow-200">
-        <div class="i-hugeicons:alert-01 h-4 w-4 text-yellow-500 flex-shrink-0 mt-0.5" />
+        <div class="i-hugeicons:alert-01 mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
         <span class="leading-relaxed">
           <Trans key="search.instance_compatibility_warning" />
         </span>
@@ -329,10 +329,10 @@ export function SearchModloaderDropdown(_props: DropdownProps) {
         <Trans key="search.modloaders" />
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>
-        <DropdownMenuSubContent class="p-0 w-64">
+        <DropdownMenuSubContent class="w-64 p-0">
           {/* Search Input */}
           <div
-            class="p-2 border-b border-darkSlate-600"
+            class="border-darkSlate-600 border-b p-2"
             onClick={(e) => {
               e.stopPropagation()
               if (inputRef) {
@@ -348,7 +348,7 @@ export function SearchModloaderDropdown(_props: DropdownProps) {
               e.stopPropagation()
             }}
           >
-            <div style="height: 32px;">
+            <div style={{ height: "32px" }}>
               <Input
                 ref={inputRef}
                 placeholder="Search modloaders..."
@@ -386,7 +386,7 @@ export function SearchModloaderDropdown(_props: DropdownProps) {
           <Show
             when={filteredModloaders().length > 0}
             fallback={
-              <div class="px-2 py-3 text-sm text-lightSlate-400 text-center">
+              <div class="text-lightSlate-400 px-2 py-3 text-center text-sm">
                 No modloaders found
               </div>
             }
@@ -749,7 +749,7 @@ export function SearchGameVersionDropdown(_props: DropdownProps) {
     // Mimic DropdownMenuCheckboxItem styling for virtualized items
     return (
       <div
-        class="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors hover:bg-darkSlate-700 focus:bg-darkSlate-700 data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+        class="hover:bg-darkSlate-700 focus:bg-darkSlate-700 relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
         onClick={handleToggle}
       >
         {/* Custom checkbox styled like DropdownMenuCheckboxItem */}
@@ -771,10 +771,10 @@ export function SearchGameVersionDropdown(_props: DropdownProps) {
         <Trans key="search.game_versions" />
       </DropdownMenuSubTrigger>
       <DropdownMenuPortal>
-        <DropdownMenuSubContent class="p-0 w-64">
+        <DropdownMenuSubContent class="w-64 p-0">
           {/* Search Input */}
           <div
-            class="p-2 border-b border-darkSlate-600"
+            class="border-darkSlate-600 border-b p-2"
             onClick={(e) => {
               e.stopPropagation()
               if (inputRef) {
@@ -790,7 +790,7 @@ export function SearchGameVersionDropdown(_props: DropdownProps) {
               e.stopPropagation()
             }}
           >
-            <div style="height: 32px;">
+            <div style={{ height: "32px" }}>
               <Input
                 ref={inputRef}
                 placeholder="Search versions..."
@@ -828,7 +828,7 @@ export function SearchGameVersionDropdown(_props: DropdownProps) {
           <Show
             when={filteredVersions().length > 0}
             fallback={
-              <div class="px-2 py-3 text-sm text-lightSlate-400 text-center">
+              <div class="text-lightSlate-400 px-2 py-3 text-center text-sm">
                 No versions found
               </div>
             }

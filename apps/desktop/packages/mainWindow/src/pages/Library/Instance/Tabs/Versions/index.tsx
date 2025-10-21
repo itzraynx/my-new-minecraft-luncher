@@ -10,9 +10,9 @@ import { CFFEFile } from "@gd/core_module/bindings"
 
 const NoVersions = () => {
   return (
-    <div class="h-full min-h-90 w-full flex justify-center items-center">
-      <div class="flex flex-col justify-center items-center text-center">
-        <img src={skull} class="w-16 h-16" />
+    <div class="min-h-90 flex h-full w-full items-center justify-center">
+      <div class="flex flex-col items-center justify-center text-center">
+        <img src={skull} class="h-16 w-16" />
         <p class="text-lightSlate-700 max-w-100">
           <Trans
             key="modpack.no_versions_text"

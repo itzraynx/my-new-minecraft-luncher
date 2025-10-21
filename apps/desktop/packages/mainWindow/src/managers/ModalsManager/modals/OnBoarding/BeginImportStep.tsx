@@ -42,7 +42,7 @@ const BeginImportStep = (props: {
   if (taskIds().every((x) => x === undefined)) createMutations()
 
   return (
-    <div class="w-full overflow-y-auto p-2 h-[240px]">
+    <div class="h-[240px] w-full overflow-y-auto p-2">
       <For each={props.instances}>
         {(instance, index) => (
           <SingleImport

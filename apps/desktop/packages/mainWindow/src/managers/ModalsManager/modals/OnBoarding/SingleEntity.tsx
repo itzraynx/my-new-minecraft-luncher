@@ -159,122 +159,122 @@ const SingleEntity = (props: {
   })
 
   return (
-    <div class="flex flex-col h-full">
+    <div class="flex h-full flex-col">
       {/* Fixed Header - path input */}
-      <div class="flex-shrink-0 flex w-full flex-col items-start justify-start gap-2 p-4">
-          <span class="font-bold">
-            {props.entity.entity} <Trans key="instance.import_path" />:
-          </span>
-          <div class="flex w-full items-center gap-2">
-            <Input
-              value={path()}
-              onInput={(e) => {
-                setInputValue(e.currentTarget.value)
-              }}
-              onBlur={() => {
-                if (inputValue() && inputValue() !== path()) {
-                  setPath(inputValue())
-                }
-              }}
-              class="flex-1"
-              inputColor="bg-darkSlate-800"
-              icon={
-                <div
-                  onClick={() => {
-                    setPath("")
-                  }}
-                  class="i-hugeicons:cancel-01 bg-darkSlate-50 hover:bg-white"
-                />
+      <div class="flex w-full shrink-0 flex-col items-start justify-start gap-2 p-4">
+        <span class="font-bold">
+          {props.entity.entity} <Trans key="instance.import_path" />:
+        </span>
+        <div class="flex w-full items-center gap-2">
+          <Input
+            value={path()}
+            onInput={(e) => {
+              setInputValue(e.currentTarget.value)
+            }}
+            onBlur={() => {
+              if (inputValue() && inputValue() !== path()) {
+                setPath(inputValue())
               }
-            />
-            <div class="flex gap-2">
-              <Show when={entityDefaultPath.data}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <div class="bg-darkSlate-800 text-lightSlate-700 hover:text-lightSlate-50 flex items-center justify-center rounded-lg p-2">
-                      <div
-                        onClick={async () => {
-                          setPath(entityDefaultPath.data!)
-                        }}
-                        class="i-hugeicons:arrow-turn-backward text-xl"
-                      />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <Trans key="tooltip.reset" />
-                  </TooltipContent>
-                </Tooltip>
-              </Show>
-              <Show when={props.entity.selection_type === "directory"}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <div class="bg-darkSlate-800 text-lightSlate-700 hover:text-lightSlate-50 flex items-center justify-center rounded-lg p-2">
-                      <div
-                        onClick={async () => {
-                          const result = await window.openFileDialog({
-                            title: t("instance.select_path"),
-                            defaultPath: path() || "",
-                            properties: ["openFile", "openDirectory"]
-                          })
+            }}
+            class="flex-1"
+            inputColor="bg-darkSlate-800"
+            icon={
+              <div
+                onClick={() => {
+                  setPath("")
+                }}
+                class="i-hugeicons:cancel-01 bg-darkSlate-50 hover:bg-white"
+              />
+            }
+          />
+          <div class="flex gap-2">
+            <Show when={entityDefaultPath.data}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div class="bg-darkSlate-800 text-lightSlate-700 hover:text-lightSlate-50 flex items-center justify-center rounded-lg p-2">
+                    <div
+                      onClick={async () => {
+                        setPath(entityDefaultPath.data!)
+                      }}
+                      class="i-hugeicons:arrow-turn-backward text-xl"
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <Trans key="tooltip.reset" />
+                </TooltipContent>
+              </Tooltip>
+            </Show>
+            <Show when={props.entity.selection_type === "directory"}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div class="bg-darkSlate-800 text-lightSlate-700 hover:text-lightSlate-50 flex items-center justify-center rounded-lg p-2">
+                    <div
+                      onClick={async () => {
+                        const result = await window.openFileDialog({
+                          title: t("instance.select_path"),
+                          defaultPath: path() || "",
+                          properties: ["openFile", "openDirectory"]
+                        })
 
-                          if (result.canceled) {
-                            return
-                          }
+                        if (result.canceled) {
+                          return
+                        }
 
-                          setPath(result.filePaths[0])
-                        }}
-                        class="i-hugeicons:folder-01 text-xl"
-                      />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <Trans key="instance.select_path" />
-                  </TooltipContent>
-                </Tooltip>
-              </Show>
-              <Show when={props.entity.selection_type === "file"}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <div class="bg-darkSlate-800 text-lightSlate-700 hover:text-lightSlate-50 flex items-center justify-center rounded-lg p-2">
-                      <div
-                        onClick={async () => {
-                          const result = await window.openFileDialog({
-                            title: t("instance.select_zip"),
-                            defaultPath: path() || "",
-                            properties: ["openFile"],
-                            filters: [
-                              {
-                                name: "ZIP Files",
-                                extensions:
-                                  props.entity.entity === "CurseForgeZip"
-                                    ? ["zip"]
-                                    : ["mrpack"]
-                              },
-                              { name: "All Files", extensions: ["*"] }
-                            ]
-                          })
+                        setPath(result.filePaths[0])
+                      }}
+                      class="i-hugeicons:folder-01 text-xl"
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <Trans key="instance.select_path" />
+                </TooltipContent>
+              </Tooltip>
+            </Show>
+            <Show when={props.entity.selection_type === "file"}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div class="bg-darkSlate-800 text-lightSlate-700 hover:text-lightSlate-50 flex items-center justify-center rounded-lg p-2">
+                    <div
+                      onClick={async () => {
+                        const result = await window.openFileDialog({
+                          title: t("instance.select_zip"),
+                          defaultPath: path() || "",
+                          properties: ["openFile"],
+                          filters: [
+                            {
+                              name: "ZIP Files",
+                              extensions:
+                                props.entity.entity === "CurseForgeZip"
+                                  ? ["zip"]
+                                  : ["mrpack"]
+                            },
+                            { name: "All Files", extensions: ["*"] }
+                          ]
+                        })
 
-                          if (result.canceled) {
-                            return
-                          }
+                        if (result.canceled) {
+                          return
+                        }
 
-                          setPath(result.filePaths[0])
-                        }}
-                        class="i-hugeicons:zip-01 text-xl"
-                      />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <Trans key="instance.select_zip" />
-                  </TooltipContent>
-                </Tooltip>
-              </Show>
-            </div>
+                        setPath(result.filePaths[0])
+                      }}
+                      class="i-hugeicons:zip-01 text-xl"
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <Trans key="instance.select_zip" />
+                </TooltipContent>
+              </Tooltip>
+            </Show>
           </div>
+        </div>
       </div>
 
       {/* Scrollable Content - results area */}
-      <div class="flex-1 overflow-y-auto mx-4 mb-4">
+      <div class="mx-4 mb-4 flex-1 overflow-y-auto">
         <div class="flex w-full flex-col items-start justify-start rounded-md bg-[#1D2028] py-2">
           <Switch>
             <Match when={step() === "selectionStep"}>
@@ -370,7 +370,7 @@ const SingleEntity = (props: {
       </div>
 
       {/* Fixed Footer - buttons */}
-      <div class="flex-shrink-0 flex w-full items-center justify-between px-4 pb-4">
+      <div class="flex w-full shrink-0 items-center justify-between px-4 pb-4">
         <Button
           type="secondary"
           onClick={() => {

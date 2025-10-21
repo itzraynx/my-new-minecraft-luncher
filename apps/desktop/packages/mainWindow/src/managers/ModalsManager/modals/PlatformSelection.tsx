@@ -27,14 +27,14 @@ const PlatformSelection = (props: ModalProps) => {
       title={t("instance.select_platform")}
       noPadding={false}
     >
-      <div class="w-96 flex flex-col gap-4">
+      <div class="flex w-96 flex-col gap-4">
         <p class="text-lightSlate-400">
           {t("instance.select_platform_description", {
             modName: data().modName
           })}
         </p>
 
-        <div class="flex flex-col gap-3 mt-4">
+        <div class="mt-4 flex flex-col gap-3">
           <button
             class="bg-darkSlate-700 hover:bg-darkSlate-600 border-darkSlate-500 flex items-center gap-4 rounded-lg border p-4 transition-colors"
             onClick={() => handleSelectPlatform("curseforge")}

@@ -7,13 +7,13 @@ import { failedMsg } from "./Exporting"
 export default function ExportDone(props: { path: string }) {
   const [t] = useTransContext()
   return (
-    <div class="flex gap-4 flex-col items-center justify-center h-full gap-2 p-4">
+    <div class="flex h-full flex-col items-center justify-center gap-2 gap-4 p-4">
       <Show when={!failedMsg()}>
         <CheckIcon />
         <span>{`${t("instance.exported_to")} :`}</span>
       </Show>
 
-      <div class="text-center w-full p-2 rounded-md bg-[#1D2028] leading-10">
+      <div class="w-full rounded-md bg-[#1D2028] p-2 text-center leading-10">
         {failedMsg() ? failedMsg() : props.path}
       </div>
 

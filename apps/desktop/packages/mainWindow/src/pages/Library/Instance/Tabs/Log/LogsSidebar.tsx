@@ -60,19 +60,19 @@ const LogsCollapsable = (props: LogsCollapsableProps) => {
       <Collapsable
         title={groupTitle()}
         noPadding
-        class="bg-darkSlate-600 rounded-md px-4 py-1 mb-2"
+        class="bg-darkSlate-600 mb-2 rounded-md px-4 py-1"
       >
         <For each={sortedLogs()}>
           {(log) => (
             <div
-              class="relative text-lightSlate-700 py-3.5 px-4 hover:bg-darkSlate-700 rounded-md w-full box-border"
+              class="text-lightSlate-700 hover:bg-darkSlate-700 relative box-border w-full rounded-md px-4 py-3.5"
               onClick={() => {
                 props.setSelectedLog(log.id)
               }}
             >
               {formatDateTime(new Date(parseInt(log.timestamp, 10)))}
               <Show when={props.selectedLog === log.id}>
-                <div class="absolute right-0 top-0 w-1 h-full bg-primary-400" />
+                <div class="bg-primary-400 absolute right-0 top-0 h-full w-1" />
               </Show>
             </div>
           )}
@@ -125,13 +125,13 @@ const LogsSidebar = (props: LogsSidebarProps) => {
   }
 
   return (
-    <div class="flex flex-col w-50 box-border pr-6 h-full">
-      <div class="h-10 px-4 py-4 flex items-center justify-between">
+    <div class="w-50 box-border flex h-full flex-col pr-6">
+      <div class="flex h-10 items-center justify-between px-4 py-4">
         <div>
           <Trans key="logs.all_sessions" />
         </div>
         <div
-          class="w-6 h-6 text-lightSlate-600 hover:text-lightSlate-50 duration-100 ease-in-out"
+          class="text-lightSlate-600 hover:text-lightSlate-50 h-6 w-6 duration-100 ease-in-out"
           classList={{
             "i-hugeicons:sort-by-up-01": sortDirection() === "asc",
             "i-hugeicons:sort-by-down-01": sortDirection() === "desc"
@@ -148,24 +148,24 @@ const LogsSidebar = (props: LogsSidebarProps) => {
 
       <Switch>
         <Match when={props.isLoading}>
-          <div class="h-full w-full flex items-center justify-center">
+          <div class="flex h-full w-full items-center justify-center">
             <Spinner />
           </div>
         </Match>
         <Match when={props.availableLogEntries.length > 0}>
-          <div class="relative overflow-y-auto h-full">
+          <div class="relative h-full overflow-y-auto">
             <Show when={activeLog()}>
               <div
-                class="z-1 sticky top-0 bg-darkSlate-800 w-full h-10 text-lightSlate-50 rounded-b-md rounded-t-none"
+                class="z-1 bg-darkSlate-800 text-lightSlate-50 sticky top-0 h-10 w-full rounded-b-md rounded-t-none"
                 onClick={() => props.setSelectedLog(activeLog()?.id)}
               >
-                <div class="relative w-full h-full flex items-center px-4 py-1 box-border bg-darkSlate-600 rounded-md">
-                  <div class="bg-red-400 rounded-full text-red-400 w-4 h-4 mr-2 animate-liveCirclePulse" />
+                <div class="bg-darkSlate-600 relative box-border flex h-full w-full items-center rounded-md px-4 py-1">
+                  <div class="animate-liveCirclePulse mr-2 h-4 w-4 rounded-full bg-red-400 text-red-400" />
                   <div>
                     <Trans key="ui.live" />
                   </div>
                   <Show when={props.selectedLog === activeLog()?.id}>
-                    <div class="absolute right-0 top-0 w-1 h-full bg-primary-400" />
+                    <div class="bg-primary-400 absolute right-0 top-0 h-full w-1" />
                   </Show>
                 </div>
               </div>
@@ -185,7 +185,7 @@ const LogsSidebar = (props: LogsSidebarProps) => {
           </div>
         </Match>
         <Match when={props.availableLogEntries.length === 0}>
-          <div class="h-full flex items-center justify-center text-lightSlate-600 text-center">
+          <div class="text-lightSlate-600 flex h-full items-center justify-center text-center">
             <Trans key="logs.no_log_sessions_available" />
           </div>
         </Match>

@@ -73,7 +73,7 @@ function TruncatedPath(props: { originalPath: string }) {
     // <div ref={containerRef} class="w-full overflow-hidden whitespace-nowrap">
     //   {displayPath()}
     // </div>
-    <div class="w-full whitespace-nowrap break-all overflow-hidden truncate">
+    <div class="w-full overflow-hidden truncate whitespace-nowrap break-all">
       {props.originalPath}
     </div>
   )

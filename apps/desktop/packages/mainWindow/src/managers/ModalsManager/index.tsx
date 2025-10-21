@@ -256,7 +256,7 @@ export const ModalProvider = (props: { children: JSX.Element }) => {
               return (
                 <div class="absolute inset-0 flex h-screen w-screen">
                   <div
-                    class="z-999 relative flex h-full flex-grow items-center justify-center"
+                    class="z-999 relative flex h-full grow items-center justify-center"
                     onMouseDown={() => {
                       if (!preventClose) {
                         closeModal()

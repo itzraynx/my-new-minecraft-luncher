@@ -1,21 +1,18 @@
 import { ListItem } from "./ListItem"
 import { VList } from "@/components/VirtuaWrapper"
 import useSearchContext from "@/components/SearchInputContext"
-import { Button, Skeleton } from "@gd/ui"
+import { Skeleton } from "@gd/ui"
 import { onMount, Show, createMemo } from "solid-js"
 import { FEUnifiedSearchType } from "@gd/core_module/bindings"
 import { useGDNavigate } from "@/managers/NavigationManager"
 import { useParams } from "@solidjs/router"
 import { rspc } from "@/utils/rspcClient"
-import { Trans, useTransContext } from "@gd/i18n"
-import { useGlobalStore } from "@/components/GlobalStoreContext"
+import { Trans } from "@gd/i18n"
 
 export function List() {
   const searchContext = useSearchContext()
   const navigator = useGDNavigate()
   const params = useParams()
-  const [t] = useTransContext()
-  const globalStore = useGlobalStore()
 
   const instanceId = () => searchContext?.selectedInstanceId() || NaN
   const instanceMods = () => searchContext?.selectedInstanceMods
@@ -46,7 +43,6 @@ export function List() {
       projectType: type()
     }))
   }
-
 
   onMount(() => {
     queueMicrotask(() => {
@@ -107,7 +103,7 @@ export function List() {
           >
             <VList
               data={searchContext?.allRows() || []}
-              class="h-full flex max-w-full flex-col gap-4 overflow-auto px-6 pb-6"
+              class="flex h-full max-w-full flex-col gap-4 overflow-auto px-6 pb-6"
               ref={(v) => {
                 if (v) {
                   searchContext?.setRef(v)

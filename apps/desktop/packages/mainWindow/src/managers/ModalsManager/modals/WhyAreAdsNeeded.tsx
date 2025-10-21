@@ -14,53 +14,52 @@ const WhyAreAdsNeeded = (props: ModalProps) => {
       width="w-[52rem]"
     >
       <div class="h-full overflow-y-auto">
-        <div class="px-8 py-6 space-y-6">
-
+        <div class="space-y-6 px-8 py-6">
           {/* Hero Introduction */}
-          <div class="flex gap-6 items-start bg-darkSlate-700/50 rounded-lg p-6 border border-darkSlate-600">
-            <div class="flex-shrink-0 w-16 h-16 bg-darkSlate-800 rounded-xl flex items-center justify-center border-2 border-primary-500/30 shadow-[0_0_20px_rgba(139,92,246,0.2)]">
-              <div class="i-hugeicons:customer-support text-[2.5rem] text-primary-500" />
+          <div class="bg-darkSlate-700/50 border-darkSlate-600 flex items-start gap-6 rounded-lg border p-6">
+            <div class="bg-darkSlate-800 border-primary-500/30 flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-2 shadow-[0_0_20px_rgba(139,92,246,0.2)]">
+              <div class="i-hugeicons:customer-support text-primary-500 text-[2.5rem]" />
             </div>
             <div class="flex-1">
-              <p class="text-base text-lightSlate-300 leading-relaxed">
+              <p class="text-lightSlate-300 text-base leading-relaxed">
                 <Trans key="ads.paragraph-1" />
               </p>
             </div>
           </div>
 
           {/* Why Development Matters Section */}
-          <div class="bg-darkSlate-700 rounded-lg p-6 border border-darkSlate-600">
-            <h3 class="text-xs uppercase tracking-wider font-semibold text-lightSlate-300 mb-4 flex items-center gap-2">
-              <div class="i-hugeicons:code text-base text-primary-500" />
+          <div class="bg-darkSlate-700 border-darkSlate-600 rounded-lg border p-6">
+            <h3 class="text-lightSlate-300 mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
+              <div class="i-hugeicons:code text-primary-500 text-base" />
               <Trans key="ads.paragraph-2" />
             </h3>
             <div class="grid grid-cols-3 gap-6">
               {/* Card 1 - Minecraft Updates */}
-              <div class="flex flex-col items-center gap-3 p-4 bg-darkSlate-800 rounded-lg border border-darkSlate-600 hover:border-emerald-500/30 transition-all duration-300 group">
-                <div class="w-14 h-14 bg-darkSlate-700 rounded-xl flex items-center justify-center border border-emerald-500/30 group-hover:scale-110 transition-transform duration-200">
+              <div class="bg-darkSlate-800 border-darkSlate-600 group flex flex-col items-center gap-3 rounded-lg border p-4 transition-all duration-300 hover:border-emerald-500/30">
+                <div class="bg-darkSlate-700 flex h-14 w-14 items-center justify-center rounded-xl border border-emerald-500/30 transition-transform duration-200 group-hover:scale-110">
                   <div class="i-hugeicons:rocket-01 text-[2rem] text-emerald-500" />
                 </div>
-                <p class="text-sm text-lightSlate-400 leading-relaxed text-center">
+                <p class="text-lightSlate-400 text-center text-sm leading-relaxed">
                   <Trans key="ads.paragraph-2-list-element-1" />
                 </p>
               </div>
 
               {/* Card 2 - Compatibility */}
-              <div class="flex flex-col items-center gap-3 p-4 bg-darkSlate-800 rounded-lg border border-darkSlate-600 hover:border-primary-500/30 transition-all duration-300 group">
-                <div class="w-14 h-14 bg-darkSlate-700 rounded-xl flex items-center justify-center border border-primary-500/30 group-hover:scale-110 transition-transform duration-200">
-                  <div class="i-hugeicons:tick-02 text-[2rem] text-primary-500" />
+              <div class="bg-darkSlate-800 border-darkSlate-600 hover:border-primary-500/30 group flex flex-col items-center gap-3 rounded-lg border p-4 transition-all duration-300">
+                <div class="bg-darkSlate-700 border-primary-500/30 flex h-14 w-14 items-center justify-center rounded-xl border transition-transform duration-200 group-hover:scale-110">
+                  <div class="i-hugeicons:tick-02 text-primary-500 text-[2rem]" />
                 </div>
-                <p class="text-sm text-lightSlate-400 leading-relaxed text-center">
+                <p class="text-lightSlate-400 text-center text-sm leading-relaxed">
                   <Trans key="ads.paragraph-2-list-element-2" />
                 </p>
               </div>
 
               {/* Card 3 - Enhancement */}
-              <div class="flex flex-col items-center gap-3 p-4 bg-darkSlate-800 rounded-lg border border-darkSlate-600 hover:border-blue-500/30 transition-all duration-300 group">
-                <div class="w-14 h-14 bg-darkSlate-700 rounded-xl flex items-center justify-center border border-blue-500/30 group-hover:scale-110 transition-transform duration-200">
+              <div class="bg-darkSlate-800 border-darkSlate-600 group flex flex-col items-center gap-3 rounded-lg border p-4 transition-all duration-300 hover:border-blue-500/30">
+                <div class="bg-darkSlate-700 flex h-14 w-14 items-center justify-center rounded-xl border border-blue-500/30 transition-transform duration-200 group-hover:scale-110">
                   <div class="i-hugeicons:sparkles text-[2rem] text-blue-500" />
                 </div>
-                <p class="text-sm text-lightSlate-400 leading-relaxed text-center">
+                <p class="text-lightSlate-400 text-center text-sm leading-relaxed">
                   <Trans key="ads.paragraph-2-list-element-3" />
                 </p>
               </div>
@@ -68,38 +67,38 @@ const WhyAreAdsNeeded = (props: ModalProps) => {
           </div>
 
           {/* What Support Enables Section */}
-          <div class="bg-darkSlate-700 rounded-lg p-6 border border-darkSlate-600">
-            <h3 class="text-xs uppercase tracking-wider font-semibold text-lightSlate-300 mb-4 flex items-center gap-2">
-              <div class="i-hugeicons:dollar-circle text-base text-primary-500" />
+          <div class="bg-darkSlate-700 border-darkSlate-600 rounded-lg border p-6">
+            <h3 class="text-lightSlate-300 mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
+              <div class="i-hugeicons:dollar-circle text-primary-500 text-base" />
               <Trans key="ads.paragraph-3" />
             </h3>
             <div class="grid grid-cols-3 gap-6">
               {/* Card 1 - Team Support */}
-              <div class="flex flex-col items-center gap-3 p-4 bg-darkSlate-800 rounded-lg border border-darkSlate-600 hover:border-purple-500/30 transition-all duration-300 group">
-                <div class="w-14 h-14 bg-darkSlate-700 rounded-xl flex items-center justify-center border border-purple-500/30 group-hover:scale-110 transition-transform duration-200">
+              <div class="bg-darkSlate-800 border-darkSlate-600 group flex flex-col items-center gap-3 rounded-lg border p-4 transition-all duration-300 hover:border-purple-500/30">
+                <div class="bg-darkSlate-700 flex h-14 w-14 items-center justify-center rounded-xl border border-purple-500/30 transition-transform duration-200 group-hover:scale-110">
                   <div class="i-hugeicons:user-multiple-02 text-[2rem] text-purple-500" />
                 </div>
-                <p class="text-sm text-lightSlate-400 leading-relaxed text-center">
+                <p class="text-lightSlate-400 text-center text-sm leading-relaxed">
                   <Trans key="ads.paragraph-3-list-element-1" />
                 </p>
               </div>
 
               {/* Card 2 - Research & Innovation */}
-              <div class="flex flex-col items-center gap-3 p-4 bg-darkSlate-800 rounded-lg border border-darkSlate-600 hover:border-cyan-500/30 transition-all duration-300 group">
-                <div class="w-14 h-14 bg-darkSlate-700 rounded-xl flex items-center justify-center border border-cyan-500/30 group-hover:scale-110 transition-transform duration-200">
+              <div class="bg-darkSlate-800 border-darkSlate-600 group flex flex-col items-center gap-3 rounded-lg border p-4 transition-all duration-300 hover:border-cyan-500/30">
+                <div class="bg-darkSlate-700 flex h-14 w-14 items-center justify-center rounded-xl border border-cyan-500/30 transition-transform duration-200 group-hover:scale-110">
                   <div class="i-hugeicons:bulb text-[2rem] text-cyan-500" />
                 </div>
-                <p class="text-sm text-lightSlate-400 leading-relaxed text-center">
+                <p class="text-lightSlate-400 text-center text-sm leading-relaxed">
                   <Trans key="ads.paragraph-3-list-element-2" />
                 </p>
               </div>
 
               {/* Card 3 - Full-time Development */}
-              <div class="flex flex-col items-center gap-3 p-4 bg-darkSlate-800 rounded-lg border border-darkSlate-600 hover:border-pink-500/30 transition-all duration-300 group">
-                <div class="w-14 h-14 bg-darkSlate-700 rounded-xl flex items-center justify-center border border-pink-500/30 group-hover:scale-110 transition-transform duration-200">
+              <div class="bg-darkSlate-800 border-darkSlate-600 group flex flex-col items-center gap-3 rounded-lg border p-4 transition-all duration-300 hover:border-pink-500/30">
+                <div class="bg-darkSlate-700 flex h-14 w-14 items-center justify-center rounded-xl border border-pink-500/30 transition-transform duration-200 group-hover:scale-110">
                   <div class="i-hugeicons:clock-01 text-[2rem] text-pink-500" />
                 </div>
-                <p class="text-sm text-lightSlate-400 leading-relaxed text-center">
+                <p class="text-lightSlate-400 text-center text-sm leading-relaxed">
                   <Trans key="ads.paragraph-3-list-element-3" />
                 </p>
               </div>
@@ -107,19 +106,19 @@ const WhyAreAdsNeeded = (props: ModalProps) => {
           </div>
 
           {/* Revenue Transparency Section */}
-          <div class="bg-darkSlate-700 rounded-lg p-6 border border-darkSlate-600">
-            <h3 class="text-xs uppercase tracking-wider font-semibold text-lightSlate-300 mb-4 flex items-center gap-2">
-              <div class="i-hugeicons:pie-chart text-base text-primary-500" />
+          <div class="bg-darkSlate-700 border-darkSlate-600 rounded-lg border p-6">
+            <h3 class="text-lightSlate-300 mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider">
+              <div class="i-hugeicons:pie-chart text-primary-500 text-base" />
               Revenue Transparency
             </h3>
             <div class="space-y-4">
               {/* Visual Revenue Bar */}
-              <div class="relative h-12 bg-darkSlate-800 rounded-lg overflow-hidden border border-darkSlate-600">
+              <div class="bg-darkSlate-800 border-darkSlate-600 relative h-12 overflow-hidden rounded-lg border">
                 <div class="absolute inset-0 flex">
-                  <div class="w-[35%] bg-gradient-to-r from-primary-500 to-primary-600 flex items-center justify-center text-white font-semibold text-sm">
+                  <div class="from-primary-500 to-primary-600 flex w-[35%] items-center justify-center bg-gradient-to-r text-sm font-semibold text-white">
                     35%
                   </div>
-                  <div class="flex-1 bg-gradient-to-r from-darkSlate-600 to-darkSlate-700 flex items-center justify-center text-lightSlate-300 font-semibold text-sm">
+                  <div class="from-darkSlate-600 to-darkSlate-700 text-lightSlate-300 flex flex-1 items-center justify-center bg-gradient-to-r text-sm font-semibold">
                     65%
                   </div>
                 </div>
@@ -128,53 +127,65 @@ const WhyAreAdsNeeded = (props: ModalProps) => {
               {/* Labels */}
               <div class="grid grid-cols-2 gap-4">
                 <div class="flex items-start gap-3">
-                  <div class="w-10 h-10 bg-primary-500/20 rounded-lg flex items-center justify-center flex-shrink-0 p-1.5">
-                    <img src="/assets/images/gdlauncher_logo.svg" alt="GDLauncher" class="w-full h-full object-contain" />
+                  <div class="bg-primary-500/20 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg p-1.5">
+                    <img
+                      src="/assets/images/gdlauncher_logo.svg"
+                      alt="GDLauncher"
+                      class="h-full w-full object-contain"
+                    />
                   </div>
                   <div class="flex-1">
-                    <div class="text-sm font-semibold text-lightSlate-50 mb-1">GDLauncher Team</div>
-                    <div class="text-xs text-lightSlate-500">Development, infrastructure & support</div>
+                    <div class="text-lightSlate-50 mb-1 text-sm font-semibold">
+                      GDLauncher Team
+                    </div>
+                    <div class="text-lightSlate-500 text-xs">
+                      Development, infrastructure & support
+                    </div>
                   </div>
                 </div>
                 <div class="flex items-start gap-3">
-                  <div class="w-10 h-10 bg-darkSlate-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <div class="i-hugeicons:user-star-01 text-xl text-lightSlate-400" />
+                  <div class="bg-darkSlate-600 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
+                    <div class="i-hugeicons:user-star-01 text-lightSlate-400 text-xl" />
                   </div>
                   <div class="flex-1">
-                    <div class="text-sm font-semibold text-lightSlate-50 mb-1">Overwolf & Mod Authors</div>
-                    <div class="text-xs text-lightSlate-500">Platform & creator support</div>
+                    <div class="text-lightSlate-50 mb-1 text-sm font-semibold">
+                      Overwolf & Mod Authors
+                    </div>
+                    <div class="text-lightSlate-500 text-xs">
+                      Platform & creator support
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <p class="text-sm text-lightSlate-400 leading-relaxed mt-4">
+              <p class="text-lightSlate-400 mt-4 text-sm leading-relaxed">
                 <Trans key="ads.paragraph-4" />
               </p>
             </div>
           </div>
 
           {/* Ad-Free Options Section */}
-          <div class="bg-darkSlate-700 rounded-lg p-6 border border-darkSlate-600">
+          <div class="bg-darkSlate-700 border-darkSlate-600 rounded-lg border p-6">
             <div class="grid grid-cols-2 gap-6">
               {/* Subscription Option */}
-              <div class="flex items-start gap-4 p-4 bg-primary-500/5 rounded-lg border border-primary-500/20">
-                <div class="w-12 h-12 bg-primary-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <div class="i-hugeicons:award-01 text-2xl text-primary-500" />
+              <div class="bg-primary-500/5 border-primary-500/20 flex items-start gap-4 rounded-lg border p-4">
+                <div class="bg-primary-500/20 flex h-12 w-12 shrink-0 items-center justify-center rounded-lg">
+                  <div class="i-hugeicons:award-01 text-primary-500 text-2xl" />
                 </div>
                 <div class="flex-1">
-                  <p class="text-sm text-lightSlate-300 leading-relaxed">
+                  <p class="text-lightSlate-300 text-sm leading-relaxed">
                     <Trans key="ads.paragraph-5" />
                   </p>
                 </div>
               </div>
 
               {/* Ad Controls */}
-              <div class="flex items-start gap-4 p-4 bg-darkSlate-600/50 rounded-lg border border-darkSlate-500">
-                <div class="w-12 h-12 bg-darkSlate-700 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <div class="i-hugeicons:eye text-2xl text-lightSlate-400" />
+              <div class="bg-darkSlate-600/50 border-darkSlate-500 flex items-start gap-4 rounded-lg border p-4">
+                <div class="bg-darkSlate-700 flex h-12 w-12 shrink-0 items-center justify-center rounded-lg">
+                  <div class="i-hugeicons:eye text-lightSlate-400 text-2xl" />
                 </div>
                 <div class="flex-1">
-                  <p class="text-sm text-lightSlate-300 leading-relaxed">
+                  <p class="text-lightSlate-300 text-sm leading-relaxed">
                     <Trans key="ads.paragraph-6" />
                   </p>
                 </div>
@@ -183,14 +194,14 @@ const WhyAreAdsNeeded = (props: ModalProps) => {
           </div>
 
           {/* Thank You Section */}
-          <div class="text-center space-y-4 py-6">
-            <div class="flex items-center justify-center gap-2 mb-2">
-              <div class="i-hugeicons:thumbs-up text-2xl text-primary-500" />
+          <div class="space-y-4 py-6 text-center">
+            <div class="mb-2 flex items-center justify-center gap-2">
+              <div class="i-hugeicons:thumbs-up text-primary-500 text-2xl" />
             </div>
-            <p class="text-base text-lightSlate-300 leading-relaxed max-w-2xl mx-auto">
+            <p class="text-lightSlate-300 mx-auto max-w-2xl text-base leading-relaxed">
               <Trans key="ads.paragraph-7" />
             </p>
-            <p class="text-sm italic text-lightSlate-400 mt-4">
+            <p class="text-lightSlate-400 mt-4 text-sm italic">
               <Trans key="ads.paragraph-8" />
             </p>
 
@@ -204,7 +215,6 @@ const WhyAreAdsNeeded = (props: ModalProps) => {
               </Button>
             </div>
           </div>
-
         </div>
       </div>
     </ModalLayout>

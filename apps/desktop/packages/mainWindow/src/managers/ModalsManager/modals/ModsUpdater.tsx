@@ -76,8 +76,8 @@ const AppUpdate = (props: ModalProps) => {
 
   return (
     <ModalLayout noHeader={props.noHeader} title={props?.title}>
-      <div class="flex flex-col overflow-hidden min-h-60 w-160">
-        <div class="text-xl flex items-center">
+      <div class="w-160 flex min-h-60 flex-col overflow-hidden">
+        <div class="flex items-center text-xl">
           <div class="w-140">
             <Trans
               key="mods_updater.updating_mods_count"
@@ -89,14 +89,14 @@ const AppUpdate = (props: ModalProps) => {
           </div>
           <Progress value={(modsUpdated() / data().mods.length) * 100} />
         </div>
-        <div class="flex flex-col items-center text-xl mt-20">
+        <div class="mt-20 flex flex-col items-center text-xl">
           <Trans
             key="mods_updater.updating_mod_text"
             options={{
               mod_name: currentModName()
             }}
           />
-          <i class="i-hugeicons:loading-03 animate-spin text-6xl mt-10" />
+          <i class="i-hugeicons:loading-03 mt-10 animate-spin text-6xl" />
         </div>
       </div>
     </ModalLayout>

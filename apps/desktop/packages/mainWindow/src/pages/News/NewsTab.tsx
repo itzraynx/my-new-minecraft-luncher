@@ -36,7 +36,7 @@ const NewsTab = (props: NewsTabProps) => {
             <h1 class="text-2xl font-medium">
               <Trans key="news.minecraft_news" />
             </h1>
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 news-grid">
+            <div class="news-grid grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               <For each={news.data}>
                 {(item) => (
                   <div
@@ -53,7 +53,7 @@ const NewsTab = (props: NewsTabProps) => {
                     />
                     <div class="p-4">
                       <h2 class="mb-2 text-lg font-medium">{item.title}</h2>
-                      <p class="text-lightSlate-400 text-sm mb-2">
+                      <p class="text-lightSlate-400 mb-2 text-sm">
                         {item.description}
                       </p>
                       <p class="text-lightSlate-500 text-xs">

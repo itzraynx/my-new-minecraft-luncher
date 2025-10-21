@@ -80,7 +80,7 @@ const AuthorAvatars = (props: AuthorAvatarsProps) => {
           >
             {/* Transparent cutout ring */}
             <div
-              class="absolute rounded-full border-4 border-darkSlate-800"
+              class="border-darkSlate-800 absolute rounded-full border-4"
               style={{
                 width: `calc(${sizeClasses().avatar.split(" ")[0].replace("w-", "")} * 0.25rem + 8px)`,
                 height: `calc(${sizeClasses().avatar.split(" ")[1].replace("h-", "")} * 0.25rem + 8px)`,
@@ -113,7 +113,7 @@ const AuthorAvatars = (props: AuthorAvatarsProps) => {
           </div>
         </TooltipTrigger>
         <TooltipContent>
-          <div class="flex flex-col gap-2 min-w-0">
+          <div class="flex min-w-0 flex-col gap-2">
             <div class="flex items-center gap-2">
               <img
                 src={
@@ -124,12 +124,12 @@ const AuthorAvatars = (props: AuthorAvatarsProps) => {
                 class="h-4 w-4"
                 alt={author.platform}
               />
-              <span class="font-semibold text-lightSlate-50">
+              <span class="text-lightSlate-50 font-semibold">
                 {author.name}
               </span>
             </div>
             <Show when={author.role}>
-              <div class="text-xs text-lightSlate-400">Role: {author.role}</div>
+              <div class="text-lightSlate-400 text-xs">Role: {author.role}</div>
             </Show>
             <Show when={author.platform === "modrinth" && author.url}>
               <div class="text-xs text-blue-400">Click to view profile</div>
@@ -146,7 +146,7 @@ const AuthorAvatars = (props: AuthorAvatarsProps) => {
 
     return (
       <div
-        class={`${sizeClasses().avatar} ${sizeClasses().overlap} relative z-10 flex items-center justify-center rounded-full border-2 border-darkSlate-800 font-bold ${sizeClasses().text}`}
+        class={`${sizeClasses().avatar} ${sizeClasses().overlap} border-darkSlate-800 relative z-10 flex items-center justify-center rounded-full border-2 font-bold ${sizeClasses().text}`}
         style={{
           "background-color": backgroundColor,
           color: textColor,
@@ -161,7 +161,7 @@ const AuthorAvatars = (props: AuthorAvatarsProps) => {
   return (
     <Show when={props.authors.length > 0}>
       <div class="flex items-center">
-        <div class="i-hugeicons:user mr-2 text-lightSlate-600 text-lg" />
+        <div class="i-hugeicons:user text-lightSlate-600 mr-2 text-lg" />
         <div class="flex items-center">
           <For each={displayedAuthors()}>
             {(author, index) => renderAuthorAvatar(author, index())}

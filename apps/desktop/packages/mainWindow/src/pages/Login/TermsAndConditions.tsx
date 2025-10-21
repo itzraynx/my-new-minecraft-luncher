@@ -5,9 +5,9 @@ const TermsAndConditions = () => {
   const modalsContext = useModal()
 
   return (
-    <div class="flex-1 flex flex-col justify-between text-left gap-4 leading-5 p-4 text-lightSlate-700">
+    <div class="text-lightSlate-700 flex flex-1 flex-col justify-between gap-4 p-4 text-left leading-5">
       <div class="flex flex-col gap-2">
-        <p class="m-0 leading-5 text-sm select-none">
+        <p class="m-0 select-none text-sm leading-5">
           <Trans key="login.read_and_accept">
             {""}
             <span
@@ -22,7 +22,7 @@ const TermsAndConditions = () => {
             </span>
             {""}
             <span
-              class="underline cursor-pointer"
+              class="cursor-pointer underline"
               onClick={() => {
                 modalsContext?.openModal({
                   name: "privacyStatement"

@@ -80,14 +80,14 @@ const Versions = () => {
       when={mod?.data}
       fallback={
         <div class="flex h-40 items-center justify-center">
-          <div class="i-hugeicons:loading-03 animate-spin text-2xl text-lightSlate-400" />
+          <div class="i-hugeicons:loading-03 text-lightSlate-400 animate-spin text-2xl" />
           <span class="ml-2">Loading mod data...</span>
         </div>
       }
     >
       <div class="flex h-full flex-col" ref={versionsContainerRef}>
         <div
-          class="bg-darkSlate-800 border-darkSlate-600 sticky z-20 mb-4 grid grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b px-6 pb-3 pt-4 text-xs font-medium uppercase tracking-wide text-lightSlate-400"
+          class="bg-darkSlate-800 border-darkSlate-600 text-lightSlate-400 sticky z-20 mb-4 grid grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b px-6 pb-3 pt-4 text-xs font-medium uppercase tracking-wide"
           style={{ top: mod?.data?.type === "modpack" ? "72px" : "136px" }}
         >
           <div>
@@ -110,12 +110,12 @@ const Versions = () => {
             fallback={
               <div class="flex flex-col items-center justify-center py-16 text-center">
                 <Show when={infiniteQuery.isLoading}>
-                  <div class="i-hugeicons:loading-03 animate-spin text-2xl text-lightSlate-400" />
+                  <div class="i-hugeicons:loading-03 text-lightSlate-400 animate-spin text-2xl" />
                   <span class="ml-2">Loading versions...</span>
                 </Show>
                 <Show when={infiniteQuery.infiniteQuery.error}>
-                  <div class="i-hugeicons:alert-02 text-red-400 mb-4 text-3xl" />
-                  <h3 class="text-red-300 mb-2 text-lg font-semibold">
+                  <div class="i-hugeicons:alert-02 mb-4 text-3xl text-red-400" />
+                  <h3 class="mb-2 text-lg font-semibold text-red-300">
                     Error loading versions
                   </h3>
                   <Button
@@ -168,7 +168,7 @@ const Versions = () => {
                         height: `${virtualItem.size}px`,
                         transform: `translateY(${virtualItem.start}px)`
                       }}
-                      class="border-darkSlate-700 grid grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b py-2 hover:bg-darkSlate-700/30 transition-colors duration-150"
+                      class="border-darkSlate-700 hover:bg-darkSlate-700/30 grid grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b py-2 transition-colors duration-150"
                       classList={{
                         "bg-green-500/5 border-green-500/20":
                           installedMod()?.remoteId.toString() ===
@@ -191,7 +191,7 @@ const Versions = () => {
             </div>
             <Show when={infiniteQuery.infiniteQuery.isFetchingNextPage}>
               <div class="flex h-20 items-center justify-center">
-                <div class="i-hugeicons:loading-03 animate-spin text-2xl text-lightSlate-400" />
+                <div class="i-hugeicons:loading-03 text-lightSlate-400 animate-spin text-2xl" />
               </div>
             </Show>
           </Show>

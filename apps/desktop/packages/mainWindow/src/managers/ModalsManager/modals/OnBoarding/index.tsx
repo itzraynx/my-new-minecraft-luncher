@@ -45,13 +45,13 @@ const OnBoarding = (props: ModalProps) => {
       title={props?.title}
       background={
         <img
-          class="absolute w-190 z-0 -top-15 -left-10 opacity-70"
+          class="w-190 -top-15 absolute -left-10 z-0 opacity-70"
           src={mcCubes}
         />
       }
     >
-      <div class="select-none box-border lg:w-160 h-full flex flex-col">
-        <div class="w-full h-15 max-w-90 mx-auto">
+      <div class="lg:w-160 box-border flex h-full select-none flex-col">
+        <div class="h-15 max-w-90 mx-auto w-full">
           <Steps steps={onBoardingSteps} currentStep={currentStep()} />
         </div>
         <div class="h-full">

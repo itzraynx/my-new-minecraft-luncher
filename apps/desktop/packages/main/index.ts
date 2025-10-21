@@ -874,9 +874,8 @@ app.whenReady().then(async () => {
       urls: ["http://*/*", "https://*/*"]
     },
     (details, callback) => {
-      // eslint-disable-next-line
       delete details.responseHeaders!["Access-Control-Allow-Origin"]
-      // eslint-disable-next-line
+
       delete details.responseHeaders!["access-control-allow-origin"]
       details.responseHeaders!["Access-Control-Allow-Origin"] = ["*"]
       callback({

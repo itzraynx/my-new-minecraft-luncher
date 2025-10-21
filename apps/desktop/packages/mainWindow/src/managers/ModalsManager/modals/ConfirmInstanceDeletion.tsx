@@ -40,7 +40,7 @@ const ConfirmInstanceDeletion = (props: ModalProps) => {
       height="h-60"
       width="w-100"
     >
-      <div class="flex flex-col justify-between h-full">
+      <div class="flex h-full flex-col justify-between">
         <div class="h-h-full">
           <Trans
             key="instance_confirm_deletion.confirmation_text"
@@ -53,7 +53,7 @@ const ConfirmInstanceDeletion = (props: ModalProps) => {
             {""}
           </Trans>
         </div>
-        <div class="flex justify-between w-full">
+        <div class="flex w-full justify-between">
           <Button
             onClick={() => {
               modalsContext?.closeModal()

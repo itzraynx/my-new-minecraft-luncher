@@ -69,13 +69,13 @@ const Section = (props: SectionProps) => {
 
   return (
     <div>
-      <div class="flex items-center w-full">
-        <div class={`flex-1 border-t-1 ${borderColor()} border-solid`} />
+      <div class="flex w-full items-center">
+        <div class={`border-t-1 flex-1 ${borderColor()} border-solid`} />
         <span class={`px-3 ${textColor()} flex items-center gap-2 text-xl`}>
-          <div class={`inline-block ${icon()} w-4 h-4`} />
+          <div class={`inline-block ${icon()} h-4 w-4`} />
           {title()}
         </span>
-        <div class={`flex-1 border-t-1 ${borderColor()} border-solid`} />
+        <div class={`border-t-1 flex-1 ${borderColor()} border-solid`} />
       </div>
       <div class="py-4">
         <Switch>
@@ -83,7 +83,7 @@ const Section = (props: SectionProps) => {
             <Trans key="changelogs.no_changes" />
           </Match>
           <Match when={list().length > 0}>
-            <ul class="pl-4 my-0">
+            <ul class="my-0 pl-4">
               <For each={list()}>
                 {(item, index) => (
                   <li
@@ -130,7 +130,7 @@ const Changelogs = (props: ModalProps) => {
       height="h-150"
       width="w-130"
     >
-      <div class="w-full h-full overflow-auto px-5 pb-5 box-border">
+      <div class="box-border h-full w-full overflow-auto px-5 pb-5">
         <h2>
           <Trans
             key="changelogs.whats_new_in"
@@ -142,7 +142,7 @@ const Changelogs = (props: ModalProps) => {
         <Section type="new" />
         <Section type="improved" />
         <Section type="fixed" />
-        <div class="rounded-md flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4 rounded-md">
           <hr class="w-full" />
           <div class="text-lightSlate-50">
             <Trans key="changelogs.join_our_discord_description" />
@@ -154,8 +154,8 @@ const Changelogs = (props: ModalProps) => {
               window.open("https://discord.gdlauncher.com", "_blank")
             }}
           >
-            <div class="flex items-center justify-center gap-4 animate-wiggle animate-delay-1400 animate-loop">
-              <div class="i-hugeicons:discord w-6 h-6 inline-block" />
+            <div class="animate-wiggle animate-delay-1400 animate-loop flex items-center justify-center gap-4">
+              <div class="i-hugeicons:discord inline-block h-6 w-6" />
               <Trans key="changelogs.join_our_discord" />
             </div>
           </Button>

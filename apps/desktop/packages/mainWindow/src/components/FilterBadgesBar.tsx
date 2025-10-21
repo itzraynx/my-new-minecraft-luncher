@@ -42,32 +42,34 @@ export function FilterBadgesBar() {
   return (
     <Show when={isExpanded() && hasActiveFilters()}>
       <div
-        class="w-full bg-darkSlate-800 border-b border-darkSlate-700 transition-all duration-300 ease-in-out"
+        class="bg-darkSlate-800 border-darkSlate-700 w-full border-b transition-all duration-300 ease-in-out"
         style={{ "view-transition-name": "filter-badges-bar" }}
       >
-        <div class="flex items-center py-3 px-6 gap-4">
+        <div class="flex items-center gap-4 px-6 py-3">
           <Show when={searchContext?.selectedInstanceId()}>
             <Button
               size="small"
               type="outline"
               onClick={() => {
-                navigator.navigate(`/library/${searchContext?.selectedInstanceId()}/addons`)
+                navigator.navigate(
+                  `/library/${searchContext?.selectedInstanceId()}/addons`
+                )
               }}
             >
               <div class="i-hugeicons:arrow-left-01" />
               <Trans key="search.go_back" />
             </Button>
           </Show>
-          <div class="flex items-center justify-center flex-1">
-            <div class="flex items-center gap-2 max-w-[700px] overflow-visible scrollbar-hide">
+          <div class="flex flex-1 items-center justify-center">
+            <div class="scrollbar-hide flex max-w-[700px] items-center gap-2 overflow-visible">
               <button
-                class="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium text-lightSlate-400 hover:text-lightSlate-50 hover:bg-darkSlate-700 transition-colors flex-shrink-0"
+                class="text-lightSlate-400 hover:text-lightSlate-50 hover:bg-darkSlate-700 flex shrink-0 items-center gap-1.5 rounded px-2.5 py-1 text-xs font-medium transition-colors"
                 onClick={clearAllFilters}
               >
                 <div class="i-hugeicons:delete-02 text-sm" />
                 {t("search.clear_all_filters")}
               </button>
-              <div class="h-4 w-px bg-darkSlate-600 flex-shrink-0" />
+              <div class="bg-darkSlate-600 h-4 w-px shrink-0" />
               <InlineFilterBadges />
             </div>
           </div>

@@ -26,7 +26,7 @@ export function InlineFilterBadges() {
 
   return (
     <Show when={hasActiveFilters()}>
-      <div class="flex items-center gap-3 flex-wrap gap-y-2">
+      <div class="flex flex-wrap items-center gap-3 gap-y-2">
         <InstanceDisplay />
         <SearchApiDisplay />
         <CategoriesDisplay />

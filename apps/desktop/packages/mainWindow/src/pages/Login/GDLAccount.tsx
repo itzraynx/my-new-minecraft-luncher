@@ -1,7 +1,14 @@
 import { createEffect, Match, Show, Suspense, Switch } from "solid-js"
 import { Trans, useTransContext } from "@gd/i18n"
 import { port, rspc } from "@/utils/rspcClient"
-import { Collapsable, Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@gd/ui"
+import {
+  Collapsable,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue
+} from "@gd/ui"
 
 interface Props {
   activeUuid: string | null | undefined
@@ -54,35 +61,35 @@ const GDLAccount = (props: Props) => {
     if (!account) return null
 
     return (
-      <div class="flex justify-between items-center gap-4">
+      <div class="flex items-center justify-between gap-4">
         <div class="flex items-center gap-4">
           <img
             src={`http://127.0.0.1:${port}/account/headImage?uuid=${account.uuid}`}
-            class="w-6 h-6 rounded-md"
+            class="h-6 w-6 rounded-md"
           />
-          <div class="truncate max-w-30">{account.username}</div>
+          <div class="max-w-30 truncate">{account.username}</div>
         </div>
         <div class="flex items-center gap-2">
           <Switch>
             <Match when={account.type.type === "microsoft"}>
-              <div class="w-4 h-4 i-hugeicons:microsoft" />
+              <div class="i-hugeicons:microsoft h-4 w-4" />
             </Match>
             <Match when={account.type.type === "offline"}>
-              <div class="w-4 h-4 i-hugeicons:computer" />
+              <div class="i-hugeicons:computer h-4 w-4" />
             </Match>
           </Switch>
           <Switch>
             <Match when={account.status === "ok"}>
-              <div class="w-4 h-4 text-green-500 i-hugeicons:tick-02" />
+              <div class="i-hugeicons:tick-02 h-4 w-4 text-green-500" />
             </Match>
             <Match when={account.status === "expired"}>
-              <div class="w-4 h-4 text-yellow-500 i-hugeicons:alert-01" />
+              <div class="i-hugeicons:alert-01 h-4 w-4 text-yellow-500" />
             </Match>
             <Match when={account.status === "refreshing"}>
-              <div class="w-4 h-4 text-yellow-500 i-hugeicons:loading-03" />
+              <div class="i-hugeicons:loading-03 h-4 w-4 text-yellow-500" />
             </Match>
             <Match when={account.status === "invalid"}>
-              <div class="w-4 h-4 text-red-500 i-hugeicons:cancel-01" />
+              <div class="i-hugeicons:cancel-01 h-4 w-4 text-red-500" />
             </Match>
           </Switch>
         </div>
@@ -92,7 +99,7 @@ const GDLAccount = (props: Props) => {
 
   return (
     <Suspense>
-      <div class="flex flex-col h-full w-full text-center pt-2 box-border">
+      <div class="box-border flex h-full w-full flex-col pt-2 text-center">
         <div class="flex items-center justify-center gap-4">
           <div>
             <Trans key="login.link_account" />

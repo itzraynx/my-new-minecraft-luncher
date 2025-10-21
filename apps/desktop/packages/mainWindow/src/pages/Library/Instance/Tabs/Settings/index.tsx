@@ -1,7 +1,18 @@
 import { generateSequence } from "@/utils/helpers"
 import { port, queryClient, rspc } from "@/utils/rspcClient"
 import { Trans, useTransContext } from "@gd/i18n"
-import { Button, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, Input, Radio, Slider, Switch } from "@gd/ui"
+import {
+  Button,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  Input,
+  Radio,
+  Slider,
+  Switch
+} from "@gd/ui"
 import { useParams, useRouteData } from "@solidjs/router"
 import fetchData from "../../instance.data"
 import { Match, Show, createMemo, Switch as SolidSwitch } from "solid-js"
@@ -48,12 +59,18 @@ const Settings = () => {
 
   const getResolutionLabel = (key: string) => {
     switch (key) {
-      case "Standard:854x480": return "854 x 480 (100%)"
-      case "Standard:1046x588": return "1046 x 588 (150%)"
-      case "Standard:1208x679": return "1208 x 679 (200%)"
-      case "Standard:1479x831": return "1479 x 831 (300%)"
-      case "custom": return t("ui.custom")
-      default: return key
+      case "Standard:854x480":
+        return "854 x 480 (100%)"
+      case "Standard:1046x588":
+        return "1046 x 588 (150%)"
+      case "Standard:1208x679":
+        return "1208 x 679 (200%)"
+      case "Standard:1479x831":
+        return "1479 x 831 (300%)"
+      case "custom":
+        return t("ui.custom")
+      default:
+        return key
     }
   }
 
@@ -265,7 +282,9 @@ const Settings = () => {
               <Select
                 value={javaSelectedProfile()}
                 placeholder={t("placeholders.select_java_profile")}
-                options={getAllProfiles.data?.map((profile) => profile.name) || []}
+                options={
+                  getAllProfiles.data?.map((profile) => profile.name) || []
+                }
                 onChange={(option) => {
                   if (option) {
                     updateInstanceMutation.mutate({
@@ -279,11 +298,18 @@ const Settings = () => {
                   }
                 }}
                 itemComponent={(props) => (
-                  <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+                  <SelectItem item={props.item}>
+                    {props.item.rawValue}
+                  </SelectItem>
                 )}
               >
                 <SelectTrigger class="min-w-100 max-w-2/3">
-                  <SelectValue<string>>{(state) => state.selectedOption() || t("placeholders.select_java_profile")}</SelectValue>
+                  <SelectValue<string>>
+                    {(state) =>
+                      state.selectedOption() ||
+                      t("placeholders.select_java_profile")
+                    }
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent />
               </Select>
@@ -496,10 +522,7 @@ const Settings = () => {
                   value: [854, 480]
                 }
               } else {
-                const [width, height] = key
-                  .toString()
-                  .split(":")[1]
-                  .split("x")
+                const [width, height] = key.toString().split(":")[1].split("x")
                 value = {
                   type: "Standard",
                   value: [parseInt(width, 10), parseInt(height, 10)]

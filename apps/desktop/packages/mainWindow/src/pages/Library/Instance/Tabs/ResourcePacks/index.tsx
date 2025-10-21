@@ -1,4 +1,13 @@
-import { Button, Checkbox, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, Input } from "@gd/ui"
+import {
+  Button,
+  Checkbox,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  Input
+} from "@gd/ui"
 import { For, Show } from "solid-js"
 import { Trans, useTransContext } from "@gd/i18n"
 import ResourcePack from "./ResourcePack"
@@ -123,9 +132,9 @@ const resourcePacks: IResourcepack[] = [
 
 const NoResourcePacks = () => {
   return (
-    <div class="h-full min-h-90 w-full flex justify-center items-center">
-      <div class="flex flex-col justify-center items-center text-center">
-        <img src={skull} class="w-16 h-16" />
+    <div class="min-h-90 flex h-full w-full items-center justify-center">
+      <div class="flex flex-col items-center justify-center text-center">
+        <img src={skull} class="h-16 w-16" />
         <p class="text-lightSlate-700 max-w-100">
           <Trans
             key="instance.no_resource_packs_text"
@@ -152,15 +161,15 @@ const ResourcePacks = () => {
   const [t] = useTransContext()
   return (
     <div>
-      <div class="flex flex-col bg-darkSlate-800 z-10 transition-all duration-100 ease-in-out sticky pt-10 top-30">
-        <div class="flex justify-between items-center pb-4 flex-wrap gap-1">
+      <div class="bg-darkSlate-800 top-30 sticky z-10 flex flex-col pt-10 transition-all duration-100 ease-in-out">
+        <div class="flex flex-wrap items-center justify-between gap-1 pb-4">
           <Input
             placeholder={t("general.type_here")}
             icon={<div class="i-hugeicons:search-01" />}
-            class="w-full rounded-full text-lightSlate-700"
+            class="text-lightSlate-700 w-full rounded-full"
             inputClass=""
           />
-          <div class="flex gap-3 items-center">
+          <div class="flex items-center gap-3">
             <p class="text-lightSlate-700">
               <Trans
                 key="instance.sort_by"
@@ -174,13 +183,19 @@ const ResourcePacks = () => {
               options={["asc", "desc"]}
               itemComponent={(props) => (
                 <SelectItem item={props.item}>
-                  {props.item.rawValue === "asc" ? t("instance.sort_by_asc") : t("instance.sort_by_desc")}
+                  {props.item.rawValue === "asc"
+                    ? t("instance.sort_by_asc")
+                    : t("instance.sort_by_desc")}
                 </SelectItem>
               )}
             >
               <SelectTrigger variant="unstyled">
                 <SelectValue<string>>
-                  {(state) => state.selectedOption() === "asc" ? t("instance.sort_by_asc") : t("instance.sort_by_desc")}
+                  {(state) =>
+                    state.selectedOption() === "asc"
+                      ? t("instance.sort_by_asc")
+                      : t("instance.sort_by_desc")
+                  }
                 </SelectValue>
               </SelectTrigger>
               <SelectContent />
@@ -195,9 +210,9 @@ const ResourcePacks = () => {
             />
           </Button>
         </div>
-        <div class="flex justify-between text-lightSlate-700 z-10 mb-6">
+        <div class="text-lightSlate-700 z-10 mb-6 flex justify-between">
           <div class="flex gap-4">
-            <div class="flex items-center gap-2 cursor-pointer">
+            <div class="flex cursor-pointer items-center gap-2">
               <Checkbox checked={true} disabled={false} />
               <Trans
                 key="instance.select_all_resource_pack"
@@ -206,7 +221,7 @@ const ResourcePacks = () => {
                 }}
               />
             </div>
-            <div class="flex items-center gap-2 cursor-pointer hover:text-lightSlate-50 transition duration-100 ease-in-out">
+            <div class="hover:text-lightSlate-50 flex cursor-pointer items-center gap-2 transition duration-100 ease-in-out">
               <span class="i-hugeicons:folder-open text-2xl" />
               <Trans
                 key="instance.open_resource_packs_folder"
@@ -215,8 +230,8 @@ const ResourcePacks = () => {
                 }}
               />
             </div>
-            <div class="flex items-center gap-2 cursor-pointer hover:text-lightSlate-50 transition duration-100 ease-in-out">
-              <span class="text-2xl i-hugeicons:unavailable" />
+            <div class="hover:text-lightSlate-50 flex cursor-pointer items-center gap-2 transition duration-100 ease-in-out">
+              <span class="i-hugeicons:unavailable text-2xl" />
               <Trans
                 key="instance.disable_resource_pack"
                 options={{
@@ -224,7 +239,7 @@ const ResourcePacks = () => {
                 }}
               />
             </div>
-            <div class="flex items-center gap-2 cursor-pointer hover:text-lightSlate-50 transition duration-100 ease-in-out">
+            <div class="hover:text-lightSlate-50 flex cursor-pointer items-center gap-2 transition duration-100 ease-in-out">
               <span class="i-hugeicons:delete-02 text-2xl" />
               <Trans
                 key="instance.delete_resource_pack"

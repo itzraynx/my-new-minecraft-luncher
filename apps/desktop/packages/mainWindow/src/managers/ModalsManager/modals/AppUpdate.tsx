@@ -42,7 +42,7 @@ const AppUpdate = (props: ModalProps) => {
   return (
     <ModalLayout noHeader={props.noHeader} title={props?.title}>
       <Show when={os()?.platform}>
-        <div class="flex flex-col overflow-hidden min-h-60 w-160">
+        <div class="w-160 flex min-h-60 flex-col overflow-hidden">
           <p>
             <Trans key="app_update.new_update_available_text" />
           </p>
@@ -53,19 +53,19 @@ const AppUpdate = (props: ModalProps) => {
           </p>
           <div>
             <Trans key="app_update.current_release_channel" />
-            <span class={`font-bold pl-2 ${releaseChannelFontColor()}`}>
+            <span class={`pl-2 font-bold ${releaseChannelFontColor()}`}>
               <Trans key={releaseChannelTransKey()} />
             </span>
           </div>
-          <hr class="w-full mt-4 border-darkSlate-50" />
-          <div class="flex items-center relative mt-4 justify-between divide-y divide-yellow-500/50">
+          <hr class="border-darkSlate-50 mt-4 w-full" />
+          <div class="relative mt-4 flex items-center justify-between divide-y divide-yellow-500/50">
             <div class="flex flex-col gap-4">
-              <div class="font-bold text-left">
+              <div class="text-left font-bold">
                 <Trans key="app_update.current_version" />
               </div>
               <div class="text-left">{__APP_VERSION__}</div>
             </div>
-            <div class="text-2xl i-hugeicons:arrow-right-double" />
+            <div class="i-hugeicons:arrow-right-double text-2xl" />
             <div class="flex flex-col gap-4">
               <div class="text-left font-bold">
                 <Trans key="app_update.available_version" />
@@ -73,11 +73,11 @@ const AppUpdate = (props: ModalProps) => {
               <div class="text-left">{updateAvailable()?.version}</div>
             </div>
           </div>
-          <hr class="w-full border-darkSlate-50 mt-8" />
+          <hr class="border-darkSlate-50 mt-8 w-full" />
           <Show when={Boolean(updateProgress())}>
             <Progress value={updateProgress()} />
           </Show>
-          <div class="flex items-center justify-center flex-1 mb-4 mt-20">
+          <div class="mb-4 mt-20 flex flex-1 items-center justify-center">
             <Button
               onClick={() => {
                 window.installUpdate()

@@ -1,4 +1,4 @@
-import { Button, toast } from "@gd/ui"
+import { toast } from "@gd/ui"
 import { useModal } from "../.."
 import { Trans, useTransContext } from "@gd/i18n"
 import { createSignal, For, Show, createMemo } from "solid-js"
@@ -55,9 +55,8 @@ const Presets = () => {
   }))
 
   const latestMcVersion = createMemo(() => {
-    return globalStore.minecraftVersions.data?.find(
-      (v) => v.type === "release"
-    )?.id
+    return globalStore.minecraftVersions.data?.find((v) => v.type === "release")
+      ?.id
   })
 
   const DUMMY_META_VERSION = "${gdlauncher.gameVersion}"
@@ -150,7 +149,9 @@ const Presets = () => {
         loaderVersion = getLatestLoaderVersion(preset.loader)
 
         if (!loaderVersion) {
-          toast.error(`${preset.name} is not available for Minecraft ${mcVersion}`)
+          toast.error(
+            `${preset.name} is not available for Minecraft ${mcVersion}`
+          )
           setCreatingPreset(null)
           return
         }
@@ -169,14 +170,15 @@ const Presets = () => {
           Version: {
             Standard: {
               release: mcVersion,
-              modloaders: preset.loader && loaderVersion
-                ? [
-                    {
-                      type_: preset.loader,
-                      version: loaderVersion
-                    } as ModLoader
-                  ]
-                : []
+              modloaders:
+                preset.loader && loaderVersion
+                  ? [
+                      {
+                        type_: preset.loader,
+                        version: loaderVersion
+                      } as ModLoader
+                    ]
+                  : []
             }
           }
         }
@@ -203,31 +205,32 @@ const Presets = () => {
   const modloaderPresets = presetOptions.slice(1)
 
   return (
-    <div class="flex flex-col h-[600px] w-full">
-      <div class="flex flex-col gap-3 p-4 flex-1">
-        <div class="flex items-center w-full">
-          <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
-          <span class="px-3 flex text-lightSlate-400 items-center gap-2 text-base">
+    <div class="flex h-[600px] w-full flex-col">
+      <div class="flex flex-1 flex-col gap-3 p-4">
+        <div class="flex w-full items-center">
+          <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
+          <span class="text-lightSlate-400 flex items-center gap-2 px-3 text-base">
             <div class="i-hugeicons:zap text-primary-500 text-sm" />
             <Trans key="instance.quick_start_presets" />
           </span>
-          <div class="flex-1 border-t-1 border-lightSlate-400 border-solid" />
+          <div class="border-t-1 border-lightSlate-400 flex-1 border-solid" />
         </div>
 
         <Show
           when={!isLoading()}
           fallback={
-            <div class="flex items-center justify-center flex-1">
-              <div class="i-hugeicons:loading-03 animate-spin text-4xl text-lightSlate-400" />
+            <div class="flex flex-1 items-center justify-center">
+              <div class="i-hugeicons:loading-03 text-lightSlate-400 animate-spin text-4xl" />
             </div>
           }
         >
           <div class="flex flex-col gap-3">
             {/* Vanilla preset - full width, featured */}
             <button
-              class="group relative flex flex-col items-center justify-center gap-2 p-4 rounded-xl overflow-hidden border-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md bg-darkSlate-800"
+              class="bg-darkSlate-800 group relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 p-4 shadow-md transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
               classList={{
-                "border-emerald-500/30 hover:border-emerald-500/60 hover:shadow-xl hover:shadow-emerald-500/10 hover:scale-[1.01]": creatingPreset() !== vanillaPreset.name,
+                "border-emerald-500/30 hover:border-emerald-500/60 hover:shadow-xl hover:shadow-emerald-500/10 hover:scale-[1.01]":
+                  creatingPreset() !== vanillaPreset.name,
                 "border-primary-500": creatingPreset() === vanillaPreset.name
               }}
               disabled={creatingPreset() === vanillaPreset.name}
@@ -236,10 +239,10 @@ const Presets = () => {
               {/* Diagonal gradient overlay */}
               <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/40 via-emerald-600/15 to-transparent" />
               {/* Background gradient effect */}
-              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
 
               {/* Latest badge */}
-              <div class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 backdrop-blur-sm">
+              <div class="absolute right-2 top-2 rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-400 backdrop-blur-sm">
                 <Trans key="instance.latest" />
               </div>
 
@@ -247,24 +250,24 @@ const Presets = () => {
                 <Show
                   when={creatingPreset() !== vanillaPreset.name}
                   fallback={
-                    <div class="i-hugeicons:loading-03 animate-spin text-4xl text-primary-500" />
+                    <div class="i-hugeicons:loading-03 text-primary-500 animate-spin text-4xl" />
                   }
                 >
                   <div class="relative">
-                    <div class="absolute inset-0 blur-lg bg-emerald-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                    <div class="absolute inset-0 bg-emerald-500/30 opacity-0 blur-lg transition-opacity duration-200 group-hover:opacity-100" />
                     <img
-                      class="h-10 w-10 relative z-10 drop-shadow-lg"
+                      class="relative z-10 h-10 w-10 drop-shadow-lg"
                       src={getModloaderIcon("vanilla")}
                       alt={vanillaPreset.name}
                     />
                   </div>
                 </Show>
                 <div class="flex flex-col items-center gap-1">
-                  <span class="text-lg font-bold text-lightSlate-50">
+                  <span class="text-lightSlate-50 text-lg font-bold">
                     {t(vanillaPreset.translationKey)}
                   </span>
                   <Show when={latestMcVersion()}>
-                    <span class="text-sm text-lightSlate-300">
+                    <span class="text-lightSlate-300 text-sm">
                       Minecraft {latestMcVersion()}
                     </span>
                   </Show>
@@ -280,39 +283,40 @@ const Presets = () => {
 
                   return (
                     <button
-                      class="group relative flex flex-col items-center justify-center gap-2 p-4 rounded-lg overflow-hidden border backdrop-blur-sm shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      class="group relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border p-4 shadow-md backdrop-blur-sm transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
                       classList={{
-                        "bg-darkSlate-800/50 border-white/5 hover:border-primary-500/50 hover:bg-darkSlate-700/60 hover:shadow-xl hover:shadow-black/20 hover:scale-[1.02]": !creating,
+                        "bg-darkSlate-800/50 border-white/5 hover:border-primary-500/50 hover:bg-darkSlate-700/60 hover:shadow-xl hover:shadow-black/20 hover:scale-[1.02]":
+                          !creating,
                         "bg-darkSlate-800 border-primary-500": creating
                       }}
                       disabled={creating}
                       onClick={() => handleCreatePreset(preset)}
                     >
                       {/* Subtle gradient overlay on hover */}
-                      <div class="absolute inset-0 bg-gradient-to-br from-primary-500/0 to-primary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      <div class="from-primary-500/0 to-primary-500/5 absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
 
                       <div class="relative z-10 flex flex-col items-center gap-2">
                         <Show
                           when={!creating}
                           fallback={
-                            <div class="i-hugeicons:loading-03 animate-spin text-4xl text-primary-500" />
+                            <div class="i-hugeicons:loading-03 text-primary-500 animate-spin text-4xl" />
                           }
                         >
                           <div class="relative">
-                            <div class="absolute inset-0 blur-lg bg-primary-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                            <div class="bg-primary-500/20 absolute inset-0 opacity-0 blur-lg transition-opacity duration-200 group-hover:opacity-100" />
                             <img
-                              class="h-10 w-10 relative z-10 drop-shadow-md"
+                              class="relative z-10 h-10 w-10 drop-shadow-md"
                               src={getModloaderIcon(preset.loader || "vanilla")}
                               alt={preset.name}
                             />
                           </div>
                         </Show>
                         <div class="flex flex-col items-center gap-0.5">
-                          <span class="text-base font-bold text-lightSlate-50">
+                          <span class="text-lightSlate-50 text-base font-bold">
                             {t(preset.translationKey)}
                           </span>
                           <Show when={latestMcVersion()}>
-                            <span class="text-xs text-lightSlate-400">
+                            <span class="text-lightSlate-400 text-xs">
                               {latestMcVersion()}
                             </span>
                           </Show>
@@ -325,7 +329,7 @@ const Presets = () => {
             </div>
 
             {/* Footer description */}
-            <div class="text-center text-xs text-lightSlate-500 mt-2">
+            <div class="text-lightSlate-500 mt-2 text-center text-xs">
               <Trans key="instance.preset_description" />
             </div>
           </div>

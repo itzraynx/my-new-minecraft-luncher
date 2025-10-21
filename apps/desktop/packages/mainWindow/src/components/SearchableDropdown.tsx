@@ -67,19 +67,19 @@ export function SearchableDropdown(props: SearchableDropdownProps) {
 
   const renderOption = (option: SearchableOption) => (
     <div
-      class={`flex items-center gap-2 px-2 py-2 text-sm rounded cursor-pointer transition-colors ${
+      class={`flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-sm transition-colors ${
         option.disabled
-          ? "opacity-50 cursor-not-allowed"
+          ? "cursor-not-allowed opacity-50"
           : "hover:bg-darkSlate-700 focus:bg-darkSlate-700"
       } ${props.isSelected?.(option) ? "bg-darkSlate-700" : ""}`}
       onClick={() => handleSelect(option)}
     >
       <Show when={option.icon}>
-        <div class="h-4 w-4 flex-shrink-0">{option.icon}</div>
+        <div class="h-4 w-4 shrink-0">{option.icon}</div>
       </Show>
       <span class="flex-1 truncate">{option.label}</span>
       <Show when={props.isSelected?.(option)}>
-        <div class="i-hugeicons:tick-02 h-4 w-4 text-primary-500" />
+        <div class="i-hugeicons:tick-02 text-primary-500 h-4 w-4" />
       </Show>
     </div>
   )
@@ -91,9 +91,9 @@ export function SearchableDropdown(props: SearchableDropdownProps) {
       </div>
 
       <Show when={isOpen()}>
-        <div class="absolute top-full left-0 right-0 z-50 mt-1 rounded-md border border-darkSlate-600 bg-darkSlate-800 shadow-lg">
+        <div class="border-darkSlate-600 bg-darkSlate-800 absolute left-0 right-0 top-full z-50 mt-1 rounded-md border shadow-lg">
           <div
-            class="p-2 border-b border-darkSlate-600"
+            class="border-darkSlate-600 border-b p-2"
             onClick={(e) => {
               e.stopPropagation()
               if (inputRef) {
@@ -120,7 +120,7 @@ export function SearchableDropdown(props: SearchableDropdownProps) {
           <div
             class={
               shouldVirtualize()
-                ? "p-1 max-h-[200px]"
+                ? "max-h-[200px] p-1"
                 : "max-h-[200px] overflow-y-auto p-1"
             }
             style={props.maxHeight ? { "max-height": props.maxHeight } : {}}
@@ -128,7 +128,7 @@ export function SearchableDropdown(props: SearchableDropdownProps) {
             <Show
               when={filteredOptions().length > 0}
               fallback={
-                <div class="flex flex-col items-center gap-2 px-2 py-3 text-sm text-lightSlate-400 text-center">
+                <div class="text-lightSlate-400 flex flex-col items-center gap-2 px-2 py-3 text-center text-sm">
                   <div class="i-hugeicons:search-remove text-2xl" />
                   <span>{props.emptyMessage || "No results found"}</span>
                 </div>
@@ -145,7 +145,7 @@ export function SearchableDropdown(props: SearchableDropdownProps) {
                 <VList
                   data={filteredOptions()}
                   itemSize={props.itemHeight ?? 32}
-                  class="overflow-y-auto h-full"
+                  class="h-full overflow-y-auto"
                 >
                   {(item) => renderOption(item)}
                 </VList>

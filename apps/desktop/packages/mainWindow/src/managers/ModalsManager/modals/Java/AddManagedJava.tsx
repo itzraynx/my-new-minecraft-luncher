@@ -1,7 +1,15 @@
 import { Trans } from "@gd/i18n"
 import { ModalProps } from "@/managers/ModalsManager"
 import ModalLayout from "@/managers/ModalsManager/ModalLayout"
-import { Button, Select, SelectTrigger, SelectContent, SelectItem, SelectValue, toast } from "@gd/ui"
+import {
+  Button,
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  toast
+} from "@gd/ui"
 import { rspc } from "@/utils/rspcClient"
 import { Show, createEffect, createSignal, onMount } from "solid-js"
 import {
@@ -36,7 +44,6 @@ const AddManagedJava = (props: ModalProps) => {
   const [selectedJavaVersion, setSelectedJavaVersion] = createSignal("")
   const [loading, setLoading] = createSignal(false)
 
-  // eslint-disable-next-line solid/reactivity
   const versionsByVendor = rspc.createQuery(() => ({
     queryKey: ["java.getManagedVersionsByVendor", vendor()]
   }))
@@ -81,10 +88,10 @@ const AddManagedJava = (props: ModalProps) => {
 
   return (
     <ModalLayout noHeader={props.noHeader} title={props?.title}>
-      <div class="flex items-center h-full flex-col justify-center">
-        <div class="flex flex-col w-100 gap-8">
+      <div class="flex h-full flex-col items-center justify-center">
+        <div class="w-100 flex flex-col gap-8">
           <div class="flex flex-col gap-4">
-            <div class="flex justify-between items-center gap-4">
+            <div class="flex items-center justify-between gap-4">
               <h5 class="m-0">
                 <Trans
                   key="java.java_vendors"
@@ -101,18 +108,22 @@ const AddManagedJava = (props: ModalProps) => {
                   }}
                   options={mappedVendors()}
                   itemComponent={(props) => (
-                    <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+                    <SelectItem item={props.item}>
+                      {props.item.rawValue}
+                    </SelectItem>
                   )}
                 >
-                  <SelectTrigger class="border-1 border-solid border-darkSlate-600 rounded-lg">
-                    <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+                  <SelectTrigger class="border-1 border-darkSlate-600 rounded-lg border-solid">
+                    <SelectValue<string>>
+                      {(state) => state.selectedOption()}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent />
                 </Select>
               </Show>
             </div>
-            <div class="flex justify-between items-center gap-4 w-full">
-              <h5 class="m-0 w-30">
+            <div class="flex w-full items-center justify-between gap-4">
+              <h5 class="w-30 m-0">
                 <Trans
                   key="java.java_major"
                   options={{
@@ -131,13 +142,18 @@ const AddManagedJava = (props: ModalProps) => {
                   options={mappedJavaVersions()}
                   itemComponent={(props) => (
                     <SelectItem item={props.item}>
-                      {javaVersionLabels()[props.item.rawValue] || props.item.rawValue}
+                      {javaVersionLabels()[props.item.rawValue] ||
+                        props.item.rawValue}
                     </SelectItem>
                   )}
                 >
-                  <SelectTrigger class="border-1 border-solid border-darkSlate-600 rounded-lg w-full">
+                  <SelectTrigger class="border-1 border-darkSlate-600 w-full rounded-lg border-solid">
                     <SelectValue<string>>
-                      {(state) => javaVersionLabels()[state.selectedOption() || ""] || state.selectedOption() || ""}
+                      {(state) =>
+                        javaVersionLabels()[state.selectedOption() || ""] ||
+                        state.selectedOption() ||
+                        ""
+                      }
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent />

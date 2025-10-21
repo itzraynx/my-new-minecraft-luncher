@@ -41,30 +41,30 @@ export const InstanceItem = (props: InstanceItemProps) => {
       }
       onMouseLeave={() => props.onMouseLeave()}
     >
-      <div class="flex items-center gap-2 w-full">
-        <div class="flex-shrink-0">
+      <div class="flex w-full items-center gap-2">
+        <div class="shrink-0">
           <img
             src={props.instance.iconUrl || DefaultImg}
             alt={props.instance.name}
-            class="w-8 h-8 rounded object-cover"
+            class="h-8 w-8 rounded object-cover"
           />
         </div>
-        <div class="flex-1 min-w-0">
-          <div class="font-medium truncate">{props.instance.name}</div>
-          <div class="text-xs text-lightSlate-400 truncate">
+        <div class="min-w-0 flex-1">
+          <div class="truncate font-medium">{props.instance.name}</div>
+          <div class="text-lightSlate-400 truncate text-xs">
             {props.instance.gameVersion} • {props.instance.modloader}
             <Show when={props.instance.locked}>
-              <span class="text-orange-400 ml-1">• Locked modpack</span>
+              <span class="ml-1 text-orange-400">• Locked modpack</span>
             </Show>
             <Show
               when={
                 props.isInstalled && !props.isLoading && !props.instance.locked
               }
             >
-              <span class="text-green-400 ml-1">• Installed</span>
+              <span class="ml-1 text-green-400">• Installed</span>
             </Show>
             <Show when={props.isLoading && !props.instance.locked}>
-              <span class="text-blue-400 ml-1">• Installing...</span>
+              <span class="ml-1 text-blue-400">• Installing...</span>
             </Show>
           </div>
         </div>
@@ -76,7 +76,7 @@ export const InstanceItem = (props: InstanceItemProps) => {
             <div class="i-hugeicons:tick-02 h-4 w-4 text-green-400" />
           </Show>
           <Show when={props.instance.locked}>
-            <div class="i-hugeicons:lock h-4 w-4 text-lightSlate-500" />
+            <div class="i-hugeicons:lock text-lightSlate-500 h-4 w-4" />
           </Show>
         </div>
       </div>

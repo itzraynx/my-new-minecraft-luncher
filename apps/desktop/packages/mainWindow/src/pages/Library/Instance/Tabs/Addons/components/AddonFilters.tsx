@@ -146,13 +146,13 @@ export const AddonFilters = (props: AddonFiltersProps) => {
                   const getIcon = (value: string) => {
                     switch (value) {
                       case "all":
-                        return <div class="i-hugeicons:globe w-4 h-4" />
+                        return <div class="i-hugeicons:globe h-4 w-4" />
                       case "curseforge":
-                        return <div class="i-simple-icons:curseforge w-4 h-4" />
+                        return <div class="i-simple-icons:curseforge h-4 w-4" />
                       case "modrinth":
-                        return <div class="i-simple-icons:modrinth w-4 h-4" />
+                        return <div class="i-simple-icons:modrinth h-4 w-4" />
                       case "local":
-                        return <div class="i-hugeicons:folder-01 w-4 h-4" />
+                        return <div class="i-hugeicons:folder-01 h-4 w-4" />
                       default:
                         return null
                     }
@@ -187,17 +187,17 @@ export const AddonFilters = (props: AddonFiltersProps) => {
                       const getIcon = (value: string) => {
                         switch (value) {
                           case "all":
-                            return <div class="i-hugeicons:globe w-4 h-4" />
+                            return <div class="i-hugeicons:globe h-4 w-4" />
                           case "curseforge":
                             return (
-                              <div class="i-simple-icons:curseforge w-4 h-4" />
+                              <div class="i-simple-icons:curseforge h-4 w-4" />
                             )
                           case "modrinth":
                             return (
-                              <div class="i-simple-icons:modrinth w-4 h-4" />
+                              <div class="i-simple-icons:modrinth h-4 w-4" />
                             )
                           case "local":
-                            return <div class="i-hugeicons:folder-01 w-4 h-4" />
+                            return <div class="i-hugeicons:folder-01 h-4 w-4" />
                           default:
                             return null
                         }
@@ -273,14 +273,14 @@ export const AddonFilters = (props: AddonFiltersProps) => {
         {/* Addon type filters */}
         <div class="flex items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-2">
-            <div class="i-hugeicons:filter text-lightSlate-600 w-5 h-5" />
+            <div class="text-lightSlate-600 h-5 w-5" />
             <For each={visibleAddonTypes()}>
               {(type) => (
                 <Badge
                   variant={
                     props.enabledAddonTypes[type] ? "default" : "secondary"
                   }
-                  class="cursor-pointer transition-colors flex items-center gap-1.5"
+                  class="flex cursor-pointer items-center gap-1.5 transition-colors"
                   onClick={() => {
                     props.setEnabledAddonTypes(
                       type,
@@ -297,7 +297,7 @@ export const AddonFilters = (props: AddonFiltersProps) => {
               )}
             </For>
           </div>
-          <div class="text-lightSlate-600 text-xs flex items-center gap-2">
+          <div class="text-lightSlate-600 flex items-center gap-2 text-xs">
             <div class="i-hugeicons:mouse-01" />
             <span>{t("instance.right_click_hint")}</span>
             <span class="text-lightSlate-700">•</span>

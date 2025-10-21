@@ -9,7 +9,7 @@ const ExportPath = () => {
   const [t] = useTransContext()
 
   return (
-    <div class="flex flex-col pt-4 gap-2 w-full">
+    <div class="flex w-full flex-col gap-2 pt-4">
       <span>{`${t("instance.export_path")} :`}</span>
       <div class="flex gap-2">
         <Input
@@ -34,7 +34,7 @@ const ExportPath = () => {
             />
           }
         />
-        <div class="flex items-center justify-center p-2 bg-[#1D2028] rounded-lg">
+        <div class="flex items-center justify-center rounded-lg bg-[#1D2028] p-2">
           <div
             onClick={async () => {
               const result = await window.showSaveDialog({
@@ -61,7 +61,7 @@ const ExportPath = () => {
 
               setPayload({ ...payload, save_path: result.filePath })
             }}
-            class="text-2xl cursor-pointer i-material-symbols:folder-open-outline"
+            class="i-material-symbols:folder-open-outline cursor-pointer text-2xl"
           />
         </div>
       </div>

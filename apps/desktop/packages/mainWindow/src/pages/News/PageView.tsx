@@ -46,17 +46,17 @@ const PageView = () => {
   }))
 
   return (
-    <div class="max-w-4xl mx-auto p-6">
+    <div class="mx-auto max-w-4xl p-6">
       <Show
         when={!news.isPending && !patchNotes.isPending && currentArticle()}
         fallback={
-          <div class="text-center py-20">
-            <div class="bg-darkSlate-700 rounded-2xl p-12 border border-darkSlate-600">
+          <div class="py-20 text-center">
+            <div class="bg-darkSlate-700 border-darkSlate-600 rounded-2xl border p-12">
               <Show
                 when={news.isPending || patchNotes.isPending}
                 fallback={
                   <>
-                    <h1 class="text-3xl font-bold mb-6 text-white">
+                    <h1 class="mb-6 text-3xl font-bold text-white">
                       Article not found
                     </h1>
                     <p class="text-lightSlate-400 mb-8">
@@ -72,8 +72,8 @@ const PageView = () => {
                   </>
                 }
               >
-                <div class="flex items-center justify-center gap-3 text-lightSlate-400">
-                  <div class="animate-spin i-hugeicons:loading-03 text-2xl" />
+                <div class="text-lightSlate-400 flex items-center justify-center gap-3">
+                  <div class="i-hugeicons:loading-03 animate-spin text-2xl" />
                   <span class="text-xl">Loading article...</span>
                 </div>
               </Show>
@@ -94,9 +94,9 @@ const PageView = () => {
             {/* Navigation */}
             <button
               onClick={() => navigator.navigate("/news")}
-              class="self-start text-lightSlate-400 hover:text-lightSlate-200 flex items-center gap-3 mb-2 transition-colors group"
+              class="text-lightSlate-400 hover:text-lightSlate-200 group mb-2 flex items-center gap-3 self-start transition-colors"
             >
-              <div class="i-hugeicons:arrow-left-01 group-hover:transform group-hover:-translate-x-1 transition-transform" />
+              <div class="i-hugeicons:arrow-left-01 transition-transform group-hover:-translate-x-1" />
               <span class="font-medium">Back to News</span>
             </button>
 
@@ -105,24 +105,24 @@ const PageView = () => {
               <img
                 src={article().image}
                 alt={article().title}
-                class="w-full h-96 object-cover"
+                class="h-96 w-full object-cover"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             </div>
 
             {/* Header */}
-            <header class="flex flex-col gap-6 bg-darkSlate-700 rounded-2xl p-8 border border-darkSlate-600">
+            <header class="bg-darkSlate-700 border-darkSlate-600 flex flex-col gap-6 rounded-2xl border p-8">
               <div class="flex items-start justify-between gap-4">
                 <h1 class="text-5xl font-bold leading-tight text-white">
                   {article().title}
                 </h1>
                 {article().type === "patch" && (
-                  <div class="flex flex-col gap-2 items-end">
-                    <span class="text-sm bg-primary-600/20 text-primary-300 px-4 py-2 rounded-full border border-primary-600/30 font-semibold">
+                  <div class="flex flex-col items-end gap-2">
+                    <span class="bg-primary-600/20 text-primary-300 border-primary-600/30 rounded-full border px-4 py-2 text-sm font-semibold">
                       Patch Notes
                     </span>
                     {article().version && (
-                      <span class="text-xs text-lightSlate-400 font-mono">
+                      <span class="text-lightSlate-400 font-mono text-xs">
                         v{article().version}
                       </span>
                     )}
@@ -130,7 +130,7 @@ const PageView = () => {
                 )}
               </div>
 
-              <div class="flex items-center gap-4 text-lightSlate-300">
+              <div class="text-lightSlate-300 flex items-center gap-4">
                 <div class="flex items-center gap-2">
                   <i class="i-hugeicons:calendar-01 text-primary-400" />
                   <time class="text-lg font-medium">
@@ -141,8 +141,8 @@ const PageView = () => {
                     })}
                   </time>
                 </div>
-                <div class="w-1 h-1 bg-lightSlate-500 rounded-full" />
-                <span class="text-sm capitalize font-medium text-lightSlate-400">
+                <div class="bg-lightSlate-500 h-1 w-1 rounded-full" />
+                <span class="text-lightSlate-400 text-sm font-medium capitalize">
                   {article().type === "patch"
                     ? "Minecraft Patch"
                     : "Minecraft News"}
@@ -153,15 +153,15 @@ const PageView = () => {
             {/* Content */}
             <div
               id="news_article_content"
-              class="bg-darkSlate-700 rounded-2xl p-8 border border-darkSlate-600"
+              class="bg-darkSlate-700 border-darkSlate-600 rounded-2xl border p-8"
             >
               {article().type === "patch" ? (
                 <Show
                   when={patchContent.data}
                   fallback={
                     <div class="flex items-center justify-center py-16">
-                      <div class="flex items-center gap-3 text-lightSlate-400">
-                        <div class="animate-spin i-hugeicons:loading-03 text-xl" />
+                      <div class="text-lightSlate-400 flex items-center gap-3">
+                        <div class="i-hugeicons:loading-03 animate-spin text-xl" />
                         <span class="text-lg">Loading patch content...</span>
                       </div>
                     </div>
@@ -280,7 +280,7 @@ const PageView = () => {
                         `}
                     </style>
                     <div
-                      class="text-lightSlate-100 leading-relaxed prose prose-lg prose-invert max-w-none"
+                      class="text-lightSlate-100 prose prose-lg prose-invert max-w-none leading-relaxed"
                       // eslint-disable-next-line solid/no-innerhtml
                       innerHTML={parseToHtml(patchContent.data)}
                     />
@@ -299,7 +299,7 @@ const PageView = () => {
             <div class="flex justify-center pt-4">
               <Button
                 onClick={() => window.openExternalLink(article().url)}
-                class="flex items-center gap-3 px-8 py-4 text-lg font-semibold bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 border border-primary-500/50 shadow-lg hover:shadow-primary-500/25 transition-all duration-300"
+                class="from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 border-primary-500/50 hover:shadow-primary-500/25 flex items-center gap-3 border bg-gradient-to-r px-8 py-4 text-lg font-semibold shadow-lg transition-all duration-300"
               >
                 <span>
                   {article().type === "patch"

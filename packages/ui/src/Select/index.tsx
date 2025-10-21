@@ -1,4 +1,4 @@
-import { splitProps, type ParentProps, type ValidComponent, createEffect, createSignal, onMount } from "solid-js"
+import { splitProps, type ParentProps, type ValidComponent } from "solid-js"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import {
   Select as SelectPrimitive,
@@ -80,9 +80,9 @@ export const SelectContent = <T extends ValidComponent = "div">(
 
     // Wait for next tick to ensure items are rendered
     setTimeout(() => {
-      const selectedItem = listboxRef?.querySelector('[aria-selected="true"]') as HTMLElement
+      const selectedItem = listboxRef?.querySelector('[aria-selected="true"]')
       if (selectedItem) {
-        selectedItem.scrollIntoView({ block: 'center', behavior: 'instant' })
+        selectedItem.scrollIntoView({ block: "center", behavior: "instant" })
       }
     }, 0)
   }
@@ -96,7 +96,10 @@ export const SelectContent = <T extends ValidComponent = "div">(
         )}
         {...rest}
       >
-        <SelectPrimitive.Listbox ref={handleListboxRef} class="p-1 focus-visible:outline-none" />
+        <SelectPrimitive.Listbox
+          ref={handleListboxRef}
+          class="p-1 focus-visible:outline-none"
+        />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )
@@ -139,7 +142,9 @@ export const SelectItem = <T extends ValidComponent = "li">(
           <title>Checked</title>
         </svg>
       </SelectPrimitive.ItemIndicator>
-      <SelectPrimitive.ItemLabel class="flex-1 w-full">{local.children}</SelectPrimitive.ItemLabel>
+      <SelectPrimitive.ItemLabel class="flex-1 w-full">
+        {local.children}
+      </SelectPrimitive.ItemLabel>
     </SelectPrimitive.Item>
   )
 }

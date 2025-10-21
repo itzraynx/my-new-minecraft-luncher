@@ -114,7 +114,7 @@ const ContextMenu = (props: ContextMenuProps) => {
         <Portal mount={document.body}>
           <div
             ref={setMenuRef}
-            class="rounded-lg overflow-hidden bg-darkSlate-900 context-menu w-40"
+            class="bg-darkSlate-900 context-menu w-40 overflow-hidden rounded-lg"
             style={{
               position: "absolute",
               top: y() + "px",
@@ -126,7 +126,7 @@ const ContextMenu = (props: ContextMenuProps) => {
             <For each={props.menuItems}>
               {(item) => (
                 <div
-                  class="flex items-center cursor-pointer w-full gap-1 px-3 h-8 hover:bg-darkSlate-700 py-1"
+                  class="hover:bg-darkSlate-700 flex h-8 w-full cursor-pointer items-center gap-1 px-3 py-1"
                   classList={{
                     "hover:text-red-600 text-red-500": item.id === "delete",
                     "hover:text-lightSlate-50 text-darkGray-50": !item.id

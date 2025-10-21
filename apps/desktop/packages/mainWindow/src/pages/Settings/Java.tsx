@@ -523,7 +523,12 @@ const Java = () => {
                                   >
                                     <SelectTrigger class="w-70">
                                       <SelectValue<string>>
-                                        {(state) => renderJavaOption(state.selectedOption() || "unassigned")}
+                                        {(state) =>
+                                          renderJavaOption(
+                                            state.selectedOption() ||
+                                              "unassigned"
+                                          )
+                                        }
                                       </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent />

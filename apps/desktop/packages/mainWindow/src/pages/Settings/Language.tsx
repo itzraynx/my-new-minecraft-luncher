@@ -25,7 +25,7 @@ const Language = () => {
           <Title class="w-full">
             <Trans key="settings:select_a_language" />
           </Title>
-          <div class="w-full flex flex-col divide-y divide-darkSlate-600">
+          <div class="divide-darkSlate-600 flex w-full flex-col divide-y">
             <Radio.group
               onChange={(value) => {
                 runWithOwner(owner, () => {
@@ -37,10 +37,10 @@ const Language = () => {
                 ([key, value]) => ({
                   value: key,
                   label: (
-                    <div class="w-full flex justify-between">
+                    <div class="flex w-full justify-between">
                       <div class="flex items-center gap-2">
                         <div
-                          class={`h-5 w-5 i-emojione-v1:flag-for-${value}`}
+                          class={`i-emojione-v1:flag-for- h-5 w-5${value}`}
                         />
                         <Trans key={`languages:${key}_native`} />
                       </div>

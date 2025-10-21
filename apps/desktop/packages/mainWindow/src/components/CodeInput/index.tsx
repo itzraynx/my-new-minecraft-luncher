@@ -45,16 +45,16 @@ export const DeviceCode = (props: Props) => {
   })
 
   return (
-    <div class="relative h-13 flex justify-center items-center text-lightSlate-50 font-bold gap-2 rounded-md bg-darkSlate-900 opacity-100 w-54 font-ubuntu border-solid border-1 border-lightSlate-900 overflow-hidden">
+    <div class="h-13 text-lightSlate-50 bg-darkSlate-900 w-54 font-ubuntu border-1 border-lightSlate-900 relative flex items-center justify-center gap-2 overflow-hidden rounded-md border-solid font-bold opacity-100">
       <div
         ref={animateDivRef}
-        class="z-1 absolute w-full h-full top-0 left-0 bg-green-500 flex justify-center items-center opacity-0 text-sm"
+        class="z-1 absolute left-0 top-0 flex h-full w-full items-center justify-center bg-green-500 text-sm opacity-0"
         classList={{
           "translate-x-full": !copied(),
           "translate-x-0": copied()
         }}
       >
-        <i class="i-hugeicons:tick-02 w-4 h-4 mr-2" />
+        <i class="i-hugeicons:tick-02 mr-2 h-4 w-4" />
         <Trans key="genera.copied_to_clipboard" />
       </div>
 
@@ -69,7 +69,7 @@ export const DeviceCode = (props: Props) => {
       </span>
       <span
         id={props.id}
-        class="transition-color duration-100 ease-in-out hover:bg-lightSlate-50"
+        class="transition-color hover:bg-lightSlate-50 duration-100 ease-in-out"
         classList={{
           "i-hugeicons:copy-01": !props.expired,
           "i-hugeicons:refresh": props.expired,

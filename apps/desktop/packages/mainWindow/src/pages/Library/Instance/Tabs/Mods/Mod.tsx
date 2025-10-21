@@ -45,7 +45,7 @@ const CopiableEntity = (props: {
         </Tooltip>
       </div>
       <Show when={props.text}>
-        <div class="ml-2 flex-shrink-0">
+        <div class="ml-2 shrink-0">
           <CopyIcon text={props.text} />
         </div>
       </Show>

@@ -7,7 +7,7 @@ interface Props {
 
 const CopyIcon = (props: Props) => {
   const [clicked, setClicked] = createSignal(false)
-  let timeoutId: number | undefined
+  let timeoutId: ReturnType<typeof setTimeout> | undefined
 
   onCleanup(() => {
     if (timeoutId !== undefined) {
@@ -17,7 +17,7 @@ const CopyIcon = (props: Props) => {
 
   return (
     <div
-      class="hover:text-lightSlate-50 i-hugeicons:clipboard transition-transform duration-200 hover:scale-120"
+      class="hover:text-lightSlate-50 i-hugeicons:clipboard hover:scale-120 transition-transform duration-200"
       classList={{
         "animate-scaleBounce": clicked()
       }}

@@ -54,7 +54,7 @@ const JavaPathAutoComplete = (props: Props) => {
       .map((java) => ({
         value: java.path,
         label: (
-          <div class="w-full flex flex-col gap-2">
+          <div class="flex w-full flex-col gap-2">
             <div class="flex justify-between">
               <div class="text-lightSlate-50">{java.version}</div>
               <div>{java.type}</div>
@@ -95,7 +95,7 @@ const JavaPathAutoComplete = (props: Props) => {
                 value: value(),
                 label: (
                   <div
-                    class="w-full flex flex-col gap-2"
+                    class="flex w-full flex-col gap-2"
                     onClick={() => {
                       createCustomJavaVersionMutation.mutate(value())
                     }}
@@ -141,20 +141,20 @@ const JavaPathAutoComplete = (props: Props) => {
         icon={
           <Switch>
             <Match when={createCustomJavaVersionMutation.isPending}>
-              <div class="flex i-hugeicons:loading-03 animate-spin text-lightSlate-700" />
+              <div class="i-hugeicons:loading-03 text-lightSlate-700 flex animate-spin" />
             </Match>
             <Match when={javaComponent()}>
               <Switch>
                 <Match when={javaComponent()?.isValid}>
-                  <div class="flex i-hugeicons:tick-double-02 text-emerald-500" />
+                  <div class="i-hugeicons:tick-double-02 flex text-emerald-500" />
                 </Match>
                 <Match when={!javaComponent()?.isValid}>
-                  <div class="flex i-hugeicons:alert-02 text-yellow-500" />
+                  <div class="i-hugeicons:alert-02 flex text-yellow-500" />
                 </Match>
               </Switch>
             </Match>
             <Match when={shouldSuggestCreation()}>
-              <div class="flex i-hugeicons:add-01 text-lightSlate-700" />
+              <div class="i-hugeicons:add-01 text-lightSlate-700 flex" />
             </Match>
           </Switch>
         }

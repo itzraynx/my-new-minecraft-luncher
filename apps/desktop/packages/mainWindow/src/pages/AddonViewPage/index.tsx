@@ -134,7 +134,7 @@ const AddonExplore = () => {
         name: author.name,
         avatarUrl: author.avatarUrl,
         id: author.name, // Use name as ID since FEUnifiedAuthor doesn't have separate ID
-        platform: project.data!.platform,
+        platform: project.data.platform,
         url: null // FEUnifiedAuthor doesn't include profile URLs
       })
     )
@@ -340,7 +340,7 @@ const AddonExplore = () => {
         </div>
       </div>
       <div class="bg-darkSlate-800 sticky">
-        <div class="flex justify-center py-0 px-6">
+        <div class="flex justify-center px-6 py-0">
           <div class="bg-darkSlate-800 w-full">
             <div
               ref={(el) => {
@@ -413,7 +413,10 @@ const AddonExplore = () => {
                         project.data?.type && project.data?.type === "modpack"
                       }
                     >
-                      <ModpackDownloadButton addon={project.data} size="small" />
+                      <ModpackDownloadButton
+                        addon={project.data}
+                        size="small"
+                      />
                     </Match>
                     <Match
                       when={

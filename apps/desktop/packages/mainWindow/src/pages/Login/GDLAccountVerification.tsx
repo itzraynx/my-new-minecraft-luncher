@@ -53,12 +53,12 @@ const GDLAccountVerification = (props: Props) => {
           <Navigate href="/library" />
         </Match>
         <Match when={verified.loading}>
-          <div class="flex-1 w-full text-center gap-5 flex flex-col justify-between items-center">
+          <div class="flex w-full flex-1 flex-col items-center justify-between gap-5 text-center">
             <div class="p-10">
               <div class="text-2xl font-bold">
                 <Trans key="login.check_your_email_for_a_verification_link" />
               </div>
-              <div class="pt-4 pb-10 text-lightSlate-600">
+              <div class="text-lightSlate-600 pb-10 pt-4">
                 ({peekedUser.data?.email})
               </div>
               <div
@@ -110,7 +110,7 @@ const GDLAccountVerification = (props: Props) => {
               >
                 <Trans key="login.request_a_new_verification_link" />
               </div>
-              <div class="text-sm mt-2">
+              <div class="mt-2 text-sm">
                 <Switch>
                   <Match when={sentVisible()}>
                     <div class="text-green-500">

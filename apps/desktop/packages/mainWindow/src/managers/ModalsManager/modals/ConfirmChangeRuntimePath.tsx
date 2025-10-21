@@ -25,7 +25,7 @@ const ConfirmChangeRuntimePath = (props: ModalProps) => {
         height="h-120"
         width="w-180"
       >
-        <div class="flex flex-col justify-between h-full">
+        <div class="flex h-full flex-col justify-between">
           <div class="h-h-full">
             <Switch>
               <Match when={props.data.isTargetFolderAlreadyUsed}>
@@ -40,7 +40,7 @@ const ConfirmChangeRuntimePath = (props: ModalProps) => {
             <div class="font-bold text-red-400">
               <Trans key="settings:runtime_path_old_path" />
             </div>
-            <div class="bg-darkSlate-900 p-4 mt-4">
+            <div class="bg-darkSlate-900 mt-4 p-4">
               <div>{currentRuntimePath()?.replaceAll("\\\\", "/")}</div>
             </div>
           </div>
@@ -55,7 +55,7 @@ const ConfirmChangeRuntimePath = (props: ModalProps) => {
               <Trans key="settings:runtime_path_new_path" />
             </div>
             <div
-              class="bg-darkSlate-900 p-4 mt-4"
+              class="bg-darkSlate-900 mt-4 p-4"
               classList={{
                 "text-yellow-400": props.data.isTargetFolderAlreadyUsed
               }}
@@ -63,7 +63,7 @@ const ConfirmChangeRuntimePath = (props: ModalProps) => {
               <div>{props.data.runtimePath.replaceAll("\\\\", "/")}</div>
             </div>
           </div>
-          <div class="flex justify-between w-full">
+          <div class="flex w-full justify-between">
             <Button
               onClick={() => {
                 modalsContext?.closeModal()
@@ -96,7 +96,7 @@ const ConfirmChangeRuntimePath = (props: ModalProps) => {
       <Show when={props.data.isChangingRuntimePath() || migrationError()}>
         <Portal>
           <div
-            class="inset-0 z-100 backdrop-blur-sm flex flex-col items-center justify-center fixed bg-opacity-65 p-8"
+            class="z-100 fixed inset-0 flex flex-col items-center justify-center bg-opacity-65 p-8 backdrop-blur-sm"
             classList={{
               "bg-black": !migrationError(),
               "bg-red-900": !!migrationError()
@@ -105,12 +105,12 @@ const ConfirmChangeRuntimePath = (props: ModalProps) => {
             <div>
               <Switch>
                 <Match when={migrationError()}>
-                  <div class="flex text-2xl items-center text-center">
+                  <div class="flex items-center text-center text-2xl">
                     <div>
                       <Trans key="settings:migration_errored">
                         {""}
                         <span
-                          class="underline cursor-pointer text-lightSlate-50 hover:text-lightSlate-400"
+                          class="text-lightSlate-50 hover:text-lightSlate-400 cursor-pointer underline"
                           onClick={() => {
                             window.openExternalLink(
                               "https://gdlauncher.com/docs/troubleshooting/#migration-error"
@@ -123,9 +123,9 @@ const ConfirmChangeRuntimePath = (props: ModalProps) => {
                   </div>
                 </Match>
                 <Match when={!migrationError()}>
-                  <div class="flex text-2xl items-center">
+                  <div class="flex items-center text-2xl">
                     <Trans key="settings:applying_new_runtime_path" />
-                    <div class="ml-2 i-hugeicons:loading-03 animate-spin" />
+                    <div class="i-hugeicons:loading-03 ml-2 animate-spin" />
                   </div>
                 </Match>
               </Switch>
@@ -138,7 +138,7 @@ const ConfirmChangeRuntimePath = (props: ModalProps) => {
                 </Match>
               </Switch>
               <div
-                class="mt-4 text-lightSlate-400"
+                class="text-lightSlate-400 mt-4"
                 classList={{
                   "opacity-0": RTprogress() === undefined
                 }}

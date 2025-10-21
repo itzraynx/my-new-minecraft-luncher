@@ -95,7 +95,7 @@ const CodeStep = (props: Props) => {
   }
 
   let interval: ReturnType<typeof setTimeout> | undefined
-  let retryMessageTimeoutId: number | undefined
+  let retryMessageTimeoutId: ReturnType<typeof setTimeout> | undefined
   const routeData: ReturnType<typeof fetchData> = useRouteData()
 
   createEffect(() => {
@@ -209,7 +209,7 @@ const CodeStep = (props: Props) => {
           </Show>
         </div>
         <Show when={!expired()}>
-          <p class="text-lightSlate-700 text-sm mt-2">
+          <p class="text-lightSlate-700 mt-2 text-sm">
             <span class="text-lightSlate-500 mr-1">{countDown()}</span>
             <Trans key="login.before_expiring" />
           </p>

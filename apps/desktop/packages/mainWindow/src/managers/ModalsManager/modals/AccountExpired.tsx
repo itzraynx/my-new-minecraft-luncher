@@ -24,7 +24,7 @@ function AccountExpired(props: ModalProps) {
 
   return (
     <ModalLayout noHeader={props.noHeader} title={props?.title}>
-      <div class="flex flex-col justify-between gap-2 overflow-hidden min-h-60 w-120">
+      <div class="w-120 flex min-h-60 flex-col justify-between gap-2 overflow-hidden">
         <div class="flex flex-col gap-8">
           <div class="text-xl font-bold">
             <Trans key="account_expired.expiration_text" />
@@ -37,7 +37,7 @@ function AccountExpired(props: ModalProps) {
           </div>
         </div>
 
-        <div class="w-full flex justify-between">
+        <div class="flex w-full justify-between">
           <Button
             type="secondary"
             size="large"
@@ -47,7 +47,7 @@ function AccountExpired(props: ModalProps) {
             }}
           >
             <div class="flex items-center gap-2">
-              <i class="w-4 h-4 i-hugeicons:play" />
+              <i class="i-hugeicons:play h-4 w-4" />
               <Trans key="account_expired.launch_anyway" />
             </div>
           </Button>
@@ -60,7 +60,7 @@ function AccountExpired(props: ModalProps) {
             }}
           >
             <div class="flex items-center gap-2">
-              <i class="w-4 h-4 i-hugeicons:microsoft" />
+              <i class="i-hugeicons:microsoft h-4 w-4" />
               <Trans key="account_expired.back_to_login" />
             </div>
           </Button>

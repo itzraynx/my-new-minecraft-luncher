@@ -106,7 +106,7 @@ const Overview = () => {
             routeData.modpackInfo.isLoading
           }
         >
-          <div class="bg-darkSlate-700 rounded-xl box-border flex-1 p-5 h-23 min-w-full">
+          <div class="bg-darkSlate-700 h-23 box-border min-w-full flex-1 rounded-xl p-5">
             <FadedBannerSkeleton />
           </div>
         </Show>
@@ -116,12 +116,12 @@ const Overview = () => {
             routeData.modpackInfo.data
           }
         >
-          <div class="relative flex p-5 rounded-xl box-border bg-darkSlate-700 w-full overflow-hidden min-h-23 h-max">
+          <div class="bg-darkSlate-700 min-h-23 relative box-border flex h-max w-full overflow-hidden rounded-xl p-5">
             <FadedBanner
               imageUrl={`http://127.0.0.1:${port}/instance/modpackIcon?instance_id=${params.id}`}
             >
-              <div class="flex flex-col justify-between items-start w-full z-10 gap-6 2xl:flex-row 2xl:items-center 2xl:gap-14">
-                <div class="flex items-center gap-2 flex-1">
+              <div class="z-10 flex w-full flex-col items-start justify-between gap-6 2xl:flex-row 2xl:items-center 2xl:gap-14">
+                <div class="flex flex-1 items-center gap-2">
                   <img
                     class="h-13 w-13 rounded-lg"
                     src={`http://127.0.0.1:${port}/instance/modpackIcon?instance_id=${params.id}`}
@@ -130,7 +130,7 @@ const Overview = () => {
                     <div class="text-lg font-bold">
                       {routeData.modpackInfo.data?.name}
                     </div>
-                    <div class="flex gap-3 text-sm text-lightSlate-600">
+                    <div class="text-lightSlate-600 flex gap-3 text-sm">
                       <div class="flex items-center">
                         <img
                           src={getModpackPlatformIcon(modpackPlatform())}
@@ -138,7 +138,7 @@ const Overview = () => {
                         />
                       </div>
                       <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 i-hugeicons:file-01" />
+                        <div class="i-hugeicons:file-01 h-3 w-3" />
                         <div class="truncate whitespace-break-spaces">
                           {routeData.modpackInfo.data?.version_name}
                         </div>
@@ -181,7 +181,7 @@ const Overview = () => {
                     }}
                   >
                     <Trans key="instance.modpack_view" />
-                    <i class="w-4 h-4 i-hugeicons:arrow-right-01" />
+                    <i class="i-hugeicons:arrow-right-01 h-4 w-4" />
                   </Button>
                 </div>
               </div>
@@ -191,7 +191,7 @@ const Overview = () => {
       </div>
 
       <Show when={routeData.instanceDetails.data?.notes}>
-        <div class="flex flex-col justify-between gap-2 p-5 bg-darkSlate-700 rounded-xl w-full items-start box-border w-59">
+        <div class="bg-darkSlate-700 w-59 box-border flex w-full flex-col items-start justify-between gap-2 rounded-xl p-5">
           <div class="text-lightSlate-700 uppercase">
             <Trans
               key="instance.notes"

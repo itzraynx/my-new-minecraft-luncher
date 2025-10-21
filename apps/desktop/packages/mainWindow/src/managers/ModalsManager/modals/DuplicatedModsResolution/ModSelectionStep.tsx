@@ -47,15 +47,15 @@ const ModSelectionStep = (props: Props) => {
   }
 
   return (
-    <div class="flex flex-col h-full">
-      <div class="flex-shrink-0 flex flex-col gap-4">
-        <div class="flex items-start gap-3 mb-2">
+    <div class="flex h-full flex-col">
+      <div class="flex shrink-0 flex-col gap-4">
+        <div class="mb-2 flex items-start gap-3">
           <div class="flex items-center gap-3">
             <Show
               when={props.mod.modId && props.mod.platform !== undefined}
               fallback={
-                <div class="w-12 h-12 rounded-lg bg-darkSlate-600 flex items-center justify-center">
-                  <div class="i-hugeicons:puzzle text-2xl text-darkSlate-400" />
+                <div class="bg-darkSlate-600 flex h-12 w-12 items-center justify-center rounded-lg">
+                  <div class="i-hugeicons:puzzle text-darkSlate-400 text-2xl" />
                 </div>
               }
             >
@@ -66,12 +66,12 @@ const ModSelectionStep = (props: Props) => {
                   props.mod.platform!
                 )}
                 alt={props.mod.name}
-                class="w-12 h-12 rounded-lg"
+                class="h-12 w-12 rounded-lg"
               />
             </Show>
             <div>
-              <h2 class="text-xl font-bold m-0">{props.mod.name}</h2>
-              <p class="text-lightSlate-600 text-sm m-0">
+              <h2 class="m-0 text-xl font-bold">{props.mod.name}</h2>
+              <p class="text-lightSlate-600 m-0 text-sm">
                 <Trans
                   key="instance.duplicates.selection.step_indicator"
                   options={{
@@ -89,12 +89,12 @@ const ModSelectionStep = (props: Props) => {
         </p>
       </div>
 
-      <div class="flex-1 overflow-y-auto overflow-x-hidden mt-2 pr-2">
+      <div class="mt-2 flex-1 overflow-y-auto overflow-x-hidden pr-2">
         <div class="flex flex-col gap-3">
           <For each={props.mod.versions}>
             {(version) => (
               <div
-                class="border border-darkSlate-500 rounded-lg p-4 transition-all duration-200"
+                class="border-darkSlate-500 rounded-lg border p-4 transition-all duration-200"
                 classList={{
                   "bg-darkSlate-600 border-primary-500":
                     selectedVersionLocal() === version.id,
@@ -107,16 +107,16 @@ const ModSelectionStep = (props: Props) => {
                   checked={selectedVersionLocal() === version.id}
                   onChange={handleSelect}
                 >
-                  <div class="flex flex-col gap-1 w-full">
+                  <div class="flex w-full flex-col gap-1">
                     <div class="flex items-center justify-between">
-                      <span class="font-semibold text-sm">
+                      <span class="text-sm font-semibold">
                         {version.fileName}
                       </span>
-                      <span class="text-xs text-lightSlate-600 bg-darkSlate-800 px-2 py-1 rounded">
+                      <span class="text-lightSlate-600 bg-darkSlate-800 rounded px-2 py-1 text-xs">
                         {version.fileSize}
                       </span>
                     </div>
-                    <div class="flex gap-4 text-xs text-lightSlate-600 mt-1">
+                    <div class="text-lightSlate-600 mt-1 flex gap-4 text-xs">
                       <span>
                         <Trans key="instance.duplicates.selection.version_label" />{" "}
                         {version.version}
@@ -130,7 +130,7 @@ const ModSelectionStep = (props: Props) => {
         </div>
       </div>
 
-      <div class="flex-shrink-0 flex justify-between mt-6">
+      <div class="mt-6 flex shrink-0 justify-between">
         <Button type="secondary" size="large" onClick={() => props.prevStep()}>
           <Trans key="instance.duplicates.selection.button_back" />
         </Button>

@@ -1,6 +1,11 @@
 import { createFileRoute } from "@tanstack/solid-router"
-import { createSignal } from "solid-js"
-import { Dropdown } from "../../../../src"
+import { createSignal, For } from "solid-js"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from "../../../../src"
 import ComponentDemo from "../../components/ComponentDemo"
 
 export const Route = createFileRoute("/components/dropdown")({
@@ -38,56 +43,39 @@ function DropdownPage() {
         title="Basic Dropdown"
         description="Simple dropdown with basic options"
       >
-        <Dropdown options={basicOptions} />
+        <DropdownMenu>
+          <DropdownMenuTrigger>Select an option</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <For each={basicOptions}>
+              {(option) => <DropdownMenuItem>{option.label}</DropdownMenuItem>}
+            </For>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </ComponentDemo>
 
       <ComponentDemo
-        title="Dropdown with Placeholder"
-        description="Dropdown with custom placeholder text"
-      >
-        <Dropdown options={fruitOptions} placeholder="Select a fruit..." />
-      </ComponentDemo>
-
-      <ComponentDemo
-        title="Controlled Dropdown"
-        description="Dropdown with controlled value and change handler"
+        title="Dropdown with Selection"
+        description="Dropdown with selected value display"
       >
         <div class="space-y-4">
-          <Dropdown
-            options={fruitOptions}
-            value={selectedValue()}
-            onChange={(option) => setSelectedValue(option.key.toString())}
-          />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              {selectedValue() || "Select a fruit..."}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <For each={fruitOptions}>
+                {(option) => (
+                  <DropdownMenuItem
+                    onSelect={() => setSelectedValue(option.key)}
+                  >
+                    {option.label}
+                  </DropdownMenuItem>
+                )}
+              </For>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div class="text-gray-600">Selected: {selectedValue()}</div>
         </div>
-      </ComponentDemo>
-
-      <ComponentDemo
-        title="Rounded Dropdown"
-        description="Dropdown with rounded corners"
-      >
-        <Dropdown options={basicOptions} rounded />
-      </ComponentDemo>
-
-      <ComponentDemo
-        title="Disabled Dropdown"
-        description="Non-interactive disabled state"
-      >
-        <Dropdown options={basicOptions} disabled />
-      </ComponentDemo>
-
-      <ComponentDemo
-        title="Dropdown Button"
-        description="Combination of button and dropdown for split actions"
-      >
-        <Dropdown.button
-          options={fruitOptions}
-          value={selectedValue()}
-          onChange={(option) => setSelectedValue(option.key.toString())}
-          onClick={() => alert("Button clicked!")}
-        >
-          Action
-        </Dropdown.button>
       </ComponentDemo>
     </div>
   )

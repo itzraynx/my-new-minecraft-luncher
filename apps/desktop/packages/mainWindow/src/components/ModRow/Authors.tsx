@@ -26,7 +26,7 @@ const Authors = (props: Props) => {
   const authors = () => getAuthors(props.modProps)
 
   return (
-    <div class="text-sm flex gap-2 whitespace-nowrap">
+    <div class="flex gap-2 whitespace-nowrap text-sm">
       <Show
         when={!props?.isRowSmall?.()}
         fallback={

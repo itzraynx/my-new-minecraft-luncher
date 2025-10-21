@@ -8,7 +8,7 @@ export const BisectBanner = () => {
       style={{
         width: `${adSize.width}px`
       }}
-      class="absolute top-4 flex justify-center h-min max-w-full px-4 box-border z-100"
+      class="z-100 absolute top-4 box-border flex h-min max-w-full justify-center px-4"
     >
       <img
         src={adSize.useVertical ? BisectBannerVerticalImage : BisectBannerImage}

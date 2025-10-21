@@ -360,7 +360,7 @@ const HomeGrid = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Button type="secondary" size="small">
-                    <i class="i-hugeicons:filter h-4 w-4" />
+                    <i class="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent class="w-64">
@@ -443,7 +443,7 @@ const HomeGrid = () => {
                             </span>
                             {globalStore.settings.data?.instancesSortBy && (
                               <div
-                                class="h-4 w-4 ml-2"
+                                class="ml-2 h-4 w-4"
                                 classList={{
                                   "i-hugeicons:arrange-by-letters-a-z":
                                     globalStore.settings.data
@@ -504,7 +504,7 @@ const HomeGrid = () => {
                                     {globalStore.settings.data
                                       ?.instancesSortBy === option.key && (
                                       <div
-                                        class="h-4 w-4 ml-4"
+                                        class="ml-4 h-4 w-4"
                                         classList={{
                                           "i-hugeicons:arrange-by-letters-a-z":
                                             globalStore.settings.data
@@ -538,7 +538,7 @@ const HomeGrid = () => {
                             </span>
                             {globalStore.settings.data?.instancesGroupBy && (
                               <div
-                                class="h-4 w-4 ml-2"
+                                class="ml-2 h-4 w-4"
                                 classList={{
                                   "i-hugeicons:arrange-by-letters-a-z":
                                     globalStore.settings.data
@@ -600,7 +600,7 @@ const HomeGrid = () => {
                                     {globalStore.settings.data
                                       ?.instancesGroupBy === option.key && (
                                       <div
-                                        class="h-4 w-4 ml-4"
+                                        class="ml-4 h-4 w-4"
                                         classList={{
                                           "i-hugeicons:arrange-by-letters-a-z":
                                             globalStore.settings.data

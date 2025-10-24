@@ -26,6 +26,7 @@ use carbon_repos::db::{self, read_filters::IntFilter};
 use carbon_repos::pcr::Direction;
 use chrono::{DateTime, Utc};
 use daedalus::minecraft::MinecraftJavaProfile;
+use dashmap::DashMap;
 use db::instance::Data as CachedInstance;
 use domain::info;
 use fs_extra::dir::CopyOptions;
@@ -64,6 +65,9 @@ pub struct InstanceManager {
     index_lock: Mutex<()>,
     // seperate lock to prevent a deadlock with the index lock
     path_lock: Mutex<()>,
+    // Per-instance operation locks to allow parallel updates to different instances
+    // while preventing concurrent updates to the same instance
+    instance_op_locks: Arc<DashMap<InstanceId, Arc<Mutex<()>>>>,
     loaded_icon: Mutex<Option<(String, Vec<u8>)>>,
     persistence_manager: PersistenceManager,
     import_manager: InstanceImportManager,
@@ -97,6 +101,7 @@ impl InstanceManager {
             instances: RwLock::new(HashMap::new()),
             index_lock: Mutex::new(()),
             path_lock: Mutex::new(()),
+            instance_op_locks: Arc::new(DashMap::new()),
             loaded_icon: Mutex::new(None),
             persistence_manager: PersistenceManager::new(),
             import_manager: InstanceImportManager::new(),
@@ -1102,23 +1107,49 @@ impl<'s> ManagerRef<'s, InstanceManager> {
     ) -> anyhow::Result<()> {
         use db::instance::{SetParam, UniqueWhereParam};
 
-        let mut instances = self.instances.write().await;
-        let instance = instances
-            .get_mut(&update.instance_id)
-            .ok_or(InvalidInstanceIdError(update.instance_id))?;
+        // Acquire per-instance operation lock to prevent concurrent updates to same instance
+        // while allowing parallel updates to different instances
+        let op_lock = self
+            .instance_op_locks
+            .entry(update.instance_id)
+            .or_insert_with(|| Arc::new(Mutex::new(())))
+            .clone();
+        let _instance_guard = op_lock.lock().await;
 
-        let shortpath = &mut instance.shortpath;
-        let data = instance.type_.data_mut()?;
+        // Phase 1: Read instance data under write lock
+        let (mut shortpath, config, mut path, icon_revision) = {
+            let instances = self.instances.write().await;
+            let instance = instances
+                .get(&update.instance_id)
+                .ok_or(InvalidInstanceIdError(update.instance_id))?;
 
-        let mut path = self
-            .app
-            .settings_manager()
-            .runtime_path
-            .get_instances()
-            .get_instance_path(shortpath as &str)
-            .get_root();
+            let data = instance.type_.data()?;
 
-        let mut info = data.config.clone();
+            let path = self
+                .app
+                .settings_manager()
+                .runtime_path
+                .get_instances()
+                .get_instance_path(&instance.shortpath)
+                .get_root();
+
+            (
+                instance.shortpath.clone(),
+                data.config.clone(),
+                path,
+                data.icon_revision,
+            )
+            // Write lock released here - other instances can now operate
+        };
+
+        // Phase 2: Apply all updates WITHOUT holding global lock
+        let mut info = config;
+
+        // Check what changed before consuming values (for conditional invalidation)
+        let name_or_icon_changed = update.name.is_some() || update.use_loaded_icon.is_some();
+        let modpack_lock_changed = update.modpack_locked.is_some();
+
+        let mut new_icon_revision = icon_revision;
 
         if let Some(use_loaded_icon) = update.use_loaded_icon {
             let icon = match (use_loaded_icon, self.loaded_icon.lock().await.take()) {
@@ -1141,9 +1172,9 @@ impl<'s> ManagerRef<'s, InstanceManager> {
             };
 
             info.icon = icon;
-            data.icon_revision = match info.icon {
+            new_icon_revision = match info.icon {
                 InstanceIcon::Default => None,
-                InstanceIcon::RelativePath(_) => Some(data.icon_revision.unwrap_or(1) + 1),
+                InstanceIcon::RelativePath(_) => Some(icon_revision.unwrap_or(1) + 1),
             };
         }
 
@@ -1248,15 +1279,13 @@ impl<'s> ManagerRef<'s, InstanceManager> {
             .write_file_atomic(path.join("instance.json"), json)
             .await?;
 
-        let name_matches = Some(&data.config.name) == update.name.as_ref();
-        data.config = info;
-
+        // Handle instance rename with path_lock
         if let Some(name) = update.name {
-            if !name_matches {
-                let _lock = self.path_lock.lock().await;
+            let name_changed = shortpath != name;
+            if name_changed {
+                let _path_guard = self.path_lock.lock().await;
                 let (new_shortpath, new_path) = self.next_folder(&name)?;
-                tokio::fs::rename(path.clone(), new_path.clone()).await?;
-                *shortpath = new_shortpath.clone();
+                tokio::fs::rename(&path, &new_path).await?;
 
                 self.app
                     .prisma_client
@@ -1265,18 +1294,43 @@ impl<'s> ManagerRef<'s, InstanceManager> {
                         UniqueWhereParam::IdEquals(*update.instance_id),
                         vec![
                             SetParam::SetName(name),
-                            SetParam::SetShortpath(new_shortpath),
+                            SetParam::SetShortpath(new_shortpath.clone()),
                         ],
                     )
                     .exec()
                     .await?;
 
+                shortpath = new_shortpath;
                 path = new_path;
             }
         }
 
-        self.app.invalidate(GET_GROUPS, None);
-        self.app.invalidate(GET_ALL_INSTANCES, None);
+        // Phase 3: Update in-memory state under write lock (FAST - just assignment)
+        {
+            let mut instances = self.instances.write().await;
+            let instance = instances
+                .get_mut(&update.instance_id)
+                .ok_or(InvalidInstanceIdError(update.instance_id))?;
+
+            instance.shortpath = shortpath;
+
+            if let InstanceType::Valid(data) = &mut instance.type_ {
+                data.config = info;
+                data.icon_revision = new_icon_revision;
+            }
+            // Write lock released here
+        }
+
+        // Send conditional invalidations (no lock needed)
+        // Only invalidate queries that are actually affected by the changes
+        if name_or_icon_changed || modpack_lock_changed {
+            // Name/icon/lock changes affect instance list display
+            // (lock status shows in ListInstance.locked field)
+            self.app.invalidate(GET_GROUPS, None);
+            self.app.invalidate(GET_ALL_INSTANCES, None);
+        }
+
+        // Always invalidate instance details since settings changed
         self.app
             .invalidate(INSTANCE_DETAILS, Some(update.instance_id.0.into()));
 

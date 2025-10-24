@@ -1,4 +1,4 @@
-import { Spinner } from "@gd/ui"
+import { Skeleton } from "@gd/ui"
 import { Match, Switch, JSX } from "solid-js"
 import { Trans } from "@gd/i18n"
 
@@ -18,9 +18,7 @@ const LoadingError = (props: Props) => {
   return (
     <Switch>
       <Match when={props.routeData.data.isLoading}>
-        <div class="flex h-full w-full items-center justify-center">
-          <Spinner />
-        </div>
+        <Skeleton.contentArea />
       </Match>
       <Match when={props.routeData.data.isError}>
         <div class="flex h-full w-full items-center justify-center">

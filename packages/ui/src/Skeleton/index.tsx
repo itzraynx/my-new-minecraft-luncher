@@ -328,4 +328,95 @@ Skeleton.searchList = () => {
   )
 }
 
+const AddonVersionsTableRow = () => {
+  return (
+    <div class="border-darkSlate-700 hover:bg-darkSlate-700/30 grid min-h-[70px] grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b py-2">
+      <div class="flex items-center gap-3">
+        <div class="bg-darkSlate-500 skeleton-shimmer h-5 w-5 rounded" />
+        <div class="bg-darkSlate-500 skeleton-shimmer h-5 w-48 rounded-md" />
+      </div>
+      <div class="flex items-center">
+        <div class="bg-darkSlate-500 skeleton-shimmer h-5 w-20 rounded-md" />
+      </div>
+      <div class="flex items-center">
+        <div class="bg-darkSlate-500 skeleton-shimmer h-5 w-16 rounded-md" />
+      </div>
+      <div class="flex items-center">
+        <div class="bg-darkSlate-500 skeleton-shimmer h-5 w-16 rounded-md" />
+      </div>
+      <div class="flex items-center justify-end">
+        <div class="bg-darkSlate-500 skeleton-shimmer h-8 w-24 rounded-md" />
+      </div>
+    </div>
+  )
+}
+
+Skeleton.addonVersionsTable = () => {
+  return (
+    <div class="flex w-full flex-col">
+      <For each={new Array(6)}>{() => <AddonVersionsTableRow />}</For>
+    </div>
+  )
+}
+
+const LogsListItem = () => {
+  return (
+    <div class="flex items-center gap-2 px-4 py-2 hover:bg-darkSlate-600">
+      <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-4 rounded" />
+      <div class="flex flex-1 flex-col gap-1">
+        <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-3/4 rounded-md" />
+        <div class="bg-darkSlate-500 skeleton-shimmer h-3 w-1/2 rounded-md" />
+      </div>
+    </div>
+  )
+}
+
+Skeleton.logsList = () => {
+  return (
+    <div class="flex w-full flex-col">
+      <For each={new Array(10)}>{() => <LogsListItem />}</For>
+    </div>
+  )
+}
+
+const InstanceSettingsRow = () => {
+  return (
+    <div class="flex flex-col gap-2 py-3">
+      <div class="bg-darkSlate-500 skeleton-shimmer h-5 w-40 rounded-md" />
+      <div class="bg-darkSlate-500 skeleton-shimmer h-10 w-full rounded-md" />
+    </div>
+  )
+}
+
+Skeleton.instanceSettings = () => {
+  return (
+    <div class="flex w-full flex-col gap-4 p-4">
+      <div class="bg-darkSlate-500 skeleton-shimmer h-8 w-48 rounded-md" />
+      <For each={new Array(6)}>{() => <InstanceSettingsRow />}</For>
+    </div>
+  )
+}
+
+Skeleton.contentArea = () => {
+  return (
+    <div class="flex w-full flex-col gap-4 p-6">
+      <div class="bg-darkSlate-500 skeleton-shimmer h-10 w-64 rounded-md" />
+      <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-full rounded-md" />
+      <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-full rounded-md" />
+      <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-3/4 rounded-md" />
+      <div class="bg-darkSlate-500 skeleton-shimmer mt-4 h-48 w-full rounded-lg" />
+      <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-full rounded-md" />
+      <div class="bg-darkSlate-500 skeleton-shimmer h-4 w-5/6 rounded-md" />
+    </div>
+  )
+}
+
+Skeleton.instanceGrid = () => {
+  return (
+    <div class="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <For each={new Array(10)}>{() => <Instance />}</For>
+    </div>
+  )
+}
+
 export { Skeleton }

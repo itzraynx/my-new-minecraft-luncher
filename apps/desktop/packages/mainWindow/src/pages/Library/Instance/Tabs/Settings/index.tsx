@@ -31,7 +31,88 @@ const Settings = () => {
   const searchContext = useSearchContext()
   const params = useParams()
   const updateInstanceMutation = rspc.createMutation(() => ({
-    mutationKey: ["instance.updateInstance"]
+    mutationKey: ["instance.updateInstance"],
+    onMutate: async (variables) => {
+      // Cancel outgoing refetches to prevent overwriting optimistic update
+      await queryClient.cancelQueries({
+        queryKey: ["instance.getInstanceDetails", parseInt(params.id, 10)]
+      })
+
+      // Snapshot current state for rollback on error
+      const previousDetails = queryClient.getQueryData<InstanceDetails>([
+        "instance.getInstanceDetails",
+        parseInt(params.id, 10)
+      ])
+
+      // Optimistically update cache
+      queryClient.setQueryData(
+        ["instance.getInstanceDetails", parseInt(params.id, 10)],
+        (old: InstanceDetails | undefined) => {
+          if (!old) return old
+          return {
+            ...old,
+            name: variables.name?.Set !== undefined ? variables.name.Set : old.name,
+            modpack:
+              variables.modpackLocked?.Set !== undefined
+                ? variables.modpackLocked.Set === null
+                  ? undefined // Unpair - remove modpack
+                  : old.modpack
+                    ? { ...old.modpack, locked: variables.modpackLocked.Set }
+                    : old.modpack
+                : old.modpack,
+            memory:
+              variables.memory?.Set !== undefined
+                ? variables.memory.Set
+                : old.memory,
+            javaOverride:
+              variables.javaOverride?.Set !== undefined
+                ? variables.javaOverride.Set
+                : old.javaOverride,
+            extraJavaArgs:
+              variables.extraJavaArgs?.Set !== undefined
+                ? variables.extraJavaArgs.Set
+                : old.extraJavaArgs,
+            globalJavaArgs:
+              variables.globalJavaArgs?.Set !== undefined
+                ? variables.globalJavaArgs.Set
+                : old.globalJavaArgs,
+            gameResolution:
+              variables.gameResolution?.Set !== undefined
+                ? variables.gameResolution.Set
+                : old.gameResolution,
+            preLaunchHook:
+              variables.preLaunchHook?.Set !== undefined
+                ? variables.preLaunchHook.Set
+                : old.preLaunchHook,
+            postExitHook:
+              variables.postExitHook?.Set !== undefined
+                ? variables.postExitHook.Set
+                : old.postExitHook,
+            wrapperCommand:
+              variables.wrapperCommand?.Set !== undefined
+                ? variables.wrapperCommand.Set
+                : old.wrapperCommand
+          }
+        }
+      )
+
+      return { previousDetails }
+    },
+    onError: (_err, _variables, context) => {
+      // Rollback to previous state on error
+      if (context?.previousDetails) {
+        queryClient.setQueryData(
+          ["instance.getInstanceDetails", parseInt(params.id, 10)],
+          context.previousDetails
+        )
+      }
+    },
+    onSettled: () => {
+      // Refetch to ensure cache is in sync with backend
+      queryClient.invalidateQueries({
+        queryKey: ["instance.getInstanceDetails", parseInt(params.id, 10)]
+      })
+    }
   }))
 
   const getAllProfiles = rspc.createQuery(() => ({

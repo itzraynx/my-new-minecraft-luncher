@@ -84,6 +84,7 @@ carbon_parsing = { path = "../carbon_parsing" }
 carbon_rt_path = { path = "../carbon_rt_path" }
 carbon_platforms = { path = "../carbon_platforms" }
 carbon_repos = { path = "../carbon_repos" }
+dashmap = "6.1.0"
 
 [target.'cfg(windows)'.dependencies]
 winreg = { workspace = true }

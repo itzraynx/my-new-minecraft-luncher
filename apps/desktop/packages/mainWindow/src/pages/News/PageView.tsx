@@ -1,7 +1,7 @@
 import { Show, createMemo } from "solid-js"
 import { useParams } from "@solidjs/router"
 import { useNews, usePatchNotes } from "@/utils/news"
-import { Button } from "@gd/ui"
+import { Button, Spinner } from "@gd/ui"
 import { useGDNavigate } from "@/managers/NavigationManager"
 import { parseToHtml } from "@/utils/modplatformDescriptionConverter"
 import { createQuery } from "@tanstack/solid-query"
@@ -73,7 +73,7 @@ const PageView = () => {
                 }
               >
                 <div class="text-lightSlate-400 flex items-center justify-center gap-3">
-                  <div class="i-hugeicons:loading-03 animate-spin text-2xl" />
+                  <Spinner class="h-8 w-8" />
                   <span class="text-xl">Loading article...</span>
                 </div>
               </Show>
@@ -161,7 +161,7 @@ const PageView = () => {
                   fallback={
                     <div class="flex items-center justify-center py-16">
                       <div class="text-lightSlate-400 flex items-center gap-3">
-                        <div class="i-hugeicons:loading-03 animate-spin text-xl" />
+                        <Spinner class="h-6 w-6" />
                         <span class="text-lg">Loading patch content...</span>
                       </div>
                     </div>

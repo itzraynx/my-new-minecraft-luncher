@@ -1,5 +1,5 @@
 import { useModal } from "../.."
-import { Button } from "@gd/ui"
+import { Button, Spinner } from "@gd/ui"
 import { rspc } from "@/utils/rspcClient"
 import { For, Match, Show, Switch, createSignal } from "solid-js"
 import { ImportEntityStatus } from "@gd/core_module/bindings"
@@ -55,7 +55,7 @@ const ThirdStep = (props: Props) => {
       <Switch>
         <Match when={entities.isLoading}>
           <div class="flex h-full w-full items-center justify-center">
-            <div class="i-formkit:spinner h-10 w-10 animate-spin text-sky-800" />
+            <Spinner class="h-10 w-10" />
           </div>
         </Match>
         <Match when={entity()}>

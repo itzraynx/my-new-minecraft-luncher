@@ -170,6 +170,8 @@
         animation-duration: 250ms;
         animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         animation-fill-mode: both;
+        will-change: transform;
+        contain: paint;
       }
 
       .disable-view-transition {
@@ -194,6 +196,8 @@
         animation-duration: 250ms;
         animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         animation-fill-mode: both;
+        will-change: transform;
+        contain: paint;
       }
 
       ::view-transition-old(slide-left-transition),
@@ -201,6 +205,8 @@
         animation-duration: 250ms;
         animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         animation-fill-mode: both;
+        will-change: transform;
+        contain: paint;
       }
 
       ::view-transition-old(slide-right-transition) {

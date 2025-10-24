@@ -171,6 +171,16 @@ const changelogs: Changelog = {
       title: "Updated Electron and dependencies",
       description:
         "Updated to Electron 37.2.6 and Node.js 22.12.0 for better performance and security."
+    },
+    {
+      title: "Better loading indicators",
+      description:
+        "Improved loading animations throughout the app with more consistent and informative skeleton screens that show the structure of content before it loads."
+    },
+    {
+      title: "Smoother animations",
+      description:
+        "Enhanced searchbar and page transition animations for a more polished experience, especially noticeable when first opening the app."
     }
   ]
 }

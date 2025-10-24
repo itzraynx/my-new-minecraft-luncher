@@ -5,7 +5,7 @@ import { useInfiniteVersionsQuery } from "@/components/InfiniteScrollVersionsQue
 import { useContext, For, Show } from "solid-js"
 import { Trans } from "@gd/i18n"
 import { AddonContext } from "@/pages/AddonViewPage"
-import { Button } from "@gd/ui"
+import { Button, Spinner, Skeleton } from "@gd/ui"
 import { createVirtualizer } from "@tanstack/solid-virtual"
 
 const Versions = () => {
@@ -76,68 +76,57 @@ const Versions = () => {
   })
 
   return (
-    <Show
-      when={mod?.data}
-      fallback={
-        <div class="flex h-40 items-center justify-center">
-          <div class="i-hugeicons:loading-03 text-lightSlate-400 animate-spin text-2xl" />
-          <span class="ml-2">Loading mod data...</span>
+    <div class="flex h-full flex-col" ref={versionsContainerRef}>
+      <div
+        class="bg-darkSlate-800 border-darkSlate-600 text-lightSlate-400 sticky z-20 mb-4 grid grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b px-6 pb-3 pt-4 text-xs font-medium uppercase tracking-wide"
+        style={{ top: mod?.data?.type === "modpack" ? "72px" : "136px" }}
+      >
+        <div>
+          <Trans key="browser_table_headers.name" />
         </div>
-      }
-    >
-      <div class="flex h-full flex-col" ref={versionsContainerRef}>
-        <div
-          class="bg-darkSlate-800 border-darkSlate-600 text-lightSlate-400 sticky z-20 mb-4 grid grid-cols-[4fr_130px_100px_120px_150px] gap-4 border-b px-6 pb-3 pt-4 text-xs font-medium uppercase tracking-wide"
-          style={{ top: mod?.data?.type === "modpack" ? "72px" : "136px" }}
+        <div>
+          <Trans key="browser_table_headers.published" />
+        </div>
+        <div>
+          <Trans key="browser_table_headers.downloads" />
+        </div>
+        <div>
+          <Trans key="browser_table_headers.type" />
+        </div>
+        <div class="text-right">Actions</div>
+      </div>
+      <div class="flex-1 px-6">
+        <Show
+          when={mod?.data && rows().length > 0}
+          fallback={
+            <Show
+              when={!mod?.data || infiniteQuery.isLoading}
+              fallback={
+                <div class="flex flex-col items-center justify-center py-16 text-center">
+                  <Show when={infiniteQuery.infiniteQuery.error}>
+                    <div class="i-hugeicons:alert-02 mb-4 text-3xl text-red-400" />
+                    <h3 class="mb-2 text-lg font-semibold text-red-300">
+                      Error loading versions
+                    </h3>
+                    <Button
+                      type="secondary"
+                      size="small"
+                      onClick={() => infiniteQuery.infiniteQuery.refetch()}
+                    >
+                      <div class="i-hugeicons:refresh mr-2" />
+                      Retry
+                    </Button>
+                  </Show>
+                  <Show when={!infiniteQuery.infiniteQuery.error}>
+                    <span class="text-lightSlate-400">No versions found</span>
+                  </Show>
+                </div>
+              }
+            >
+              <Skeleton.addonVersionsTable />
+            </Show>
+          }
         >
-          <div>
-            <Trans key="browser_table_headers.name" />
-          </div>
-          <div>
-            <Trans key="browser_table_headers.published" />
-          </div>
-          <div>
-            <Trans key="browser_table_headers.downloads" />
-          </div>
-          <div>
-            <Trans key="browser_table_headers.type" />
-          </div>
-          <div class="text-right">Actions</div>
-        </div>
-        <div class="flex-1 px-6">
-          <Show
-            when={rows().length > 0}
-            fallback={
-              <div class="flex flex-col items-center justify-center py-16 text-center">
-                <Show when={infiniteQuery.isLoading}>
-                  <div class="i-hugeicons:loading-03 text-lightSlate-400 animate-spin text-2xl" />
-                  <span class="ml-2">Loading versions...</span>
-                </Show>
-                <Show when={infiniteQuery.infiniteQuery.error}>
-                  <div class="i-hugeicons:alert-02 mb-4 text-3xl text-red-400" />
-                  <h3 class="mb-2 text-lg font-semibold text-red-300">
-                    Error loading versions
-                  </h3>
-                  <Button
-                    type="secondary"
-                    size="small"
-                    onClick={() => infiniteQuery.infiniteQuery.refetch()}
-                  >
-                    <div class="i-hugeicons:refresh mr-2" />
-                    Retry
-                  </Button>
-                </Show>
-                <Show
-                  when={
-                    !infiniteQuery.isLoading &&
-                    !infiniteQuery.infiniteQuery.error
-                  }
-                >
-                  <span class="text-lightSlate-400">No versions found</span>
-                </Show>
-              </div>
-            }
-          >
             <div
               style={{
                 height: `${virtualizer.getTotalSize()}px`,
@@ -191,13 +180,12 @@ const Versions = () => {
             </div>
             <Show when={infiniteQuery.infiniteQuery.isFetchingNextPage}>
               <div class="flex h-20 items-center justify-center">
-                <div class="i-hugeicons:loading-03 text-lightSlate-400 animate-spin text-2xl" />
+                <Spinner class="h-8 w-8" />
               </div>
-            </Show>
           </Show>
-        </div>
+        </Show>
       </div>
-    </Show>
+    </div>
   )
 }
 

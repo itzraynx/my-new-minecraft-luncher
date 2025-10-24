@@ -82,12 +82,20 @@ const AppNavbar = () => {
           class="group relative z-0 flex h-full w-fit items-center"
           onClick={() => navigator.navigate("/library")}
         >
-          <div class="bg-darkSlate-700 -z-1 absolute left-0 top-0 h-full w-full scale-75 rounded-md opacity-0 transition-[transform,opacity] duration-150 ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-100 group-hover:opacity-100" />
+          <div
+            class="bg-darkSlate-700 -z-1 absolute left-0 top-0 h-full w-full scale-75 rounded-md opacity-0 transition-[transform,opacity] duration-150 ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-100 group-hover:opacity-100"
+            style={{
+              "will-change": "transform, opacity"
+            }}
+          />
           <div class="flex items-center gap-2 px-2">
             <div
               class="i-hugeicons:arrow-left-01 h-6 w-6 transition-[transform,opacity] duration-200 ease-[cubic-bezier(.4,0,.2,1)]"
               classList={{
                 "opacity-0 -translate-x-4": location.pathname === "/library"
+              }}
+              style={{
+                "will-change": "transform, opacity"
               }}
             />
             <img
@@ -95,6 +103,9 @@ const AppNavbar = () => {
               class="h-9 max-w-none transition-transform duration-200 ease-[cubic-bezier(.4,0,.2,1)]"
               classList={{
                 "-translate-x-4": location.pathname === "/library"
+              }}
+              style={{
+                "will-change": "transform"
               }}
             />
           </div>

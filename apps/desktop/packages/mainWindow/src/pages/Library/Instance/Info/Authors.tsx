@@ -1,11 +1,9 @@
-import { Show, createSignal, createMemo } from "solid-js"
-import { createAsyncEffect } from "@/utils/asyncEffect"
+import { Show, createMemo } from "solid-js"
 import {
   CFFEModAuthor,
   FEModResponse,
   MRFEProject,
-  MRFETeamMember,
-  MRFETeamResponse
+  MRFETeamMember
 } from "@gd/core_module/bindings"
 import { rspc } from "@/utils/rspcClient"
 import AuthorAvatars, { Author } from "@/components/AuthorAvatars"
@@ -18,47 +16,31 @@ interface Props {
 }
 
 const Authors = (props: Props) => {
-  const [authors, setAuthors] = createSignal<MRFETeamResponse>([])
-  const [isLoading, setIsLoading] = createSignal(false)
-  const rspcContext = rspc.useContext()
-
-  createAsyncEffect<string>((isStale, prevTeamId) => {
-    if (
-      props.modpackDetails &&
-      props.isModrinth &&
-      (props.modpackDetails as MRFEProject)?.team
-    ) {
-      const currentTeamId = (props.modpackDetails as MRFEProject)?.team
-
-      setIsLoading(true)
-
-      rspcContext.client
-        .query(["modplatforms.modrinth.getTeam", currentTeamId])
-        .then((modrinthAuthorsQuery) => {
-          // Check if team hasn't changed during async operation
-          if (!isStale() && modrinthAuthorsQuery) {
-            setAuthors(modrinthAuthorsQuery)
-          }
-          setIsLoading(false)
-        })
-        .catch(() => {
-          setIsLoading(false)
-        })
-
-      return currentTeamId
+  const teamId = () => {
+    if (props.isModrinth && props.modpackDetails) {
+      return (props.modpackDetails as MRFEProject)?.team
     }
+    return null
+  }
 
-    return prevTeamId
-  }, undefined)
+  // Use rspc query hook for automatic caching and deduplication
+  const modrinthTeam = rspc.createQuery(() => ({
+    queryKey: ["modplatforms.modrinth.getTeam", teamId() ?? ""],
+    enabled: teamId() !== null
+  }))
 
   const getAuthors = () => {
     if (props.isCurseforge && props.modpackDetails) {
       const modpack = props.modpackDetails as FEModResponse
       return modpack.data?.authors
-    } else if (props.isModrinth) return authors()
+    } else if (props.isModrinth && modrinthTeam.data) {
+      return modrinthTeam.data
+    }
 
     return []
   }
+
+  const isLoading = () => props.isModrinth && modrinthTeam.isLoading
 
   const normalizedAuthors = createMemo((): Author[] => {
     const rawAuthors = getAuthors()

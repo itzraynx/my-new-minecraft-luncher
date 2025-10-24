@@ -23,14 +23,11 @@ import {
   onMount,
   createMemo
 } from "solid-js"
-import { createAsyncEffect } from "@/utils/asyncEffect"
 import { useGDNavigate } from "@/managers/NavigationManager"
 import { queryClient, rspc } from "@/utils/rspcClient"
 import fetchData from "./instance.data"
 import { detectDuplicatedMods } from "@/utils/duplicateMods"
 import {
-  FEModResponse,
-  MRFEProject,
   InstanceDetails,
   ListInstance
 } from "@gd/core_module/bindings"
@@ -73,9 +70,6 @@ const Instance = () => {
   const [newName, setNewName] = createSignal(
     routeData.instanceDetails.data?.name || ""
   )
-  const [modpackDetails, setModpackDetails] = createSignal<
-    FEModResponse | MRFEProject | undefined
-  >(undefined)
   const [scrollTop, setScrollTop] = createSignal(0)
 
   const [t] = useTransContext()
@@ -293,56 +287,45 @@ const Instance = () => {
     routeData.instanceDetails.data?.state &&
     getPreparingState(routeData.instanceDetails.data?.state)
 
-  const curseforgeData = () =>
-    routeData.instanceDetails.data?.modpack?.modpack.type === "curseforge" &&
-    routeData.instanceDetails.data?.modpack?.modpack.value
-
-  createAsyncEffect<any>((isStale, _prevData) => {
-    const isCurseforge = curseforgeData()
-
-    if (isCurseforge) {
-      const currentProjectId = isCurseforge.project_id
-
-      rspcContext.client
-        .query([
-          "modplatforms.curseforge.getMod",
-          {
-            modId: currentProjectId
-          }
-        ])
-        .then((modpackData) => {
-          // Check if data hasn't changed during async operation
-          if (!isStale()) {
-            setModpackDetails(modpackData)
-          }
-        })
+  const curseforgeProjectId = () => {
+    const modpack = routeData.instanceDetails.data?.modpack
+    if (modpack?.modpack.type === "curseforge") {
+      return modpack.modpack.value.project_id
     }
+    return null
+  }
 
-    return isCurseforge
-  }, false)
-
-  const modrinthData = () =>
-    routeData.instanceDetails.data?.modpack?.modpack.type === "modrinth" &&
-    routeData.instanceDetails.data?.modpack?.modpack.value
-
-  createAsyncEffect<any>((isStale, _prevData) => {
-    const isModrinth = modrinthData()
-
-    if (isModrinth) {
-      const currentProjectId = isModrinth.project_id
-
-      rspcContext.client
-        .query(["modplatforms.modrinth.getProject", currentProjectId])
-        .then((modpackData) => {
-          // Check if data hasn't changed during async operation
-          if (!isStale()) {
-            setModpackDetails(modpackData)
-          }
-        })
+  const modrinthProjectId = () => {
+    const modpack = routeData.instanceDetails.data?.modpack
+    if (modpack?.modpack.type === "modrinth") {
+      return modpack.modpack.value.project_id
     }
+    return null
+  }
 
-    return isModrinth
-  }, false)
+  // Use rspc query hooks for automatic caching and deduplication
+  const curseforgeModpack = rspc.createQuery(() => ({
+    queryKey: [
+      "modplatforms.curseforge.getMod",
+      { modId: curseforgeProjectId() ?? 0 }
+    ],
+    enabled: curseforgeProjectId() !== null
+  }))
+
+  const modrinthModpack = rspc.createQuery(() => ({
+    queryKey: ["modplatforms.modrinth.getProject", modrinthProjectId() ?? ""],
+    enabled: modrinthProjectId() !== null
+  }))
+
+  // Combine both queries into a single computed value
+  const modpackDetails = () => {
+    if (curseforgeProjectId()) {
+      return curseforgeModpack.data
+    } else if (modrinthProjectId()) {
+      return modrinthModpack.data
+    }
+    return undefined
+  }
 
   const handleNameChange = () => {
     if (newName()) {
@@ -703,8 +686,8 @@ const Instance = () => {
                         </Show>
                         <Authors
                           modpackDetails={modpackDetails()}
-                          isCurseforge={!!curseforgeData()}
-                          isModrinth={!!modrinthData()}
+                          isCurseforge={curseforgeProjectId() !== null}
+                          isModrinth={modrinthProjectId() !== null}
                         />
                       </div>
                       <div class="mt-2 flex items-center gap-2 lg:mt-0">

@@ -1,5 +1,5 @@
 import { GameLogEntry } from "@gd/core_module/bindings"
-import { Collapsable, Spinner } from "@gd/ui"
+import { Collapsable, Skeleton } from "@gd/ui"
 import { createSignal, For, Match, Show, Switch } from "solid-js"
 import formatDateTime from "./formatDateTime"
 import { Trans, useTransContext } from "@gd/i18n"
@@ -148,9 +148,7 @@ const LogsSidebar = (props: LogsSidebarProps) => {
 
       <Switch>
         <Match when={props.isLoading}>
-          <div class="flex h-full w-full items-center justify-center">
-            <Spinner />
-          </div>
+          <Skeleton.logsList />
         </Match>
         <Match when={props.availableLogEntries.length > 0}>
           <div class="relative h-full overflow-y-auto">

@@ -42,33 +42,37 @@ export function EnhancedSearchBar() {
 
   return (
     <div
-      class="bg-darkSlate-700 has-[:focus-visible]:outline-darkSlate-500 hover:outline-darkSlate-600 hover:has-[:focus-visible]:outline-darkSlate-500 flex h-10 items-center gap-2 overflow-hidden rounded-md outline-none transition-all duration-300 ease-in-out"
+      class="bg-darkSlate-700 outline-2 outline outline-offset-2 outline-transparent has-[:focus-visible]:outline-darkSlate-500 hover:outline-darkSlate-600 hover:has-[:focus-visible]:outline-darkSlate-500 flex h-10 items-center gap-2 overflow-hidden rounded-md duration-300"
+      style={{
+        "transition": "width 300ms cubic-bezier(0.4, 0, 0.2, 1), padding 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), outline-color 150ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "will-change": "width, padding",
+        "contain": "layout",
+        "transform": "translateZ(0)"
+      }}
       classList={{
         "w-80 px-4": !isExpanded(),
         "w-[600px] px-2": isExpanded()
       }}
     >
       <div
-        class="transition-opacity duration-300 ease-in-out"
+        class="overflow-hidden transition-[opacity,max-width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
         classList={{
-          "opacity-0 pointer-events-none w-0": !isExpanded(),
-          "opacity-100 delay-[40ms]": isExpanded()
+          "opacity-0 pointer-events-none max-w-0": !isExpanded(),
+          "opacity-100 max-w-[200px] delay-[40ms]": isExpanded()
         }}
       >
         <AddonTypeDropdown />
       </div>
 
       <div
-        class="bg-darkSlate-500 h-6 w-px transition-opacity duration-300 ease-in-out"
+        class="bg-darkSlate-500 h-6 transition-[opacity,width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
         classList={{
           "opacity-0 w-0": !isExpanded(),
-          "opacity-100 delay-[75ms]": isExpanded()
+          "opacity-100 w-px delay-[75ms]": isExpanded()
         }}
       />
 
-      <Show when={!isExpanded()}>
-        <div class="i-hugeicons:search-01 text-darkSlate-400 h-5 w-5 shrink-0" />
-      </Show>
+      <div class="i-hugeicons:search-01 text-darkSlate-400 h-5 w-5 shrink-0" />
 
       <Show when={!isExpanded()}>
         <input
@@ -85,7 +89,7 @@ export function EnhancedSearchBar() {
         <input
           ref={expandedInputRef}
           placeholder={t("search.search_discover_anything")}
-          class="placeholder:text-darkSlate-400 text-lightSlate-50 h-full flex-1 bg-transparent px-2 text-sm outline-none"
+          class="placeholder:text-darkSlate-400 text-lightSlate-50 h-full flex-1 bg-transparent text-sm outline-none"
           value={searchResults?.searchQuery().searchQuery ?? ""}
           onInput={(e) => {
             searchResults?.setSearchQuery((prev) => ({
@@ -116,18 +120,18 @@ export function EnhancedSearchBar() {
       </Show>
 
       <div
-        class="bg-darkSlate-500 h-6 w-px transition-opacity duration-300 ease-in-out"
+        class="bg-darkSlate-500 h-6 transition-[opacity,width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
         classList={{
           "opacity-0 w-0": !isExpanded(),
-          "opacity-100 delay-[75ms]": isExpanded()
+          "opacity-100 w-px delay-[75ms]": isExpanded()
         }}
       />
 
       <div
-        class="transition-opacity duration-300 ease-in-out"
+        class="overflow-hidden transition-[opacity,max-width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
         classList={{
-          "opacity-0 pointer-events-none w-0": !isExpanded(),
-          "opacity-100 delay-[110ms]": isExpanded()
+          "opacity-0 pointer-events-none max-w-0": !isExpanded(),
+          "opacity-100 max-w-[200px] delay-[110ms]": isExpanded()
         }}
       >
         <DropdownMenu>

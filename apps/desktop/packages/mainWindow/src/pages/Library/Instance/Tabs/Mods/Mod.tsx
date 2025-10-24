@@ -8,6 +8,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
   Switch,
   Tooltip,
   TooltipContent,
@@ -349,22 +350,7 @@ const Mod = (props: Props) => {
             <Show
               when={updateModTaskId() !== null || updateModMutation.isPending}
             >
-              <i
-                class="flex h-5 w-5"
-                classList={{
-                  "i-hugeicons:download-02 text-lightSlate-700 hover:text-green-500":
-                    updateModTaskId() === null,
-                  "i-hugeicons:loading-03 animate-spin text-green-500":
-                    updateModTaskId() !== null || updateModMutation.isPending
-                }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  updateModMutation.mutate({
-                    instance_id: parseInt(params.id, 10),
-                    mod_id: props.mod.id
-                  })
-                }}
-              />
+              <Spinner class="h-5 w-5 text-green-500" />
             </Show>
             <Show
               when={updateModTaskId() === null && !updateModMutation.isPending}
@@ -384,13 +370,7 @@ const Mod = (props: Props) => {
                 }
               > */}
               <i
-                class="flex h-5 w-5"
-                classList={{
-                  "i-hugeicons:download-02 text-lightSlate-700 hover:text-green-500":
-                    updateModTaskId() === null,
-                  "i-hugeicons:loading-03 animate-spin text-green-500":
-                    updateModTaskId() !== null || updateModMutation.isPending
-                }}
+                class="i-hugeicons:download-02 text-lightSlate-700 hover:text-green-500 flex h-5 w-5"
                 onClick={(e) => {
                   e.stopPropagation()
                   updateModMutation.mutate({

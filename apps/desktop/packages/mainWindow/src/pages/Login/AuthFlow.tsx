@@ -32,6 +32,8 @@ import { AuthMethodStep } from "./steps/AuthMethodStep"
 import { EnrollingStep } from "./steps/EnrollingStep"
 import { ProfileCreationStep } from "./steps/ProfileCreationStep"
 import { GdlAccountStep } from "./steps/GdlAccountStep"
+import { GdlAccountFormStep } from "./steps/GdlAccountFormStep"
+import { GdlAccountVerificationStep } from "./steps/GdlAccountVerificationStep"
 import { ErrorStep } from "./steps/ErrorStep"
 
 /**
@@ -170,6 +172,15 @@ function AuthFlowContent() {
   const [usernameError, setUsernameError] = createSignal<string | null>(null)
   const [buttonLoading, setButtonLoading] = createSignal(false)
 
+  // GDL account form state
+  const [gdlEmail, setGdlEmail] = createSignal("")
+  const [gdlNickname, setGdlNickname] = createSignal("")
+  const [gdlEmailError, setGdlEmailError] = createSignal<string | undefined>()
+  const [gdlNicknameError, setGdlNicknameError] = createSignal<
+    string | undefined
+  >()
+  const [gdlFormInitialized, setGdlFormInitialized] = createSignal(false)
+
   // Track if sidebar initial animation completed
   const [sidebarShown, setSidebarShown] = createSignal(false)
 
@@ -232,6 +243,34 @@ function AuthFlowContent() {
 
     onCleanup(() => clearTimeout(timer))
   })
+
+  // Initialize GDL form when entering gdl-account-form step
+  createEffect(
+    on(
+      () => {
+        const state = flow.state()
+        if (state.phase === "content" && state.step.type === "gdl-account-form")
+          return state.step
+        return null
+      },
+      (step) => {
+        if (step && !gdlFormInitialized()) {
+          // Set default nickname from step (Microsoft username)
+          if (step.nickname) {
+            setGdlNickname(step.nickname)
+          }
+          // Set email if provided
+          if (step.email) {
+            setGdlEmail(step.email)
+          }
+          setGdlFormInitialized(true)
+        } else if (!step) {
+          // Reset when leaving the step
+          setGdlFormInitialized(false)
+        }
+      }
+    )
+  )
 
   // Button handlers
   const handleWelcomeContinue = async () => {
@@ -319,6 +358,137 @@ function AuthFlowContent() {
     }
   }
 
+  // GDL account form mutation
+  const registerGdlAccountMutation = rspc.createMutation(() => ({
+    mutationKey: ["account.registerGdlAccount"]
+  }))
+
+  const saveGdlAccountMutation = rspc.createMutation(() => ({
+    mutationKey: ["account.saveGdlAccount"]
+  }))
+
+  // GDL account validation helpers
+  const isGdlEmailValid = createMemo(() => {
+    const email = gdlEmail().trim()
+    if (email.length === 0) return false
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  })
+
+  const isGdlNicknameValid = createMemo(() => {
+    const nickname = gdlNickname().trim()
+    return nickname.length >= 3
+  })
+
+  const canSubmitGdlForm = createMemo(
+    () => isGdlEmailValid() && isGdlNicknameValid()
+  )
+
+  const handleRegisterGdlAccount = async () => {
+    if (!canSubmitGdlForm()) {
+      // Show validation errors
+      if (!gdlEmail().trim()) {
+        setGdlEmailError("Email is required")
+      } else if (!isGdlEmailValid()) {
+        setGdlEmailError("Please enter a valid email address")
+      }
+      if (!gdlNickname().trim()) {
+        setGdlNicknameError("Nickname is required")
+      } else if (!isGdlNicknameValid()) {
+        setGdlNicknameError("Nickname must be at least 3 characters")
+      }
+      return
+    }
+
+    setButtonLoading(true)
+    setGdlEmailError(undefined)
+    setGdlNicknameError(undefined)
+
+    try {
+      const activeUuid = flow.data.activeUuid
+      if (!activeUuid) {
+        throw new Error("No active account found")
+      }
+
+      // Register the account
+      await registerGdlAccountMutation.mutateAsync({
+        email: gdlEmail().trim(),
+        nickname: gdlNickname().trim(),
+        uuid: activeUuid
+      })
+
+      // Navigate to verification step
+      await flow.goToStep({
+        type: "gdl-account-verification",
+        email: gdlEmail().trim(),
+        uuid: activeUuid
+      })
+    } catch (error) {
+      console.error("[AuthFlow] Failed to register GDL account:", error)
+      setGdlEmailError(
+        error instanceof Error ? error.message : "Failed to create account"
+      )
+    } finally {
+      setButtonLoading(false)
+    }
+  }
+
+  const handleVerifyLater = async () => {
+    setButtonLoading(true)
+    try {
+      const step = getCurrentStep()
+      if (step?.type === "gdl-account-verification") {
+        // Save the UUID even though not verified
+        await saveGdlAccountMutation.mutateAsync(step.uuid)
+      }
+      await flow.exitFlow("library", flow.data.isFirstLaunch)
+    } catch (error) {
+      console.error("[AuthFlow] Failed to verify later:", error)
+      setButtonLoading(false)
+    }
+  }
+
+  // GDL Account step handlers
+  const handleSyncExistingAccount = async () => {
+    const step = getCurrentStep()
+    if (step?.type !== "gdl-account") return
+
+    const gdlAccount = step.gdlAccount
+    if (gdlAccount?.type !== "found-existing") return
+
+    setButtonLoading(true)
+    try {
+      await flow.linkExistingGDLAccount(gdlAccount.data)
+      await flow.exitFlow("library", flow.data.isFirstLaunch)
+    } catch (error) {
+      console.error("[AuthFlow] Failed to link GDL account:", error)
+      setButtonLoading(false)
+    }
+  }
+
+  const handleSetupGDLAccount = async () => {
+    // Get default nickname from current account
+    const account = flow.data.accounts.find(
+      (acc) => acc.uuid === flow.data.activeUuid
+    )
+    const defaultNickname = account?.username || ""
+
+    await flow.goToStep({
+      type: "gdl-account-form",
+      email: "",
+      nickname: defaultNickname
+    })
+  }
+
+  const handleGdlContinue = async () => {
+    setButtonLoading(true)
+    try {
+      await flow.exitFlow("library", flow.data.isFirstLaunch)
+    } finally {
+      setButtonLoading(false)
+    }
+  }
+
   // DOM refs
   let sidebarRef: HTMLDivElement | undefined
   let videoRef: HTMLVideoElement | undefined
@@ -384,8 +554,10 @@ function AuthFlowContent() {
           case "auth-method":
           case "enrolling":
           case "profile-creation":
+          case "gdl-account-form":
             return true
           case "error":
+          case "gdl-account-verification":
             return false
           case "gdl-account":
             // Show back button when adding from settings (allows cancel)
@@ -416,13 +588,13 @@ function AuthFlowContent() {
           flow.data.isAddingGdlFromSettings
 
         // Show skip button when:
-        // 1. NOT adding from settings
-        // 2. On gdl-account step
-        // 3. User hasn't made a decision yet (gdlAccountId is null)
+        // 1. On gdl-account step AND NOT adding from settings AND user hasn't made a decision yet
+        // 2. On gdl-account-verification step (as "Verify Later")
         const shouldShowSkip =
-          !isAddingFromSettings &&
-          step?.type === "gdl-account" &&
-          flow.data.gdlAccountId === null
+          (!isAddingFromSettings &&
+            step?.type === "gdl-account" &&
+            flow.data.gdlAccountId === null) ||
+          step?.type === "gdl-account-verification"
 
         return shouldShowSkip
       },
@@ -499,7 +671,11 @@ function AuthFlowContent() {
       case "profile-creation":
         return <Trans key="auth:_trn_login.titles.create_profile" />
       case "gdl-account":
-        return <Trans key="auth:_trn_login.titles.all_set" />
+        return <Trans key="auth:_trn_login.enable_cloud_sync" />
+      case "gdl-account-form":
+        return <Trans key="auth:_trn_login.titles.create_gdl_account" />
+      case "gdl-account-verification":
+        return <Trans key="auth:_trn_login.titles.gdl_account_verification" />
       case "error":
         return <Trans key="auth:_trn_login.titles.something_went_wrong" />
       default:
@@ -619,6 +795,24 @@ function AuthFlowContent() {
                   {(step) => <GdlAccountStep step={step()} />}
                 </Match>
 
+                <Match when={getStepAs("gdl-account-form")}>
+                  {(step) => (
+                    <GdlAccountFormStep
+                      step={step()}
+                      email={gdlEmail()}
+                      nickname={gdlNickname()}
+                      onEmailChange={setGdlEmail}
+                      onNicknameChange={setGdlNickname}
+                      emailError={gdlEmailError()}
+                      nicknameError={gdlNicknameError()}
+                    />
+                  )}
+                </Match>
+
+                <Match when={getStepAs("gdl-account-verification")}>
+                  {(step) => <GdlAccountVerificationStep step={step()} />}
+                </Match>
+
                 <Match when={getStepAs("error")}>
                   {(step) => <ErrorStep step={step()} />}
                 </Match>
@@ -689,6 +883,13 @@ function AuthFlowContent() {
                         flow.exitFlow("settings")
                       }
                       break
+                    case "gdl-account-form":
+                      // Go back to gdl-account info step
+                      flow.goToStep(
+                        { type: "gdl-account", gdlAccount: { type: "none" } },
+                        { direction: "backward" }
+                      )
+                      break
                   }
                 }}
               >
@@ -711,17 +912,34 @@ function AuthFlowContent() {
                 type="secondary"
                 fullWidth
                 onClick={async () => {
-                  // Save the skip decision if on gdl-account step
                   const step = getCurrentStep()
                   if (step?.type === "gdl-account") {
+                    // Save the skip decision
                     await flow.skipGDLAccount()
+                    flow.exitFlow("library", flow.data.isFirstLaunch)
+                  } else if (step?.type === "gdl-account-verification") {
+                    // Verify later - save UUID and exit
+                    await handleVerifyLater()
+                  } else {
+                    // Default skip
+                    flow.exitFlow("library", flow.data.isFirstLaunch)
                   }
-                  // Navigate to library with seasonal animation if first launch
-                  flow.exitFlow("library", flow.data.isFirstLaunch)
                 }}
+                loading={buttonLoading()}
+                disabled={buttonLoading()}
               >
-                <Trans key="auth:_trn_login.skip_for_now" />
-                <div class="i-hugeicons:arrow-right-01" />
+                <Show
+                  when={getCurrentStep()?.type === "gdl-account-verification"}
+                  fallback={
+                    <>
+                      <Trans key="auth:_trn_login.skip_for_now" />
+                      <div class="i-hugeicons:arrow-right-01" />
+                    </>
+                  }
+                >
+                  <Trans key="auth:_trn_login.verify_later" />
+                  <div class="i-hugeicons:arrow-right-01" />
+                </Show>
               </Button>
             </div>
 
@@ -788,6 +1006,81 @@ function AuthFlowContent() {
                   </Button>
                 </Show>
               )}
+            </Show>
+
+            {/* GDL Account Form Step - Register button */}
+            <Show when={getCurrentStep()?.type === "gdl-account-form"}>
+              <Button
+                size="large"
+                type="primary"
+                fullWidth
+                onClick={handleRegisterGdlAccount}
+                disabled={!canSubmitGdlForm() || buttonLoading()}
+                loading={buttonLoading()}
+              >
+                <Trans key="auth:_trn_login.register" />
+                <div class="i-hugeicons:arrow-right-01 h-4 w-4" />
+              </Button>
+            </Show>
+
+            {/* GDL Account Step - Sync existing account button */}
+            <Show
+              when={
+                getStepAs("gdl-account")?.gdlAccount?.type === "found-existing"
+              }
+            >
+              <Button
+                size="large"
+                type="primary"
+                fullWidth
+                onClick={handleSyncExistingAccount}
+                loading={buttonLoading()}
+                disabled={buttonLoading()}
+              >
+                <Trans key="auth:_trn_login.sync_account" />
+                <div class="i-hugeicons:arrow-right-01 h-4 w-4" />
+              </Button>
+            </Show>
+
+            {/* GDL Account Step - Enable Cloud Sync button (no existing account) */}
+            <Show
+              when={
+                getStepAs("gdl-account")?.gdlAccount?.type === "none" &&
+                flow.data.gdlAccountId !== ""
+              }
+            >
+              <Button
+                size="large"
+                type="primary"
+                fullWidth
+                onClick={handleSetupGDLAccount}
+                loading={buttonLoading()}
+                disabled={buttonLoading()}
+              >
+                <Trans key="auth:_trn_login.enable_cloud_sync" />
+                <div class="i-hugeicons:arrow-right-01 h-4 w-4" />
+              </Button>
+            </Show>
+
+            {/* GDL Account Step - Continue button (already linked or skipped) */}
+            <Show
+              when={
+                getStepAs("gdl-account")?.gdlAccount?.type === "linked" ||
+                (getStepAs("gdl-account")?.gdlAccount?.type === "none" &&
+                  flow.data.gdlAccountId === "")
+              }
+            >
+              <Button
+                size="large"
+                type="primary"
+                fullWidth
+                onClick={handleGdlContinue}
+                loading={buttonLoading()}
+                disabled={buttonLoading()}
+              >
+                <Trans key="general:_trn_continue" />
+                <div class="i-hugeicons:arrow-right-01 h-4 w-4" />
+              </Button>
             </Show>
           </div>
         </div>

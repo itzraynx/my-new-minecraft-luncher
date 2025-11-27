@@ -518,23 +518,82 @@ export class FlowControllerImpl implements FlowController {
 
   async checkExistingAccount(): Promise<void> {
     try {
-      // If user already skipped (empty string), exit immediately
-      if (this.data.gdlAccountId === "") {
+      // If user already skipped (empty string) AND not adding from settings, exit immediately
+      if (this.data.gdlAccountId === "" && !this.data.isAddingGdlFromSettings) {
         await this.exitFlow("library")
         return
       }
 
-      const gdlState = await this.checkGDLAccount(true) // Show global loading
+      this.showGlobalLoading("checking-gdl")
 
-      // Navigate based on result
-      if (gdlState.type === "found-existing") {
+      const { activeUuid, gdlAccountId } = this.data
+
+      if (!activeUuid) {
         this.setState({
           phase: "content",
-          step: { type: "gdl-account", gdlAccount: gdlState }
+          step: { type: "gdl-account", gdlAccount: { type: "none" } }
         })
-      } else if (gdlState.type === "linked") {
-        await this.exitFlow("library")
-      } else {
+        return
+      }
+
+      // Verify account exists
+      const accounts = await this.accountsQuery.refetch()
+      const accountExists = accounts.data?.some(
+        (acc: any) => acc.uuid === activeUuid
+      )
+
+      if (!accountExists) {
+        throw new Error(`Account ${activeUuid} not found`)
+      }
+
+      // Check cloud for GDL account
+      try {
+        const gdlAccount = await this.rspcContext.client.query([
+          "account.peekGdlAccount",
+          activeUuid
+        ])
+
+        if (gdlAccount) {
+          this.data.hasGDLAccount = true
+          this.data.foundGDLAccountData = gdlAccount
+
+          // Check if verified
+          if (gdlAccount.isEmailVerified) {
+            // Already verified - check if same as local
+            if (gdlAccountId === activeUuid) {
+              // Already linked - exit to library
+              await this.exitFlow("library")
+              return
+            }
+            // Found existing verified account - show sync option
+            this.setState({
+              phase: "content",
+              step: {
+                type: "gdl-account",
+                gdlAccount: { type: "found-existing", data: gdlAccount }
+              }
+            })
+          } else {
+            // Unverified account - go directly to verification step
+            this.setState({
+              phase: "content",
+              step: {
+                type: "gdl-account-verification",
+                email: gdlAccount.email,
+                uuid: activeUuid
+              }
+            })
+          }
+          return
+        }
+
+        // No GDL account found
+        this.setState({
+          phase: "content",
+          step: { type: "gdl-account", gdlAccount: { type: "none" } }
+        })
+      } catch (error) {
+        console.error("[FlowController] Failed to peek GDL account:", error)
         this.setState({
           phase: "content",
           step: { type: "gdl-account", gdlAccount: { type: "none" } }

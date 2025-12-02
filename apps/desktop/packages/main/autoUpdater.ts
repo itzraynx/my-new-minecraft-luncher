@@ -46,10 +46,10 @@ function releaseAutoUpdaterLock() {
 
 let isInstallingUpdate = false
 
-export function installPendingUpdateOnQuit(): void {
+export function installPendingUpdateOnQuit(): boolean {
   // Prevent multiple install attempts
   if (isInstallingUpdate) {
-    return
+    return true
   }
 
   if (currentState.state === "downloaded") {
@@ -57,11 +57,13 @@ export function installPendingUpdateOnQuit(): void {
     log.info("[updater] Installing pending update on quit...")
     try {
       autoUpdater.quitAndInstall(true, false)
+      return true
     } catch (error) {
       log.error("[updater] Failed to install update on quit:", error)
       isInstallingUpdate = false
     }
   }
+  return false
 }
 
 export default function initAutoUpdater(_win: BrowserWindow | null) {

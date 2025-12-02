@@ -1047,10 +1047,13 @@ app.on("window-all-closed", async () => {
   app.quit()
 })
 
-app.on("before-quit", async () => {
-  // Use our own install-on-quit mechanism for consistent behavior across platforms
-  // (autoInstallOnAppQuit is disabled because it doesn't work reliably on macOS)
-  installPendingUpdateOnQuit()
+app.on("before-quit", async (event) => {
+  // If installing an update, prevent normal quit and let quitAndInstall handle it
+  // (quitAndInstall closes windows and emits its own before-quit when ready)
+  if (installPendingUpdateOnQuit()) {
+    event.preventDefault()
+    return
+  }
 
   try {
     const _coreModule = await coreModule

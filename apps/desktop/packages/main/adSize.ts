@@ -44,7 +44,9 @@ function getEffectiveDisplaySize(display: Display) {
   const isWindows = os.platform() === "win32"
 
   return {
-    width: isWindows ? Math.floor(workArea.width / scaleFactor) : workArea.width,
+    width: isWindows
+      ? Math.floor(workArea.width / scaleFactor)
+      : workArea.width,
     height: isWindows
       ? Math.floor(workArea.height / scaleFactor)
       : workArea.height,

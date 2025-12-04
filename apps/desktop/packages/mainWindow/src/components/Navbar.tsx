@@ -10,10 +10,7 @@ import { useModal } from "@/managers/ModalsManager"
 import { useGlobalStore } from "./GlobalStoreContext"
 import { EnhancedSearchBar } from "./EnhancedSearchBar"
 import { getAccountImageUuid } from "@/utils/showcaseHelpers"
-import {
-  hasPendingUpdate,
-  showPendingUpdateToast
-} from "@/utils/updater"
+import { hasPendingUpdate, showPendingUpdateToast } from "@/utils/updater"
 import { useTransContext } from "@gd/i18n"
 
 export interface AccountsStatus {

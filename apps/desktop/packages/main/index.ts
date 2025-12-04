@@ -625,7 +625,11 @@ async function createWindow(): Promise<BrowserWindow> {
       getAdSize(currentDisplay)
     win?.setMinimumSize(minWidth, minHeight)
     win?.setSize(minWidth, minHeight)
-    win?.webContents?.send("adSizeChanged", { adSize, bannerAdSize, hideAdText })
+    win?.webContents?.send("adSizeChanged", {
+      adSize,
+      bannerAdSize,
+      hideAdText
+    })
   })
 
   win.on("close", (e) => {
@@ -739,7 +743,7 @@ ipcMain.handle("deleteDbAndRestart", async () => {
   try {
     await fs.unlink(dbPath)
     console.log("database deleted successfully")
-  } catch (e) {
+  } catch {
     // File might not exist, that's ok
     console.log("database file not found or already deleted")
   }
@@ -1041,7 +1045,11 @@ app.whenReady().then(async () => {
       if (changedMetrics.includes("workArea")) {
         win?.setMinimumSize(minWidth, minHeight)
         win?.setSize(minWidth, minHeight)
-        win?.webContents.send("adSizeChanged", { adSize, bannerAdSize, hideAdText })
+        win?.webContents.send("adSizeChanged", {
+          adSize,
+          bannerAdSize,
+          hideAdText
+        })
       }
     }
   )

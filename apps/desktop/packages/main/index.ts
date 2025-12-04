@@ -621,11 +621,11 @@ async function createWindow(): Promise<BrowserWindow> {
     }
 
     lastDisplay = currentDisplay
-    const { minWidth, minHeight, adSize, bannerAdSize } =
+    const { minWidth, minHeight, adSize, bannerAdSize, hideAdText } =
       getAdSize(currentDisplay)
     win?.setMinimumSize(minWidth, minHeight)
     win?.setSize(minWidth, minHeight)
-    win?.webContents?.send("adSizeChanged", { adSize, bannerAdSize })
+    win?.webContents?.send("adSizeChanged", { adSize, bannerAdSize, hideAdText })
   })
 
   win.on("close", (e) => {
@@ -759,8 +759,8 @@ ipcMain.handle("deleteDbAndRestart", async () => {
 
 ipcMain.handle("getAdSize", async () => {
   const currentDisplay = screen.getDisplayMatching(win?.getBounds()!)
-  const { adSize, bannerAdSize } = getAdSize(currentDisplay)
-  return { adSize, bannerAdSize }
+  const { adSize, bannerAdSize, hideAdText } = getAdSize(currentDisplay)
+  return { adSize, bannerAdSize, hideAdText }
 })
 
 ipcMain.handle("openFileDialog", async (_, opts: OpenDialogOptions) => {
@@ -1036,12 +1036,12 @@ app.whenReady().then(async () => {
 
       lastDisplay = currentDisplay
 
-      const { minWidth, minHeight, adSize, bannerAdSize } =
+      const { minWidth, minHeight, adSize, bannerAdSize, hideAdText } =
         getAdSize(currentDisplay)
       if (changedMetrics.includes("workArea")) {
         win?.setMinimumSize(minWidth, minHeight)
         win?.setSize(minWidth, minHeight)
-        win?.webContents.send("adSizeChanged", { adSize, bannerAdSize })
+        win?.webContents.send("adSizeChanged", { adSize, bannerAdSize, hideAdText })
       }
     }
   )

@@ -121,7 +121,7 @@ const AppNavbar = () => {
         <div class="text-lightSlate-50 flex h-full list-none items-center gap-6">
           <Show when={hasPendingUpdate()}>
             <div
-              class="cursor-pointer text-green-500 hover:text-green-400 transition-colors"
+              class="animate-icons-on-hover cursor-pointer text-green-500 hover:text-green-400 transition-colors"
               onClick={showPendingUpdateToast}
               title={t("app:_trn_update_pending_tooltip")}
             >

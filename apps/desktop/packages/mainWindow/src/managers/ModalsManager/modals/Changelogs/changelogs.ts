@@ -114,6 +114,9 @@ const changelogs: Changelog = {
     {
       title:
         "Fixed caching errors that were causing the cache subroutine to hang/crash"
+    },
+    {
+      title: "Fixed GDL account verification sometimes hanging"
     }
   ],
   improved: [
@@ -180,7 +183,12 @@ const changelogs: Changelog = {
     {
       title: "Updated Electron and dependencies",
       description:
-        "Updated to Electron 37.2.6 and Node.js 22.12.0 for better performance and security."
+        "Updated to Electron 37.7.0 and Node.js 22.12.0 for better performance and security."
+    },
+    {
+      title: "Improved auto update system",
+      description:
+        "Enhanced update installation flow with better error handling, improved download UI, and reliable update installation on quit."
     },
     {
       title: "Better loading indicators",

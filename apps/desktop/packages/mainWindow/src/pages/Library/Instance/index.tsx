@@ -775,9 +775,13 @@ const Instance = () => {
               classList={{
                 "pt-14": isFullScreen(),
                 "pt-0":
-                  !isFullScreen() && location.pathname.includes("/addons"),
+                  !isFullScreen() &&
+                  (location.pathname.includes("/addons") ||
+                    location.pathname.includes("/logs")),
                 "pt-4 px-4":
-                  !isFullScreen() && !location.pathname.includes("/addons")
+                  !isFullScreen() &&
+                  !location.pathname.includes("/addons") &&
+                  !location.pathname.includes("/logs")
               }}
             >
               <Show when={duplicatedMods().length > 0}>

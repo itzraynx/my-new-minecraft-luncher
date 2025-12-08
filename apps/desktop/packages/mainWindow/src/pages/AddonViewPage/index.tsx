@@ -83,6 +83,8 @@ export const AddonContext = createContext<CreateQueryResult<
   RSPCError
 > | null>(null)
 
+export const StickyHeaderHeightContext = createContext<() => number>(() => 0)
+
 const ModContextProvider = (props: {
   mod: CreateQueryResult<FEUnifiedSearchResultWithDescription, RSPCError>
   children: JSX.Element
@@ -212,6 +214,7 @@ const AddonExplore = () => {
 
   let refStickyTabs: HTMLDivElement
   const [isSticky, setIsSticky] = createSignal(false)
+  const [stickyHeaderHeight, setStickyHeaderHeight] = createSignal(0)
 
   const handleScroll = () => {
     if (!refStickyTabs) return
@@ -229,6 +232,15 @@ const AddonExplore = () => {
       onCleanup(() =>
         scrollContainer.removeEventListener("scroll", handleScroll)
       )
+    }
+
+    // Measure sticky header height for versions table positioning
+    if (refStickyTabs) {
+      const resizeObserver = new ResizeObserver(() => {
+        setStickyHeaderHeight(refStickyTabs.getBoundingClientRect().height)
+      })
+      resizeObserver.observe(refStickyTabs)
+      onCleanup(() => resizeObserver.disconnect())
     }
   })
 
@@ -477,10 +489,12 @@ const AddonExplore = () => {
                 <ExploreVersionsNavbar modplatform={platform()} type="mod" />
               </Show>
             </div>
-            <div class="z-0 flex flex-1 flex-col px-0 pt-4 min-w-0 overflow-hidden">
-              <ModContextProvider mod={project}>
-                <Outlet />
-              </ModContextProvider>
+            <div class="z-0 flex flex-1 flex-col px-0 pt-4 min-w-0">
+              <StickyHeaderHeightContext.Provider value={stickyHeaderHeight}>
+                <ModContextProvider mod={project}>
+                  <Outlet />
+                </ModContextProvider>
+              </StickyHeaderHeightContext.Provider>
             </div>
           </div>
         </div>

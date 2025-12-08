@@ -784,7 +784,12 @@ const Instance = () => {
                   !location.pathname.includes("/logs")
               }}
             >
-              <Show when={duplicatedMods().length > 0}>
+              <Show
+                when={
+                  duplicatedMods().length > 0 &&
+                  !routeData.instanceDetails.data?.modpack?.locked
+                }
+              >
                 <div
                   class="mb-4 flex items-center justify-between rounded-xl border border-yellow-600/30 bg-yellow-900/20 p-4"
                   classList={{

@@ -23,7 +23,6 @@ const NAVBAR_HEIGHT = 60
 const GAP_LARGE = 16
 const GAP_SMALL = 10
 const TEXT_HEIGHT_FULL = 100
-const TEXT_HEIGHT_SMALL = 60
 
 const getTitlebarHeight = () => {
   const platform = os.platform() as keyof typeof TITLEBAR_HEIGHT
@@ -142,7 +141,10 @@ export default function getAdSize(display?: Display) {
   // Uses SKYSCRAPER (160px) to preserve content area on laptops
   if (width >= 1024 && height >= 700) {
     const minHeight =
-      getTitlebarHeight() + NAVBAR_HEIGHT + AD_SIZES.SKYSCRAPER.height + GAP_SMALL
+      getTitlebarHeight() +
+      NAVBAR_HEIGHT +
+      AD_SIZES.SKYSCRAPER.height +
+      GAP_SMALL
 
     return {
       minWidth: 900,

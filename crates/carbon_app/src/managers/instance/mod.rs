@@ -414,10 +414,16 @@ impl<'s> ManagerRef<'s, InstanceManager> {
                                         Some(GameVersion::Custom(_)) => None,
                                         None => None,
                                     },
-                                    modloader_version: match &status.config.game_configuration.version {
-                                        Some(GameVersion::Standard(version)) => {
-                                            version.modloaders.iter().next().map(|m| m.version.clone())
-                                        }
+                                    modloader_version: match &status
+                                        .config
+                                        .game_configuration
+                                        .version
+                                    {
+                                        Some(GameVersion::Standard(version)) => version
+                                            .modloaders
+                                            .iter()
+                                            .next()
+                                            .map(|m| m.version.clone()),
                                         Some(GameVersion::Custom(_)) => None,
                                         None => None,
                                     },
@@ -2523,6 +2529,7 @@ mod test {
                 status: ListInstanceStatus::Valid(ValidListInstance {
                     mc_version: Some(String::from("1.7.10")),
                     modloader: None,
+                    modloader_version: None,
                     modpack: None,
                     state: domain::LaunchState::Inactive { failed_task: None },
                 }),

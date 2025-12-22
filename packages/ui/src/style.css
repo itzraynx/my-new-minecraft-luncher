@@ -158,11 +158,13 @@ a {
 }
 
 .copy-text-drop-in {
-  animation: copyTextDropIn 180ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation: copyTextDropIn 180ms cubic-bezier(0.68, -0.55, 0.265, 1.55)
+    forwards;
 }
 
 .copy-text-drop-out {
-  animation: copyTextDropOut 150ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation: copyTextDropOut 150ms cubic-bezier(0.68, -0.55, 0.265, 1.55)
+    forwards;
 }
 
 .copy-text-blur-in {

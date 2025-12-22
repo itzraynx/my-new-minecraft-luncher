@@ -35,7 +35,12 @@ const sizeStyles: Record<
 type CopyState = "idle" | "showing" | "leaving"
 
 export const CopyText: Component<CopyTextProps> = (props) => {
-  const [local, others] = splitProps(props, ["value", "size", "class", "onCopy"])
+  const [local, others] = splitProps(props, [
+    "value",
+    "size",
+    "class",
+    "onCopy"
+  ])
   const [copyState, setCopyState] = createSignal<CopyState>("idle")
 
   const size = () => local.size ?? "small"
@@ -70,12 +75,7 @@ export const CopyText: Component<CopyTextProps> = (props) => {
       {...others}
     >
       {/* Text content */}
-      <span
-        class={cn(
-          "text-lightSlate-400 select-all flex-1",
-          styles().text
-        )}
-      >
+      <span class={cn("text-lightSlate-400 select-all flex-1", styles().text)}>
         {local.value}
       </span>
 

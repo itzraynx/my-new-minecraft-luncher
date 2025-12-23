@@ -342,7 +342,7 @@ const Tile = (props: Props) => {
           </ContextMenuContent>
           <ContextMenuTrigger>
             <div
-              class="group relative flex select-none flex-col items-start justify-center duration-200 ease-in-out"
+              class="group relative flex select-none flex-col items-start justify-center duration-200 ease-spring"
               onClick={(e) => {
                 e.stopPropagation()
                 if (
@@ -368,7 +368,7 @@ const Tile = (props: Props) => {
                     }}
                   >
                     <div
-                      class="absolute left-0 top-0 h-full w-full transition-[opacity,background] duration-300 ease-in-out"
+                      class="absolute left-0 top-0 h-full w-full transition-[opacity,background] duration-300 ease-spring"
                       classList={{
                         "opacity-0 bg-transparent":
                           !isLoading() && !props.isRunning,
@@ -396,7 +396,7 @@ const Tile = (props: Props) => {
                       }
                     >
                       <div
-                        class="bg-darkSlate-800 relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl bg-cover bg-center transition-all duration-300 ease-in-out"
+                        class="bg-darkSlate-800 relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl bg-cover bg-center transition-all duration-300 ease-spring"
                         classList={{
                           grayscale: isLoading() || isInQueue(),
                           "group-hover:scale-120": !isLoading() && !isInQueue()
@@ -592,7 +592,7 @@ const Tile = (props: Props) => {
                         />
                       </Show>
                       <div
-                        class="z-2 absolute left-1/2 top-1/2 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl transition-all duration-200 ease-in-out"
+                        class="z-2 absolute left-1/2 top-1/2 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl transition-all duration-200 ease-spring"
                         classList={{
                           "scale-100 bg-red-500": isLoading(),
                           "flex bg-primary-500 hover:bg-primary-400 text-2xl":
@@ -647,7 +647,7 @@ const Tile = (props: Props) => {
                             <div
                               class={`${copiedError() ? "i-hugeicons:tick-double-02" : "i-hugeicons:copy-01"} h-6 w-6 shrink-0`}
                               classList={{
-                                "text-lightSlate-700 hover:text-lightSlate-100 duration-100 ease-in-out":
+                                "text-lightSlate-700 hover:text-lightSlate-100 duration-100 ease-spring":
                                   !copiedError(),
                                 "text-green-400": copiedError()
                               }}

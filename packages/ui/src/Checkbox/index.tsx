@@ -2,7 +2,7 @@ import { createEffect, createSignal, Show, JSX } from "solid-js"
 import { cva, type VariantProps } from "class-variance-authority"
 
 const checkboxStyles = cva(
-  "box-border flex h-5 min-h-5 w-5 min-w-5 items-center justify-center rounded-md transition-all duration-200 ease-in-out",
+  "box-border flex h-5 min-h-5 w-5 min-w-5 items-center justify-center rounded-md transition-all duration-200 ease-spring",
   {
     variants: {
       checked: {

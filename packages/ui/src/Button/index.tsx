@@ -68,7 +68,7 @@ const getVariant = (
     "transition-all": true,
     "overflow-hidden": true,
     "duration-100": true,
-    "ease-in-out": true,
+    "ease-spring": true,
     "active:scale-95": !isDisabled,
     "font-main": true,
     "max-w-max": !isLoading && !fullWidth,

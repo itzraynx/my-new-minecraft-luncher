@@ -112,7 +112,7 @@ export function EnhancedSearchBar() {
         }
       >
         <div
-          class="i-hugeicons:cancel-01 text-lg text-darkSlate-500 cursor-pointer transition-colors duration-200 ease-in-out hover:text-white"
+          class="i-hugeicons:cancel-01 text-lg text-darkSlate-500 cursor-pointer transition-colors duration-200 ease-spring hover:text-white"
           onClick={(e) => {
             e.preventDefault()
             e.stopPropagation()

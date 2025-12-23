@@ -11,7 +11,7 @@ export interface SessionEntryProps {
 const SessionEntry = (props: SessionEntryProps) => {
   return (
     <div
-      class={`group relative box-border flex items-center gap-2 w-full rounded-md px-3 py-2 cursor-pointer transition-colors duration-150 ease-in-out ${props.isSelected ? "bg-darkSlate-600" : "hover:bg-darkSlate-700"}`}
+      class={`group relative box-border flex items-center gap-2 w-full rounded-md px-3 py-2 cursor-pointer transition-colors duration-150 ease-spring ${props.isSelected ? "bg-darkSlate-600" : "hover:bg-darkSlate-700"}`}
       onClick={props.onClick}
     >
       {/* Icon */}

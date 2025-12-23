@@ -328,9 +328,7 @@ export function EnrollingStep(props: EnrollingStepProps) {
               <div class="rounded-lg bg-white p-2">
                 <Show
                   when={hasPollingCode()}
-                  fallback={
-                    <Skeleton class="h-[120px] w-[120px] rounded" />
-                  }
+                  fallback={<Skeleton class="h-[120px] w-[120px] rounded" />}
                 >
                   <canvas
                     ref={qrCanvasRef}

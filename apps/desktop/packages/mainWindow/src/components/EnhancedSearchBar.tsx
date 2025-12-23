@@ -58,7 +58,8 @@ export function EnhancedSearchBar() {
       <div
         class="shrink-0 transition-[opacity,max-width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
         classList={{
-          "opacity-0 pointer-events-none max-w-0 overflow-hidden": !isExpanded(),
+          "opacity-0 pointer-events-none max-w-0 overflow-hidden":
+            !isExpanded(),
           "opacity-100 delay-[40ms]": isExpanded()
         }}
       >
@@ -137,7 +138,8 @@ export function EnhancedSearchBar() {
       <div
         class="shrink-0 transition-[opacity,max-width] duration-300 ease-[cubic-bezier(.4,0,.2,1)]"
         classList={{
-          "opacity-0 pointer-events-none max-w-0 overflow-hidden": !isExpanded(),
+          "opacity-0 pointer-events-none max-w-0 overflow-hidden":
+            !isExpanded(),
           "opacity-100 delay-[110ms]": isExpanded()
         }}
       >

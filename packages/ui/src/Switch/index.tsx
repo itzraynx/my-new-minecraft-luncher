@@ -1,5 +1,6 @@
 import { JSX, Show, createEffect, createSignal } from "solid-js"
 import { cva, type VariantProps } from "class-variance-authority"
+import { PRESS_CLASSES } from "../Clickable"
 
 const switchStyles = cva(
   "absolute top-0 left-0 right-0 bottom-0 transition-colors duration-100 ease-spring rounded-md",
@@ -117,7 +118,7 @@ function Switch(props: Props) {
   })
 
   return (
-    <label class="relative inline-block w-10 h-5 group transition-transform duration-100 active:scale-95">
+    <label class={`relative inline-block w-10 h-5 group ${PRESS_CLASSES}`}>
       <input
         {...props}
         class="opacity-0 w-0 h-0 peer"

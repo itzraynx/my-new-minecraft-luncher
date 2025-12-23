@@ -2,7 +2,7 @@ import { useGlobalStore } from "@/components/GlobalStoreContext"
 import { useGDNavigate } from "@/managers/NavigationManager"
 import { rspc } from "@/utils/rspcClient"
 import { Trans } from "@gd/i18n"
-import { Skeleton } from "@gd/ui"
+import { PRESS_CLASSES, Skeleton } from "@gd/ui"
 import {
   For,
   Match,
@@ -63,7 +63,7 @@ const FeaturedModpackTile = () => {
         <div class="bg-darkSlate-400 h-24 w-px" />
         <Show when={settings()?.showFeatured}>
           <div
-            class="w-70 outline-darkSlate-500 relative box-border h-24 overflow-hidden rounded-md outline-2 duration-200 ease-spring"
+            class={`w-70 outline-darkSlate-500 relative box-border h-24 overflow-hidden rounded-md outline-2 ${PRESS_CLASSES}`}
             classList={{
               "group hover:outline hover:bg-darkSlate-700":
                 !!hexingTales()?.data

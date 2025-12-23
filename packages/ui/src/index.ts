@@ -26,4 +26,12 @@ export { AuthorsSkeleton } from "./AuthorsSkeleton"
 export { Separator } from "./Separator"
 export { ContextMenuProvider, useContextMenu } from "./Menu/ContextMenuContext"
 export { CopyText } from "./CopyText"
+export {
+  Clickable,
+  type ClickableProps,
+  type ClickableRenderProps,
+  PRESS_CLASSES,
+  PRESS_CLASSES_DISABLED,
+  getPressEffectClasses
+} from "./Clickable"
 export * from "./themes"

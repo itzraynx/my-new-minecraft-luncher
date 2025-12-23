@@ -24,7 +24,8 @@ import {
   Spinner,
   Tooltip,
   TooltipContent,
-  TooltipTrigger
+  TooltipTrigger,
+  PRESS_CLASSES
 } from "@gd/ui"
 import DefaultImg from "/assets/images/default-instance-img.png"
 import { useGDNavigate } from "@/managers/NavigationManager"
@@ -342,7 +343,7 @@ const Tile = (props: Props) => {
           </ContextMenuContent>
           <ContextMenuTrigger>
             <div
-              class="group relative flex select-none flex-col items-start justify-center duration-200 ease-spring"
+              class={`group relative flex select-none flex-col items-start justify-center ${PRESS_CLASSES}`}
               onClick={(e) => {
                 e.stopPropagation()
                 if (

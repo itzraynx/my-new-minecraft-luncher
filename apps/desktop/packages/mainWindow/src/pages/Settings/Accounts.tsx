@@ -249,6 +249,7 @@ const Accounts = () => {
       setAvatarLoading(true)
       try {
         await uploadAvatarMutation.mutateAsync({ uuid, iconPath: filePath })
+        toast.success(t("accounts:_trn_avatar_upload_success"))
       } catch (err) {
         console.error("Avatar upload failed:", err)
         toast.error(t("accounts:_trn_avatar_upload_failed"))
@@ -266,6 +267,7 @@ const Accounts = () => {
     try {
       await deleteAvatarMutation.mutateAsync(uuid)
       setAvatarPreview(null)
+      toast.success(t("accounts:_trn_avatar_delete_success"))
     } catch (err) {
       console.error("Avatar deletion failed:", err)
       toast.error(t("accounts:_trn_avatar_delete_failed"))

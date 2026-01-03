@@ -45,5 +45,7 @@
   "_trn_click_to_select_image": "Click to select an image",
   "_trn_upload": "Upload",
   "_trn_avatar_upload_failed": "Failed to upload avatar",
-  "_trn_avatar_delete_failed": "Failed to delete avatar"
+  "_trn_avatar_delete_failed": "Failed to delete avatar",
+  "_trn_avatar_upload_success": "Avatar uploaded successfully",
+  "_trn_avatar_delete_success": "Avatar removed successfully"
 }

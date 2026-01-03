@@ -105,6 +105,13 @@ export function EnhancedSearchBar() {
         />
       </Show>
 
+      <Show when={isExpanded() && searchResults?.isDirectMode()}>
+        <div class="bg-primary-600/20 text-primary-400 flex shrink-0 items-center gap-1 rounded px-2 py-0.5 text-xs">
+          <div class="i-hugeicons:link-01 text-sm" />
+          <span>{t("search:_trn_direct")}</span>
+        </div>
+      </Show>
+
       <Show
         when={
           isExpanded() &&

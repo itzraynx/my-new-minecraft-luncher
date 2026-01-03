@@ -187,6 +187,7 @@ keys! {
 
         UNIFIED_SEARCH                              = "unifiedSearch";
         UNIFIED_GET_PROJECT                         = "unifiedGetProject";
+        UNIFIED_GET_PROJECTS_BY_IDS                 = "unifiedGetProjectsByIds";
         UNIFIED_GET_PROJECT_VERSIONS                = "unifiedGetProjectVersions";
         UNIFIED_SEARCH_PROJECT_TYPE                 = "unifiedSearchProjectType";
         GET_UNIFIED_CATEGORIES                      = "getUnifiedCategories";

@@ -62,6 +62,8 @@ keys! {
         DELETE_PROFILE_ICON                         = "deleteProfileIcon";
         CHECK_USERNAME_AVAILABLE                    = "checkUsernameAvailable";
         CREATE_PROFILE                              = "createProfile";
+        GET_NICKNAME_HISTORY                        = "getNicknameHistory";
+        CLEAR_NICKNAME_HISTORY                      = "clearNicknameHistory";
     }
 
     java {

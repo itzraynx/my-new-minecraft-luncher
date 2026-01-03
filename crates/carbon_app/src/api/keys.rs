@@ -155,6 +155,10 @@ keys! {
         SHOULD_SHOW_BETA_PROMPT                     = "shouldShowBetaPrompt";
         DISMISS_BETA_PROMPT_PERMANENTLY             = "dismissBetaPromptPermanently";
         REMIND_BETA_PROMPT_LATER                    = "remindBetaPromptLater";
+        // Onboarding tips
+        GET_SEEN_ONBOARDING_TIPS                    = "getSeenOnboardingTips";
+        MARK_ONBOARDING_TIP_SEEN                    = "markOnboardingTipSeen";
+        RESET_ONBOARDING_TIPS                       = "resetOnboardingTips";
     }
 
     metrics {

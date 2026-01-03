@@ -5,8 +5,9 @@ use crate::{
             self,
             settings::{
                 COMPLETE_FIRST_LAUNCH, DISMISS_BETA_PROMPT_PERMANENTLY, GET_PRIVACY_STATEMENT_BODY,
-                GET_SETTINGS, GET_TERMS_OF_SERVICE_BODY, IS_FIRST_LAUNCH, MARK_CHANGELOG_SEEN,
-                REMIND_BETA_PROMPT_LATER, SET_SETTINGS, SHOULD_SHOW_BETA_PROMPT,
+                GET_SEEN_ONBOARDING_TIPS, GET_SETTINGS, GET_TERMS_OF_SERVICE_BODY, IS_FIRST_LAUNCH,
+                MARK_CHANGELOG_SEEN, MARK_ONBOARDING_TIP_SEEN, REMIND_BETA_PROMPT_LATER,
+                RESET_ONBOARDING_TIPS, SET_SETTINGS, SHOULD_SHOW_BETA_PROMPT,
                 SHOULD_SHOW_CHANGELOG,
             },
         },
@@ -29,6 +30,7 @@ mod preference_keys {
     pub const LAST_SEEN_VERSION: &str = "last_seen_version";
     pub const BETA_PROMPT_DISMISSED: &str = "beta_prompt_dismissed_permanently";
     pub const BETA_PROMPT_LAST_SHOWN: &str = "beta_prompt_last_shown";
+    pub const ONBOARDING_TIPS_SEEN: &str = "onboarding_tips_seen";
 }
 
 /// Input state for beta prompt decision logic
@@ -276,6 +278,84 @@ pub(super) fn mount() -> RouterBuilder<App> {
                 )
                 .exec()
                 .await?;
+
+            Ok(())
+        }
+
+        // Onboarding Tips endpoints
+        query GET_SEEN_ONBOARDING_TIPS[app, _args: ()] {
+            let db = &app.prisma_client;
+
+            let pref = db
+                .frontend_preference()
+                .find_unique(frontend_preference::key::equals(
+                    preference_keys::ONBOARDING_TIPS_SEEN.to_string()
+                ))
+                .exec()
+                .await?;
+
+            match pref {
+                Some(p) => Ok(serde_json::from_str::<Vec<String>>(&p.value).unwrap_or_default()),
+                None => Ok(Vec::new()),
+            }
+        }
+
+        mutation MARK_ONBOARDING_TIP_SEEN[app, tip_id: String] {
+            let db = &app.prisma_client;
+
+            // Get existing tips
+            let pref = db
+                .frontend_preference()
+                .find_unique(frontend_preference::key::equals(
+                    preference_keys::ONBOARDING_TIPS_SEEN.to_string()
+                ))
+                .exec()
+                .await?;
+
+            let mut tips: Vec<String> = match pref {
+                Some(p) => serde_json::from_str(&p.value).unwrap_or_default(),
+                None => Vec::new(),
+            };
+
+            // Add tip if not already seen
+            if !tips.contains(&tip_id) {
+                tips.push(tip_id);
+            }
+
+            let value = serde_json::to_string(&tips)?;
+
+            db.frontend_preference()
+                .upsert(
+                    frontend_preference::key::equals(preference_keys::ONBOARDING_TIPS_SEEN.to_string()),
+                    frontend_preference::create(
+                        preference_keys::ONBOARDING_TIPS_SEEN.to_string(),
+                        value.clone(),
+                        vec![]
+                    ),
+                    vec![frontend_preference::value::set(value)],
+                )
+                .exec()
+                .await?;
+
+            // Invalidate so the query returns fresh data
+            app.invalidate(GET_SEEN_ONBOARDING_TIPS, None);
+
+            Ok(())
+        }
+
+        mutation RESET_ONBOARDING_TIPS[app, _args: ()] {
+            let db = &app.prisma_client;
+
+            db.frontend_preference()
+                .delete(frontend_preference::key::equals(
+                    preference_keys::ONBOARDING_TIPS_SEEN.to_string()
+                ))
+                .exec()
+                .await
+                .ok(); // Ignore if not found
+
+            // Invalidate so the query returns fresh data
+            app.invalidate(GET_SEEN_ONBOARDING_TIPS, None);
 
             Ok(())
         }

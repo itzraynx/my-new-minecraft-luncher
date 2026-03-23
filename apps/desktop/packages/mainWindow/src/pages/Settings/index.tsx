@@ -68,6 +68,18 @@ function Settings() {
       name: t("java:_trn_runtime_path"),
       icon: "i-hugeicons:folder-01",
       path: "/settings/runtime-path"
+    },
+    {
+      name: (
+        <div class="relative flex items-center gap-2">
+          {t("settings:_trn_nokiatis_features")}
+          <div class="absolute -top-10 right-0">
+            <FeatureStatusBadge type="new" />
+          </div>
+        </div>
+      ),
+      icon: "i-hugeicons:star",
+      path: "/settings/nokiatis-features"
     }
   ]
 

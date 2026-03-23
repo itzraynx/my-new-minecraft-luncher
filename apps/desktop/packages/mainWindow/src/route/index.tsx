@@ -176,6 +176,10 @@ export const routes: RouteDefinition[] = [
           {
             path: "/runtime-path",
             component: lazy(() => import("@/pages/Settings/RuntimePath"))
+          },
+          {
+            path: "/nokiatis-features",
+            component: lazy(() => import("@/pages/Settings/NokiatisFeatures"))
           }
         ]
       },

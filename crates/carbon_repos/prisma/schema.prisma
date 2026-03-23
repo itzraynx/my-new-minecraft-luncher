@@ -48,6 +48,22 @@ model AppConfiguration {
   gdlAccountStatus                Bytes?
   // Stable installation ID for cohort-based features
   installationId                  String?
+  // Nokiatis specific settings
+  showNokiatisWelcome             Boolean  @default(true)
+  enableOfflineMode               Boolean  @default(true)
+  defaultTagFilter                String?  // Default tag to filter by
+  // Performance & Animation Settings
+  animationPerformance            String   @default("medium") // "low", "medium", "high"
+  enableTransitions               Boolean  @default(true)
+  enableParticles                 Boolean  @default(true)
+  // Auto Backup Settings
+  autoBackupEnabled               Boolean  @default(false)
+  autoBackupInterval              Int      @default(7) // Days between auto backups
+  maxAutoBackups                  Int      @default(5) // Max auto backups to keep
+  // Notification Settings
+  notificationsEnabled            Boolean  @default(true)
+  notifyOnUpdates                 Boolean  @default(true)
+  notifyOnFriendActivity          Boolean  @default(true)
 }
 
 // Generic KV store for frontend preferences (onboarding, "don't show again" dialogs, etc.)
@@ -95,6 +111,17 @@ model Skin {
   skin Bytes
 }
 
+// Offline Account Skins - Custom skins for offline/cracked accounts
+// These skins are shared between Nokiatis Launcher users
+model OfflineSkin {
+  id        String   @id @default(uuid())
+  username  String   @unique // Username for the offline account
+  skinData  Bytes    // The skin image data (PNG)
+  skinUrl   String?  // Optional URL if hosted externally
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model HTTPCache {
   url          String    @id
   status_code  Int
@@ -119,6 +146,169 @@ model Instance {
   group         InstanceGroup  @relation(fields: [groupId], references: [id])
   groupId       Int
   mods          ModFileCache[]
+  tags          InstanceTag[]
+  backups       InstanceBackup[]
+  modProfiles   ModProfile[]
+  notes         String?
+  iconPath      String?
+  // Enhanced Instance Settings
+  customIconId  String?        // Reference to custom icon from IconPack
+  gpuPreference String?        // "integrated", "discrete", or specific GPU name
+  customWidth   Int?           // Custom window width
+  customHeight  Int?           // Custom window height
+  playTime      Int            @default(0) // Total play time in seconds
+  lastPlayed    DateTime?
+  worlds        WorldData[]
+  screenshots   ScreenshotData[]
+  crashReports  CrashReport[]
+}
+
+// Instance Tags for organization
+model InstanceTag {
+  id          Int         @id @default(autoincrement())
+  name        String
+  color       String      @default("#3b82f6") // Default blue color
+  instances   Instance[]
+
+  @@unique([name])
+}
+
+// Instance Backups
+model InstanceBackup {
+  id          Int      @id @default(autoincrement())
+  instanceId  Int
+  instance    Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  path        String   // Path to backup file
+  size        Int      // Size in bytes
+}
+
+// Mod Profiles/Loadouts
+model ModProfile {
+  id          Int              @id @default(autoincrement())
+  instanceId  Int
+  instance    Instance         @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  mods        ProfileModEntry[]
+}
+
+model ProfileModEntry {
+  id          Int        @id @default(autoincrement())
+  profileId  Int
+  profile    ModProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  modId      String     // Filename or identifier
+  modName    String
+  enabled    Boolean    @default(true)
+}
+
+// Server Favorites
+model ServerFavorite {
+  id          Int      @id @default(autoincrement())
+  name        String
+  address     String
+  port        Int      @default(25565)
+  icon        String?  // Base64 or path to icon
+  description String?
+  lastPlayed  DateTime?
+  createdAt   DateTime @default(now())
+  // Server Status Cache
+  lastPing    Int?       // Ping in ms
+  playerCount Int?       // Current players
+  maxPlayers  Int?       // Max players
+  motd        String?    // Server MOTD
+  online      Boolean    @default(false)
+  lastChecked DateTime?
+  version     String?    // Server version
+}
+
+// Icon Packs - Custom icons for instances
+model IconPack {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  author      String
+  version     String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  icons       CustomIcon[]
+}
+
+model CustomIcon {
+  id         String    @id @default(uuid())
+  iconPackId String?
+  iconPack   IconPack? @relation(fields: [iconPackId], references: [id], onDelete: Cascade)
+  name       String
+  path       String    // Path to icon file
+  tags       String?   // Comma-separated tags for search
+  category   String?   // Category (e.g., "modpack", "vanilla", "tech")
+}
+
+// Crash Reports - Store and analyze crash logs
+model CrashReport {
+  id          Int      @id @default(autoincrement())
+  instanceId  Int
+  instance    Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  title       String
+  content     String   // Full crash log
+  summary     String?  // AI-generated summary
+  cause       String?  // Detected cause
+  solution    String?  // Suggested solution
+  createdAt   DateTime @default(now())
+  isResolved  Boolean  @default(false)
+  modId       String?  // Related mod ID if detected
+}
+
+// Notifications System
+model Notification {
+  id          Int      @id @default(autoincrement())
+  type        String   // "update", "friend", "system", "alert"
+  title       String
+  message     String
+  icon        String?  // Icon name or path
+  actionUrl   String?  // URL to open when clicked
+  actionLabel String?  // Label for action button
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime?
+  priority    Int      @default(0) // Higher = more important
+}
+
+// World Data - Enhanced for World Manager
+model WorldData {
+  id           Int      @id @default(autoincrement())
+  instanceId   Int
+  instance     Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  name         String
+  path         String
+  lastPlayed   DateTime?
+  gameMode     String?
+  difficulty   String?
+  createdAt    DateTime @default(now())
+  size         Int?     // World size in bytes
+  isBackup     Boolean  @default(false)
+  backupDate   DateTime?
+  thumbnail    String?  // Path to world preview image
+}
+
+// Screenshot Data - Enhanced for Gallery
+model ScreenshotData {
+  id          Int      @id @default(autoincrement())
+  instanceId  Int
+  instance    Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  filename    String
+  path        String
+  width       Int?
+  height      Int?
+  size        Int      // Size in bytes
+  createdAt   DateTime @default(now())
+  isFavorite  Boolean  @default(false)
+  worldName   String?  // World where screenshot was taken
+  tags        String?  // Comma-separated tags
 }
 
 model VersionInfoCache {
@@ -150,6 +340,8 @@ model InstanceGroup {
   name       String
   groupIndex Int
   instances  Instance[]
+  color      String?    @default("#6b7280") // Group color for visual organization
+  icon       String?    // Icon name or path
 }
 
 model ModFileCache {

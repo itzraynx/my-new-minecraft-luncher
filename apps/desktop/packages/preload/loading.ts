@@ -31,7 +31,7 @@ function useLoading() {
       oDiv.classList.add("appFatalCrash")
 
       const _fontSize = isString ? "1.3rem" : "1rem"
-      const dbPath = pathJoin(runtimePath, "gdl_conf.db")
+      const dbPath = pathJoin(runtimePath, "nokiatis_conf.db")
 
       oDiv.innerHTML = `
       <div style="height: 100vh; overflow-y: auto; padding: 16px 20px; text-align: left;">
@@ -40,7 +40,7 @@ function useLoading() {
           <!-- Header -->
           <div style="text-align: left;">
             <div style="font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, rgb(var(--primary-400)), rgb(var(--primary-600))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px;">
-              GDLauncher Couldn't Launch
+              Nokiatis Launcher Couldn't Launch
             </div>
             <div style="font-size: 0.85rem; color: rgb(var(--lightSlate-400));">
               Failed to load: <span style="color: rgb(var(--primary-400)); font-weight: 600;">${moduleName}</span> • v${__APP_VERSION__}
@@ -65,7 +65,7 @@ function useLoading() {
             <div style="font-size: 0.7rem; font-weight: 700; color: rgb(var(--lightSlate-500)); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Step 1</div>
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
               <div style="text-align: left;">
-                <div style="font-size: 0.95rem; font-weight: 600; color: rgb(var(--lightSlate-50)); margin-bottom: 2px;">Restart GDLauncher</div>
+                <div style="font-size: 0.95rem; font-weight: 600; color: rgb(var(--lightSlate-50)); margin-bottom: 2px;">Restart Nokiatis Launcher</div>
                 <div style="font-size: 0.8rem; color: rgb(var(--lightSlate-400));">A simple restart often fixes temporary issues.</div>
               </div>
               <button id="restart-btn" style="padding: 8px 16px; background: rgb(var(--primary-500)); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; white-space: nowrap; flex-shrink: 0;">
@@ -450,7 +450,7 @@ function useLoading() {
 
           <!-- Main message -->
           <div style="font-size: 1rem; color: rgb(var(--lightSlate-300)); line-height: 1.7; margin-bottom: 16px;">
-            Your database was created by a newer version of GDLauncher.
+            Your database was created by a newer version of Nokiatis Launcher.
           </div>
 
           <!-- Reassurance -->

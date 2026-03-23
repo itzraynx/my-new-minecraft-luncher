@@ -64,6 +64,12 @@ keys! {
         CREATE_PROFILE                              = "createProfile";
         GET_NICKNAME_HISTORY                        = "getNicknameHistory";
         CLEAR_NICKNAME_HISTORY                      = "clearNicknameHistory";
+
+        // Offline Skin Management
+        GET_OFFLINE_SKIN                            = "getOfflineSkin";
+        SET_OFFLINE_SKIN                            = "setOfflineSkin";
+        DELETE_OFFLINE_SKIN                         = "deleteOfflineSkin";
+        GET_OFFLINE_SKIN_HEAD                      = "getOfflineSkinHead";
     }
 
     java {
@@ -134,6 +140,32 @@ keys! {
         EXPLORE                                     = "explore";
         EXPORT                                      = "export";
         GET_MODPACK_INFO                            = "getModpackInfo";
+        
+        // Backup System
+        GET_BACKUPS                                 = "getBackups";
+        CREATE_BACKUP                               = "createBackup";
+        RESTORE_BACKUP                              = "restoreBackup";
+        DELETE_BACKUP                               = "deleteBackup";
+        
+        // Mod Profiles
+        GET_MOD_PROFILES                            = "getModProfiles";
+        CREATE_MOD_PROFILE                          = "createModProfile";
+        SWITCH_MOD_PROFILE                          = "switchModProfile";
+        DELETE_MOD_PROFILE                          = "deleteModProfile";
+        
+        // World Management
+        GET_WORLDS                                  = "getWorlds";
+        BACKUP_WORLD                                = "backupWorld";
+        DELETE_WORLD                                = "deleteWorld";
+        EXPORT_WORLD                                = "exportWorld";
+        
+        // Crash Reports
+        GET_CRASH_REPORTS                           = "getCrashReports";
+        ANALYZE_CRASH                               = "analyzeCrash";
+        
+        // GPU Selection
+        SET_INSTANCE_GPU                            = "setInstanceGpu";
+        GET_AVAILABLE_GPUS                          = "getAvailableGpus";
     }
 
     vtask {
@@ -198,5 +230,29 @@ keys! {
         UNIFIED_SEARCH_PROJECT_TYPE                 = "unifiedSearchProjectType";
         GET_UNIFIED_CATEGORIES                      = "getUnifiedCategories";
         GET_UNIFIED_MODLOADERS                      = "getUnifiedModloaders";
+    }
+
+    server {
+        GET_FAVORITES                               = "getFavorites";
+        ADD_FAVORITE                                = "addFavorite";
+        REMOVE_FAVORITE                             = "removeFavorite";
+        PING_SERVER                                 = "pingServer";
+        JOIN_SERVER                                 = "joinServer";
+        UPDATE_SERVER_STATUS                        = "updateServerStatus";
+    }
+
+    notifications {
+        GET_ALL                                     = "getAll";
+        MARK_READ                                   = "markRead";
+        MARK_ALL_READ                               = "markAllRead";
+        DISMISS                                     = "dismiss";
+        CREATE                                      = "create";
+    }
+
+    iconpacks {
+        GET_ALL                                     = "getAll";
+        INSTALL                                     = "install";
+        UNINSTALL                                   = "uninstall";
+        GET_ICONS                                   = "getIcons";
     }
 }

@@ -39,6 +39,7 @@ use tracing::{debug, error, info, trace, warn};
 
 pub use self::enroll::{EnrollmentError, EnrollmentStatus};
 use self::{enroll::EnrollmentTask, skin::SkinManager};
+use self::skin::stitch_offline_skin_head;
 
 use super::{AppInner, AppRef, ManagerRef};
 
@@ -1229,6 +1230,124 @@ impl<'s> ManagerRef<'s, AccountManager> {
         debug!("Account is valid");
 
         Ok(())
+    }
+
+    /// Create an offline/cracked account with just a username.
+    /// This allows playing without a Microsoft account.
+    pub async fn create_offline_account(self, username: String) -> anyhow::Result<String> {
+        // Generate a random UUID v4 for the offline account
+        let uuid = uuid::Uuid::new_v4().to_string();
+
+        info!("Creating offline account with username '{}' and UUID {}", username, uuid);
+
+        // Create the account in the database
+        self.app
+            .prisma_client
+            .account()
+            .create(
+                uuid.clone(),
+                username.clone(),
+                Utc::now().into(),
+                Vec::new(), // No extra params for offline account
+            )
+            .exec()
+            .await?;
+
+        // Set this account as active
+        self.set_active_uuid(Some(uuid.clone())).await?;
+
+        self.app.invalidate(GET_ACCOUNTS, None);
+
+        Ok(uuid)
+    }
+
+    /// Get the offline skin for a username
+    pub async fn get_offline_skin(self, username: String) -> anyhow::Result<Option<Vec<u8>>> {
+        use db::offline_skin::UniqueWhereParam;
+
+        let skin = self
+            .app
+            .prisma_client
+            .offline_skin()
+            .find_unique(UniqueWhereParam::UsernameEquals(username.clone()))
+            .exec()
+            .await?;
+
+        Ok(skin.map(|s| s.skin_data.to_vec()))
+    }
+
+    /// Set the offline skin for a username
+    pub async fn set_offline_skin(self, username: String, skin_data: Vec<u8>) -> anyhow::Result<()> {
+        use db::offline_skin::{SetParam, UniqueWhereParam, WhereParam};
+
+        // Try to update existing skin or create new one
+        let existing = self
+            .app
+            .prisma_client
+            .offline_skin()
+            .find_unique(UniqueWhereParam::UsernameEquals(username.clone()))
+            .exec()
+            .await?;
+
+        if existing.is_some() {
+            self.app
+                .prisma_client
+                .offline_skin()
+                .update(
+                    UniqueWhereParam::UsernameEquals(username.clone()),
+                    vec![SetParam::SetSkinData(skin_data.into())],
+                )
+                .exec()
+                .await?;
+        } else {
+            self.app
+                .prisma_client
+                .offline_skin()
+                .create(username.clone(), skin_data.into(), vec![])
+                .exec()
+                .await?;
+        }
+
+        info!("Set offline skin for username '{}'", username);
+
+        self.app.invalidate(GET_OFFLINE_SKIN, Some(username.into()));
+
+        Ok(())
+    }
+
+    /// Delete the offline skin for a username
+    pub async fn delete_offline_skin(self, username: String) -> anyhow::Result<()> {
+        use db::offline_skin::UniqueWhereParam;
+
+        self.app
+            .prisma_client
+            .offline_skin()
+            .delete(UniqueWhereParam::UsernameEquals(username.clone()))
+            .exec()
+            .await?;
+
+        info!("Deleted offline skin for username '{}'", username);
+
+        self.app.invalidate(GET_OFFLINE_SKIN, Some(username.into()));
+
+        Ok(())
+    }
+
+    /// Get the offline skin head for a username (rendered head image)
+    pub async fn get_offline_skin_head(self, username: String) -> anyhow::Result<Option<Vec<u8>>> {
+        // First get the skin
+        let skin_data = self.get_offline_skin(username.clone()).await?;
+
+        if let Some(skin) = skin_data {
+            // Render the head from the skin using the existing skin manager logic
+            let head = carbon_scheduler::cpu_block(|| {
+                stitch_offline_skin_head(&skin)
+            }).await?;
+
+            Ok(Some(head))
+        } else {
+            Ok(None)
+        }
     }
 
     pub fn skin_manager(self) -> ManagerRef<'s, SkinManager> {

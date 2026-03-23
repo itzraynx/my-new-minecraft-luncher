@@ -6,6 +6,11 @@ use image::{GenericImageView, ImageFormat};
 use std::io::Cursor;
 use thiserror::Error;
 
+/// Stitch a head from raw skin data (used for offline skins)
+pub fn stitch_offline_skin_head(skin_data: &[u8]) -> anyhow::Result<Vec<u8>> {
+    stitch_head(skin_data)
+}
+
 pub struct SkinManager {}
 
 impl ManagerRef<'_, SkinManager> {

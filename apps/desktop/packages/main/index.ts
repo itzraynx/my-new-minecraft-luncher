@@ -167,7 +167,7 @@ export function getPatchedUserData() {
   if (app.isPackaged && isSnapshot) {
     const isDeepBinary = app
       .getPath("exe")
-      .endsWith("Contents/MacOS/GDLauncher")
+      .endsWith("Contents/MacOS/Nokiatis Launcher")
     const isMacOS = process.platform === "darwin"
     const appPackagePath = path.resolve(
       app.getPath("exe"),
@@ -175,7 +175,7 @@ export function getPatchedUserData() {
       // but depending on whether you double-click the .app or run it from the terminal,
       // the path will be different
       isMacOS && isDeepBinary ? "../../../../" : "../",
-      "gdl_data"
+      "nokiatis_data"
     )
 
     ensureDirSync(appPackagePath)
@@ -200,7 +200,7 @@ export function getPatchedUserData() {
   }
 
   console.log("App data path:", appData)
-  return path.join(appData, "gdlauncher_carbon")
+  return path.join(appData, "nokiatis_launcher")
 }
 
 const patchedUserData = getPatchedUserData()
@@ -565,8 +565,8 @@ if ((app as any).overwolf) {
 // Set application name for Windows 10+ notifications
 if (process.platform === "win32") app.setAppUserModelId(app.getName())
 
-// Register protocol handlers for gdlauncher, curseforge, and modrinth
-const protocols = ["gdlauncher", "curseforge", "modrinth"]
+// Register protocol handlers for nokiatis, curseforge, and modrinth
+const protocols = ["nokiatis", "curseforge", "modrinth"]
 for (const protocol of protocols) {
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
@@ -588,7 +588,7 @@ let pendingProtocolUrl: string | null = null
 
 // Helper to check if a URL is a supported protocol
 const isSupportedProtocol = (url: string) =>
-  url.startsWith("gdlauncher://") ||
+  url.startsWith("nokiatis://") ||
   url.startsWith("curseforge://") ||
   url.startsWith("modrinth://")
 
@@ -612,7 +612,7 @@ async function createWindow(): Promise<BrowserWindow> {
   }
 
   win = new BrowserWindow({
-    title: "GDLauncher Carbon",
+    title: "Nokiatis Launcher",
     minHeight,
     height,
     minWidth,
@@ -681,7 +681,7 @@ async function createWindow(): Promise<BrowserWindow> {
     }`
 
     win.loadURL(url, {
-      userAgent: "GDLauncher Carbon"
+      userAgent: "Nokiatis Launcher"
     })
   }
 
@@ -1006,7 +1006,7 @@ app.whenReady().then(async () => {
       urls: ["http://*/*", "https://*/*"]
     },
     (details, callback) => {
-      details.requestHeaders.Origin = "https://app.gdlauncher.com"
+      details.requestHeaders.Origin = "https://app.nokiatis.com"
       callback({ requestHeaders: details.requestHeaders })
     }
   )

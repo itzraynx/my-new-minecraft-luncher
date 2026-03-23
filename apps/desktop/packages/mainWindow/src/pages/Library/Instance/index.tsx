@@ -256,6 +256,20 @@ const Instance = () => {
       killInstanceMutation.mutate(parsedInstanceId)
       return
     }
+
+    // Check if user has an account - if not, show login options
+    const currentAccount = globalStore.currentlySelectedAccountUuid.data
+    if (currentAccount === null || currentAccount === undefined) {
+      // No account - show login options modal
+      modalsContext?.openModal(
+        { name: "loginOptions" },
+        {
+          instanceId: parsedInstanceId
+        }
+      )
+      return
+    }
+
     if (
       globalStore.currentlySelectedAccount()?.status === "expired" ||
       globalStore.currentlySelectedAccount()?.status === "invalid"

@@ -14,6 +14,7 @@ interface Props {
 
 const App = (props: Props) => {
   const [runItOnce, setRunItOnce] = createSignal(true)
+  const [welcomeShown, setWelcomeShown] = createSignal(false)
   const Route = useRoutes(routes)
   const modalsContext = useModal()
   const currentRoute = useLocation()
@@ -41,14 +42,29 @@ const App = (props: Props) => {
     mutationKey: ["settings.completeFirstLaunch"]
   }))
 
+  // Get settings to check if welcome should be shown
+  const settingsQuery = rspc.createQuery(() => ({
+    queryKey: ["settings.getSettings"]
+  }))
+
+  // Show NokiatisWelcome popup every time the launcher starts
+  createEffect(() => {
+    if (!welcomeShown() && !isFirstLaunch.isLoading) {
+      setWelcomeShown(true)
+      untrack(() => {
+        modalsContext?.openModal({ name: "nokiatisWelcome" })
+      })
+    }
+  })
+
+  // Skip the onboarding for first launch - go directly to library
+  // Login will be prompted when clicking Play
   createEffect(() => {
     if (
       isFirstLaunch.data === true &&
-      currentRoute.pathname !== "/" &&
       runItOnce()
     ) {
       untrack(() => {
-        modalsContext?.openModal({ name: "onBoarding" })
         completeFirstLaunch.mutate(undefined)
       })
       setRunItOnce(false)

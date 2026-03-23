@@ -31,6 +31,14 @@ type Hash = Record<
 >
 
 const getDefaultModals = (t: TypedTFunction) => ({
+  nokiatisWelcome: {
+    component: lazy(() => import("./modals/NokiatisWelcome")),
+    noHeader: true
+  },
+  loginOptions: {
+    component: lazy(() => import("./modals/LoginOptions")),
+    noHeader: true
+  },
   privacyStatement: {
     component: lazy(() => import("./modals/PrivacyStatement")),
     title: t("modals:_trn_privacy_statement")
@@ -142,6 +150,34 @@ const getDefaultModals = (t: TypedTFunction) => ({
   betaPrompt: {
     component: lazy(() => import("./modals/BetaPrompt")),
     title: t("modals:_trn_beta_prompt_title")
+  },
+  offlineSkinManager: {
+    component: lazy(() => import("./modals/OfflineSkinManager")),
+    title: t("modals:_trn_offline_skin_manager")
+  },
+  instanceBackup: {
+    component: lazy(() => import("./modals/InstanceBackup")),
+    title: t("modals:_trn_instance_backup")
+  },
+  modProfiles: {
+    component: lazy(() => import("./modals/ModProfiles")),
+    title: t("modals:_trn_mod_profiles")
+  },
+  worldManager: {
+    component: lazy(() => import("./modals/WorldManager")),
+    title: t("modals:_trn_world_manager")
+  },
+  serverBrowser: {
+    component: lazy(() => import("./modals/ServerBrowser")),
+    title: t("modals:_trn_server_browser")
+  },
+  crashAnalyzer: {
+    component: lazy(() => import("./modals/CrashAnalyzer")),
+    title: t("modals:_trn_crash_analyzer")
+  },
+  notificationPanel: {
+    component: lazy(() => import("./modals/NotificationPanel")),
+    title: t("modals:_trn_notifications")
   }
 })
 

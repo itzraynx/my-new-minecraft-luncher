@@ -1,9 +1,9 @@
 {
-  "name": "gdlauncher",
-  "productName": "GDLauncher",
+  "name": "nokiatis-launcher",
+  "productName": "Nokiatis Launcher",
   "private": true,
-  "description": "GDLauncher Carbon.",
-  "author": "killpowa <davide@gdlauncher.com>",
+  "description": "Nokiatis Launcher - A custom Minecraft launcher by Nokiatis Team.",
+  "author": "Nokiatis Team",
   "license": "ARR",
   "scripts": {
     "init": "npm i -g pnpm@9.13.2 && npm i -g cross-env && cross-env-shell PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true pnpm i",

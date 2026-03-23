@@ -39,6 +39,11 @@ pub(super) fn mount() -> RouterBuilder<App> {
             app.account_manager().delete_account(uuid).await
         }
 
+        // Create an offline/cracked account with just a username
+        mutation CREATE_OFFLINE_ACCOUNT[app, username: String] {
+            app.account_manager().create_offline_account(username).await
+        }
+
         mutation ENROLL_BEGIN[app, args: ()] {
             app.account_manager().begin_enrollment().await
         }
@@ -176,6 +181,31 @@ pub(super) fn mount() -> RouterBuilder<App> {
         mutation CLEAR_NICKNAME_HISTORY[app, uuid: String] {
             app.account_manager()
                 .clear_nickname_history(uuid)
+                .await
+        }
+
+        // Offline Skin Management
+        query GET_OFFLINE_SKIN[app, username: String] {
+            app.account_manager()
+                .get_offline_skin(username)
+                .await
+        }
+
+        mutation SET_OFFLINE_SKIN[app, args: FESetOfflineSkin] {
+            app.account_manager()
+                .set_offline_skin(args.username, args.skin_data)
+                .await
+        }
+
+        mutation DELETE_OFFLINE_SKIN[app, username: String] {
+            app.account_manager()
+                .delete_offline_skin(username)
+                .await
+        }
+
+        query GET_OFFLINE_SKIN_HEAD[app, username: String] {
+            app.account_manager()
+                .get_offline_skin_head(username)
                 .await
         }
     }
@@ -668,4 +698,20 @@ impl From<NicknameHistoryEntry> for FENicknameHistoryEntry {
             changed_at: value.changed_at,
         }
     }
+}
+
+// Offline Skin Types
+#[derive(Type, Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FESetOfflineSkin {
+    pub username: String,
+    pub skin_data: Vec<u8>, // Base64 encoded skin PNG data
+}
+
+#[derive(Type, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FEOfflineSkin {
+    pub username: String,
+    pub skin_data: Option<Vec<u8>>,
+    pub has_custom_skin: bool,
 }

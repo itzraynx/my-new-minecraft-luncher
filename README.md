@@ -1,32 +1,25 @@
-# GDLauncher (Carbon)
+# Nokiatis Launcher
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-![Discord](https://img.shields.io/discord/398091532881756161)
 
-## 🎮 What is GDLauncher
+## 🎮 What is Nokiatis Launcher
 
-GDLauncher is a custom Minecraft launcher written from the ground up in rust and solidJS. Its main goal is to make it easy and enjoyable to manage different Minecraft versions, install modloaders, mods and modpacks from different platforms, bringing the playing and modding experience to the next level!
+Nokiatis Launcher is a custom Minecraft launcher written from the ground up in Rust and SolidJS. Its main goal is to make it easy and enjoyable to manage different Minecraft versions, install modloaders, mods and modpacks from different platforms, bringing the playing and modding experience to the next level!
 
-## What happened to the old GDLauncher?
-
-The old GDLauncher has been rewritten and officially discontinued. You can still find the old code in the [legacy branch](#-history).
-You can read more [here](https://gdlauncher.com/en/blog/curseforge-partnership-announcement/)
+**Made with ❤️ by Nokiatis Team**
 
 ## Table of Content
 
 <details>
  <summary><strong>Table of Contents</strong> (click to expand)</summary>
 
-- [GDLauncher (Carbon)](#gdlauncher-carbon)
-  - [🎮 What is GDLauncher](#-what-is-gdlauncher)
-  - [What happened to the old GDLauncher?](#what-happened-to-the-old-gdlauncher)
+- [Nokiatis Launcher](#nokiatis-launcher)
+  - [🎮 What is Nokiatis Launcher](#-what-is-nokiatis-launcher)
   - [Table of Content](#table-of-content)
   - [📥 Download](#-download)
   - [🎉 Join our community](#-join-our-community)
   - [🎁 Features](#-features)
   - [▶️ Development](#️-development)
-    - [A quick note](#a-quick-note)
-    - [Contributing](#contributing)
     - [Requirements](#requirements)
     - [Pnpm](#pnpm)
     - [Install Dependencies](#install-dependencies)
@@ -37,26 +30,17 @@ You can read more [here](https://gdlauncher.com/en/blog/curseforge-partnership-a
   - [\</\> Code Formatting](#-code-formatting)
   - [🚚 Production](#-production)
   - [🎓 License](#-license)
-  - [™️ Trademark](#️-trademark)
-  - [📜 History](#-history)
+  - [🙏 Credits](#-credits)
 
 </details>
 
-<p align="center">
-    <img width="600" height="auto" src="https://cdn.gdl.gg/github-readme/home.png" alt="GDLauncher" />
-    <img width="300" height="auto" src="https://cdn.gdl.gg/github-readme/modpacks.png" alt="GDLauncher" />
-    <img width="300" height="auto" src="https://cdn.gdl.gg/github-readme/mods.png" alt="GDLauncher" />
-</p>
-
 ## 📥 Download
 
-GDLauncher is currently in alpha and is only available for download through our discord server. You can join our discord server by clicking the button below.
+Nokiatis Launcher is currently in development. Stay tuned for release announcements!
 
 ## 🎉 Join our community
 
-Join our official GDLauncher discord server. There you'll find our community and friends to play with along with support for any issues you may have.
-
-<a href='https://discord.gdlauncher.com' target='_blank'><img height='40' style='border:0px;height:50px;' src='https://cdn.gdl.gg/github-readme/Discord-Logo-Wordmark-Color.png' border='0' alt='GDLauncher Discord Server' /></a>
+Join the Nokiatis Team community for support and to connect with other players!
 
 ## 🎁 Features
 
@@ -67,24 +51,9 @@ Join our official GDLauncher discord server. There you'll find our community and
 - 🔄 Built-in **auto updater**
 - 👥 **Multi account** support
 - 🐢 Still playing on your grandma's pc from the 80s? Don't worry, we got you covered with **Potato PC Mode**!
-- ⬇️ Import/export instances from/to other launchers like **Curseforge**, **MultiMC**, **ATLauncher**, **Technic**, **Prism**, **Modrinth**, **FTB** and more! (WIP)
-
-<!-- Track https://github.com/cawa-93/vite-electron-builder and https://github.com/electron-vite/electron-vite-boilerplate for electron v20 update.
-
-Check https://github.com/anubhavsrivastava/awesome-ui-component-library#react for UI libs.
-https://flowbite.com/
-
-Check https://github.com/vercel/turborepo/tree/main/examples/with-docker for turborepo examples. -->
+- ⬇️ Import/export instances from/to other launchers like **Curseforge**, **MultiMC**, **ATLauncher**, **Technic**, **Prism**, **Modrinth**, **FTB** and more!
 
 ## ▶️ Development
-
-### A quick note
-
-To be able to develop on GDLauncher Carbon locally, you will need to request an API key to `api-keys@gdlauncher.com`. Please include your github username and a short description of what you are planning to do with the API key.
-
-### Contributing
-
-To contribute, please see the [contributing](CONTRIBUTING.md) guide.
 
 ### Requirements
 
@@ -146,29 +115,16 @@ A [`.editorconfig`](https://editorconfig.org/) is in the repo to normalize incon
 
 ## 🎓 License
 
-GDLauncher and its logo are copyright © 2023 GorillaDevs Inc. All rights reserved.
+Nokiatis Launcher is released under the Business Source License 1.1 (BSL 1.1) - see the [LICENSE](LICENSE) file for details
 
-The software in this repository is released under the Business Source License 1.1 (BSL 1.1) - see the [LICENSE](LICENSE) file for details
+## 🙏 Credits
 
-## ™️ Trademark
+**Nokiatis Launcher** is developed and maintained by **Nokiatis Team**.
 
-The GDLauncher name and logo are trademarks of GorillaDevs Inc. and may not be used without the express written permission of GorillaDevs Inc.
+Based on the original GDLauncher Carbon project.
 
-## 📜 History
+---
 
-- 2014: Davide started learning programming and experimenting with writing a C# launcher
-- 2015: Davide rewrote the launcher (still in C#) but with some better designs and features
-- 2016: Yet another C# rewrite
-- 2018: First Electron rewrite, Davide got into web development and started learning React
-- 2019: GDL takes on a new and modern design features Curseforge integrations, massive UI changes, and one-of-a-kind features.
-- 2022: GDLauncher Carbon Rewrite [See announcement](https://gdlauncher.com/en/blog/curseforge-partnership-announcement/)
-
-<br>
-
-<img width="600" height="auto" src="https://cdn.gdl.gg/github-readme/launcher_evolution.png" alt="GDLauncher" />
-
-Here you can find the previous versions of the code:
-
-- [Original C# Code](https://github.com/gorilla-devs/GDLauncher_LEGACY-Full-History/tree/csharp_legacy_launcher)
-- [First Electron/React Version](https://github.com/gorilla-devs/GDLauncher_LEGACY-Full-History/tree/GDLauncher_old)
-- GDLauncher (Discontinued) [Legacy Branch](https://www.github.com/gorilla-devs/GDLauncher)
+<p align="center">
+  <strong>Made with ❤️ by Nokiatis Team</strong>
+</p>

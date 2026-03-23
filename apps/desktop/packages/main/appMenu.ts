@@ -4,10 +4,10 @@ const edit = [
   ...(process.platform === "darwin"
     ? [
         {
-          label: "GDLauncher",
+          label: "Nokiatis Launcher",
           submenu: [
             {
-              label: "About GDLauncher",
+              label: "About Nokiatis Launcher",
               role: "about"
             },
             { type: "separator" },
@@ -18,7 +18,7 @@ const edit = [
             },
             { type: "separator" },
             {
-              label: "Hide GDLauncher",
+              label: "Hide Nokiatis Launcher",
               accelerator: "Command+H",
               role: "hide"
             },
@@ -33,7 +33,7 @@ const edit = [
             },
             { type: "separator" },
             {
-              label: "Quit GDLauncher",
+              label: "Quit Nokiatis Launcher",
               accelerator: "Command+Q",
               click: () => {
                 app.quit()

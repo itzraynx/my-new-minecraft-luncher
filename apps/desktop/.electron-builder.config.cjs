@@ -55,13 +55,13 @@ let publish =
           (process.env.PUBLISH_URL_FOLDER || "")
       }
 
-const appId = "org.gorilladevs.GDLauncher"
+const appId = "com.nokiatis.launcher"
 
 module.exports = {
-  productName: "GDLauncher",
+  productName: "Nokiatis Launcher",
   appId,
   generateUpdatesFilesForAllChannels: true,
-  copyright: `Copyright © ${new Date().getFullYear()} GorillaDevs Inc.`,
+  copyright: `Copyright © ${new Date().getFullYear()} Nokiatis Team`,
   publish,
   asar: true,
   directories: {
@@ -78,9 +78,9 @@ module.exports = {
   npmRebuild: false,
   protocols: [
     {
-      name: "gdlauncher",
+      name: "nokiatis",
       role: "Viewer",
-      schemes: ["gdlauncher"]
+      schemes: ["nokiatis"]
     },
     {
       name: "CurseForge",
@@ -127,8 +127,8 @@ module.exports = {
     category: "Game",
     synopsis: "Custom Minecraft Launcher",
     description:
-      "GDLauncher is a custom Minecraft launcher with built-in mod management, modpack support, and a modern interface.",
-    maintainer: "GorillaDevs Inc. (support@gdlauncher.com)"
+      "Nokiatis Launcher is a custom Minecraft launcher with built-in mod management, modpack support, and a modern interface. Made by Nokiatis Team.",
+    maintainer: "Nokiatis Team (team@nokiatis.com)"
   },
   afterAllArtifactBuild: (_buildResult) => {
     const path = require("path")

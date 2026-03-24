@@ -7,34 +7,40 @@ export interface BoundsSize {
   shouldShow: boolean
 }
 
+// Nokiatis Launcher - NO ADS
 export const [adSize, _setAdSize] = createStore<BoundsSize>({
   width: 0,
   height: 0,
-  shouldShow: true
+  shouldShow: false // Disabled for Nokiatis
 })
 
 export const [bannerAdSize, _setBannerAdSize] = createStore<BoundsSize>({
   width: 0,
   height: 0,
-  shouldShow: false
+  shouldShow: false // Disabled for Nokiatis
 })
 
-// Signal for hiding the "Why are ads needed" text on constrained displays
-export const [hideAdText, _setHideAdText] = createSignal(false)
+// Signal for hiding the "Why are ads needed" text
+export const [hideAdText, _setHideAdText] = createSignal(true) // Always hide for Nokiatis
 
 const init = async () => {
-  const bounds = await window.getAdSize()
-  _setAdSize(bounds.adSize)
+  // Nokiatis - No ads, set everything to hidden
+  _setAdSize({
+    width: 0,
+    height: 0,
+    shouldShow: false
+  })
 
-  if (bounds.bannerAdSize) {
-    _setBannerAdSize(bounds.bannerAdSize)
-  }
+  _setBannerAdSize({
+    width: 0,
+    height: 0,
+    shouldShow: false
+  })
 
-  if (bounds.hideAdText !== undefined) {
-    _setHideAdText(bounds.hideAdText)
-  }
+  _setHideAdText(true)
 
-  window.adSizeChanged(
+  // Still listen for changes but keep ads disabled
+  window.adSizeChanged?.(
     (
       _,
       newBounds: {
@@ -43,35 +49,20 @@ const init = async () => {
         hideAdText?: boolean
       }
     ) => {
+      // Keep ads disabled for Nokiatis
       _setAdSize({
-        ...newBounds.adSize,
+        width: 0,
+        height: 0,
         shouldShow: false
       })
 
-      setTimeout(() => {
-        _setAdSize({
-          ...newBounds.adSize,
-          shouldShow: true
-        })
-      }, 100)
+      _setBannerAdSize({
+        width: 0,
+        height: 0,
+        shouldShow: false
+      })
 
-      if (newBounds.bannerAdSize) {
-        _setBannerAdSize({
-          ...newBounds.bannerAdSize,
-          shouldShow: false
-        })
-
-        setTimeout(() => {
-          _setBannerAdSize({
-            ...newBounds.bannerAdSize,
-            shouldShow: true
-          })
-        }, 100)
-      }
-
-      if (newBounds.hideAdText !== undefined) {
-        _setHideAdText(newBounds.hideAdText)
-      }
+      _setHideAdText(true)
     }
   )
 }

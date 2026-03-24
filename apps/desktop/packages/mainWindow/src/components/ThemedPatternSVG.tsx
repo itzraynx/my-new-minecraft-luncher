@@ -1,5 +1,5 @@
 import { onMount } from "solid-js"
-import patternSvgRaw from "/assets/images/gdlauncher_pattern.svg?raw"
+import patternSvgRaw from "/assets/images/nokiatis_pattern.svg?raw"
 
 const ThemedPatternSVG = () => {
   let containerRef: HTMLDivElement | undefined
@@ -47,7 +47,7 @@ const ThemedPatternSVG = () => {
           fill: rgb(var(--darkSlate-900));
         }
         .pattern-fill {
-          fill: rgb(var(--darkSlate-800));
+          fill: rgb(var(--primary-500));
         }
       `}</style>
       <div ref={containerRef} class="h-full w-full" />

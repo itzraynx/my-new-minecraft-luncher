@@ -1,8 +1,16 @@
 {
-  "_trn_copied_to_clipboard": "Copied to clipboard",
-  "_trn_instance_created_success": "Instance successfully created.",
-  "_trn_instance_created_error": "Error while creating the instance.",
-  "_trn_modpack_download_error": "Error while downloading the modpack.",
-  "_trn_cannot_delete_instance": "Cannot delete instance",
-  "_trn_custom_java_added": "Custom Java Path added successfully"
+  "_trn_notifications": "Notifications",
+  "_trn_no_notifications": "No notifications",
+  "_trn_notifications_appear_here": "Notifications will appear here when something important happens",
+  "_trn_mark_all_read": "Mark all read",
+  "_trn_view": "View",
+  "_trn_dismiss": "Dismiss",
+  "_trn_new_update": "New Update Available",
+  "_trn_update_description": "A new version of Nokiatis Launcher is available!",
+  "_trn_instance_created": "Instance Created",
+  "_trn_instance_created_description": "Your new instance is ready to play!",
+  "_trn_mod_installed": "Mod Installed",
+  "_trn_mod_installed_description": "Successfully installed {{mod_name}}",
+  "_trn_download_complete": "Download Complete",
+  "_trn_download_complete_description": "{{name}} has been downloaded successfully"
 }

@@ -35,6 +35,7 @@ import {
 import { Trans, useTransContext } from "@gd/i18n"
 import InstanceTile from "@/components/InstanceTile"
 import UnstableCard from "@/components/UnstableCard"
+import WelcomeDashboard from "@/components/WelcomeDashboard"
 import { PlaceholderGorilla } from "@/components/PlaceholderGorilla"
 import {
   InstancesGroupBy,
@@ -321,14 +322,8 @@ const HomeGrid = () => {
             !globalStore.instances.isLoading
           }
         >
-          <div class="mt-12 flex h-full w-full flex-col items-center justify-center gap-6">
-            <PlaceholderGorilla
-              size={14}
-              variant="Welcoming Gorilla - Open Arms"
-            />
-            <p class="text-lightSlate-700 max-w-100 text-center">
-              <Trans key="instances:_trn_no_instances_text" />
-            </p>
+          <div class="flex flex-col h-full">
+            <WelcomeDashboard />
           </div>
         </Match>
         <Match

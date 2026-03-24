@@ -1,0 +1,22 @@
+{
+  "_trn_good_morning": "صباح الخير",
+  "_trn_good_afternoon": "مساء الخير",
+  "_trn_good_evening": "مساء الخير",
+  "_trn_welcome_back": "مرحباً بعودتك إلى Nokiatis Launcher!",
+  "_trn_total_playtime": "إجمالي وقت اللعب",
+  "_trn_quick_actions": "إجراءات سريعة",
+  "_trn_create_instance": "إنشاء حالة",
+  "_trn_browse_modpacks": "تصفح حزم المودات",
+  "_trn_browse_mods": "تصفح المودات",
+  "_trn_settings": "الإعدادات",
+  "_trn_instances": "الحالات",
+  "_trn_favorites": "المفضلة",
+  "_trn_latest_mc": "أحدث ماينكرافت",
+  "_trn_continue_playing": "متابعة اللعب",
+  "_trn_pro_tip_title": "نصيحة احترافية",
+  "_trn_pro_tip_text": "استخدم شريط البحث للعثور على المودات من Modrinth و CurseForge معاً!",
+  "_trn_made_by": "صنع بـ ❤️ بواسطة",
+  "_trn_news": "آخر الأخبار",
+  "_trn_no_instances_yet": "لا توجد حالات بعد",
+  "_trn_create_first_instance": "أنشئ حالتك الأولى للبدء!"
+}

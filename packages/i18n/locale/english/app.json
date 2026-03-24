@@ -32,5 +32,9 @@
   "_trn_update_check_failed_description": "Could not start update check. Please try again.",
   "_trn_update_copy_failed": "Failed to copy link",
   "_trn_update_copy_failed_description": "Please try copying manually",
-  "_trn_update_pending_tooltip": "Update pending"
+  "_trn_update_pending_tooltip": "Update pending",
+  "_trn_palestine_free": "Free Palestine",
+  "_trn_palestine_message": "We stand with the people of Palestine. Peace, Justice & Freedom!",
+  "_trn_palestine_quote": "From the river to the sea, Palestine will be free!",
+  "_trn_made_with_love": "Made with love for the Minecraft community"
 }

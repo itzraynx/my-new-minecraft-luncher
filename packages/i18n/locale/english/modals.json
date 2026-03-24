@@ -103,5 +103,20 @@
   "_trn_notifications": "Notifications",
   "_trn_notifications.mark_all_read": "Mark all as read",
   "_trn_notifications.no_notifications": "No notifications",
-  "_trn_notifications.unread": "unread"
+  "_trn_notifications.unread": "unread",
+  "_trn_add_mod_from_file": "Add {{type}} from File",
+  "_trn_click_to_select_files": "Click to select files",
+  "_trn_accepted_types": "Accepted types: {{types}}",
+  "_trn_importing_files": "Importing files...",
+  "_trn_files_to_import": "{{count}} file(s) to import",
+  "_trn_import_files": "Import {{count}} file(s)",
+  "_trn_drop_files_here": "Drop files here or click to browse",
+  "_trn_keyboard_shortcuts": "Keyboard Shortcuts",
+  "_trn_drop_files_title": "Drop files here",
+  "_trn_drop_files_subtitle": "Supported formats: {{types}}",
+  "_trn_invalid_files_skipped": "{{count}} file(s) skipped: invalid format",
+  "_trn_quick_tips": "Quick Tips",
+  "_trn_tip_drag_drop": "Drag and drop files directly into this window",
+  "_trn_tip_multi_select": "Select multiple files at once using Ctrl+Click",
+  "_trn_tip_auto_detect": "Mod metadata is automatically fetched from Modrinth and CurseForge"
 }

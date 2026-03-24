@@ -383,6 +383,16 @@ pub(super) fn mount() -> RouterBuilder<App> {
             .await
         }
 
+        mutation IMPORT_MOD_FILES[app, args: ImportModFiles] {
+            app.instance_manager()
+                .import_mod_files(
+                    args.instance_id.into(),
+                    args.addon_type.into(),
+                    args.file_paths.into_iter().map(PathBuf::from).collect(),
+                )
+                .await
+        }
+
         query GET_IMPORTABLE_ENTITIES[_, _args: ()] {
             anyhow::Result::Ok(importer::Entity::list()
                 .into_iter()
@@ -1175,6 +1185,32 @@ struct ImportEntityStatus {
 struct ImportRequest {
     index: u32,
     name: Option<String>,
+}
+
+#[derive(Type, Debug, Deserialize)]
+struct ImportModFiles {
+    instance_id: FEInstanceId,
+    addon_type: FEAddonType,
+    file_paths: Vec<String>,
+}
+
+#[derive(Type, Debug, Deserialize)]
+enum FEAddonType {
+    Mods,
+    Resourcepacks,
+    Shaders,
+    Datapacks,
+}
+
+impl From<FEAddonType> for domain::AddonType {
+    fn from(value: FEAddonType) -> Self {
+        match value {
+            FEAddonType::Mods => Self::Mods,
+            FEAddonType::Resourcepacks => Self::ResourcePacks,
+            FEAddonType::Shaders => Self::Shaders,
+            FEAddonType::Datapacks => Self::DataPacks,
+        }
+    }
 }
 
 impl From<domain::InstanceDetails> for InstanceDetails {

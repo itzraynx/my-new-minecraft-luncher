@@ -178,6 +178,14 @@ const getDefaultModals = (t: TypedTFunction) => ({
   notificationPanel: {
     component: lazy(() => import("./modals/NotificationPanel")),
     title: t("modals:_trn_notifications")
+  },
+  addModFromFile: {
+    component: lazy(() => import("./modals/AddModFromFile")),
+    title: t("modals:_trn_add_mod_from_file")
+  },
+  keyboardShortcuts: {
+    component: lazy(() => import("./modals/KeyboardShortcuts")),
+    title: t("modals:_trn_keyboard_shortcuts")
   }
 })
 

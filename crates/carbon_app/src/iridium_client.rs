@@ -19,21 +19,23 @@ pub fn get_client(gdl_base_api: String) -> reqwest_middleware::ClientBuilder {
             _extensions: &mut axum::http::Extensions,
             next: Next<'_>,
         ) -> reqwest_middleware::Result<Response> {
-            let curseforge_api_base = url::Url::parse(env!(
-                "CURSEFORGE_API_BASE",
-                "missing curseforge env api base"
-            ))
-            .expect("Failed to parse CURSEFORGE_API_BASE environment variable");
+            // Parse CurseForge API base URL - use default if not set
+            let curseforge_api_base = option_env!("CURSEFORGE_API_BASE")
+                .map(|s| url::Url::parse(s).expect("Failed to parse CURSEFORGE_API_BASE"))
+                .unwrap_or_else(|| {
+                    url::Url::parse("https://api.curseforge.com").expect("Failed to parse default CurseForge URL")
+                });
 
             if req.url().host_str() == curseforge_api_base.host_str() {
-                let api_key = option_env!("CURSEFORGE_API_KEY")
-                    .expect("CURSEFORGE_API_KEY environment variable not set. Please set it to use CurseForge features.");
-
-                let api_key_header = api_key
-                    .parse()
-                    .expect("Failed to parse CURSEFORGE_API_KEY as header value");
-
-                req.headers_mut().insert("x-api-key", api_key_header);
+                // Only add API key if it's set
+                if let Some(api_key) = option_env!("CURSEFORGE_API_KEY") {
+                    if !api_key.is_empty() && api_key != "your_curseforge_api_key_here" {
+                        let api_key_header = api_key
+                            .parse()
+                            .expect("Failed to parse CURSEFORGE_API_KEY as header value");
+                        req.headers_mut().insert("x-api-key", api_key_header);
+                    }
+                }
 
                 req.headers_mut().insert(
                     "Content-Type",

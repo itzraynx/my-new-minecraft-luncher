@@ -1,0 +1,22 @@
+{
+  "_trn_good_morning": "Good morning",
+  "_trn_good_afternoon": "Good afternoon",
+  "_trn_good_evening": "Good evening",
+  "_trn_welcome_back": "Welcome back to Nokiatis Launcher!",
+  "_trn_total_playtime": "Total Playtime",
+  "_trn_quick_actions": "Quick Actions",
+  "_trn_create_instance": "Create Instance",
+  "_trn_browse_modpacks": "Browse Modpacks",
+  "_trn_browse_mods": "Browse Mods",
+  "_trn_settings": "Settings",
+  "_trn_instances": "Instances",
+  "_trn_favorites": "Favorites",
+  "_trn_latest_mc": "Latest MC",
+  "_trn_continue_playing": "Continue Playing",
+  "_trn_pro_tip_title": "Pro Tip",
+  "_trn_pro_tip_text": "Use the search bar to find mods from both Modrinth and CurseForge at once!",
+  "_trn_made_by": "Made with ❤️ by",
+  "_trn_news": "Latest News",
+  "_trn_no_instances_yet": "No instances yet",
+  "_trn_create_first_instance": "Create your first instance to get started!"
+}

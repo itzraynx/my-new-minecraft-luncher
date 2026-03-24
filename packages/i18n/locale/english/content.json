@@ -189,5 +189,11 @@
   "_trn_table.status": "Status",
   "_trn_table.actions": "Actions",
   "_trn_mods.search": "Search mods...",
-  "_trn_sort_by_asc": "Sort Ascending"
+  "_trn_sort_by_asc": "Sort Ascending",
+  "_trn_browse_online": "Browse Online",
+  "_trn_import_mod_from_file": "Import Mod from File",
+  "_trn_import_resourcepack": "Import Resource Pack",
+  "_trn_import_shader": "Import Shader",
+  "_trn_import_datapack": "Import Data Pack",
+  "_trn_import_from_file": "Import from File"
 }

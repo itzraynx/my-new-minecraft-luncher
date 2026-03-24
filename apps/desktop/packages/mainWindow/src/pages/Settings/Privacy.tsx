@@ -16,25 +16,6 @@ const Privacy = () => {
         <Trans key="settings:_trn_privacy" />
       </PageTitle>
       <RowsContainer>
-        <Row>
-          <Title
-            description={<Trans key="settings:_trn_ads_personalization_text" />}
-          >
-            <Trans key="settings:_trn_ads_personalization_title" />
-          </Title>
-          <RightHandSide>
-            <Button
-              type="secondary"
-              size="small"
-              rounded={false}
-              onClick={() => {
-                window?.openCMPWindow()
-              }}
-            >
-              <Trans key="auth:_trn_login.manage" />
-            </Button>
-          </RightHandSide>
-        </Row>
         <Row forceContentBelow>
           <Title description={<Trans key="settings:_trn_documents_text" />}>
             <Trans key="settings:_trn_documents_title" />

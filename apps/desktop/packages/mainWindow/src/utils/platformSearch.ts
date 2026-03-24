@@ -216,7 +216,10 @@ export const getSearchResults = (_opts?: SearchResultsOpts) => {
       return hasMore
         ? (lastPage?.pagination?.index || 0) + actualPageSize()
         : null
-    }
+    },
+    // Don't retry on CurseForge failures - it may be unavailable
+    retry: false,
+    refetchOnWindowFocus: false,
   }))
 
   const mrInfiniteResults = createInfiniteQuery(() => ({
@@ -250,7 +253,8 @@ export const getSearchResults = (_opts?: SearchResultsOpts) => {
       return hasMore
         ? (lastPage?.pagination?.index || 0) + actualPageSize()
         : null
-    }
+    },
+    retry: 2,
   }))
 
   // Debounce search query changes to avoid excessive refetching
@@ -279,7 +283,7 @@ export const getSearchResults = (_opts?: SearchResultsOpts) => {
   const allRows = createMemo<SearchResultItem[]>(() => {
     // Direct mode - return results from batch query
     if (isDirectMode()) {
-      const directResults = directSearchQuery.data?.results ?? []
+      const directResults = directSearchQuery.isError ? [] : (directSearchQuery.data?.results ?? [])
       const items: SearchResultItem[] = directResults.map((item) => ({
         type: "value" as const,
         value: item
@@ -292,13 +296,13 @@ export const getSearchResults = (_opts?: SearchResultsOpts) => {
       return items
     }
 
-    // Regular search mode
+    // Regular search mode - handle errors gracefully
     const cfData =
-      searchQuery().searchApi === "modrinth"
+      searchQuery().searchApi === "modrinth" || cfInfiniteResults.isError
         ? []
         : (cfInfiniteResults.data?.pages.flatMap((p) => p.data) ?? [])
     const mrData =
-      searchQuery().searchApi === "curseforge"
+      searchQuery().searchApi === "curseforge" || mrInfiniteResults.isError
         ? []
         : (mrInfiniteResults.data?.pages.flatMap((p) => p.data) ?? [])
 

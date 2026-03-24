@@ -11,6 +11,7 @@ export interface settingsItem {
   name: string | JSX.Element
   icon: string
   path: string
+  badge?: "new" | "beta"
 }
 
 function Settings() {
@@ -38,21 +39,39 @@ function Settings() {
       path: "/settings/language"
     },
     {
-      name: (
-        <div class="relative flex items-center gap-2">
-          {"Appearance"}
-          <div class="absolute -top-10 right-0">
-            <FeatureStatusBadge type="beta" />
-          </div>
-        </div>
-      ),
+      name: "Appearance",
       icon: "i-hugeicons:paint-brush-01",
-      path: "/settings/appearance"
+      path: "/settings/appearance",
+      badge: "beta"
+    },
+    {
+      name: "Gaming",
+      icon: "i-hugeicons:controller-01",
+      path: "/settings/gaming",
+      badge: "new"
+    },
+    {
+      name: "Performance",
+      icon: "i-hugeicons:chart-line",
+      path: "/settings/performance",
+      badge: "new"
     },
     {
       name: t("settings:_trn_java"),
       icon: "i-hugeicons:java",
       path: "/settings/java"
+    },
+    {
+      name: "Notifications",
+      icon: "i-hugeicons:notification-bell-02",
+      path: "/settings/notifications",
+      badge: "new"
+    },
+    {
+      name: "Audio",
+      icon: "i-hugeicons:speaker-01",
+      path: "/settings/audio",
+      badge: "new"
     },
     {
       name: t("settings:_trn_custom_commands"),
@@ -70,16 +89,10 @@ function Settings() {
       path: "/settings/runtime-path"
     },
     {
-      name: (
-        <div class="relative flex items-center gap-2">
-          {t("settings:_trn_nokiatis_features")}
-          <div class="absolute -top-10 right-0">
-            <FeatureStatusBadge type="new" />
-          </div>
-        </div>
-      ),
+      name: t("settings:_trn_nokiatis_features"),
       icon: "i-hugeicons:star",
-      path: "/settings/nokiatis-features"
+      path: "/settings/nokiatis-features",
+      badge: "new"
     }
   ]
 
@@ -99,10 +112,13 @@ function Settings() {
                           value={item.path}
                           onClick={() => navigator.navigate(item.path)}
                         >
-                          <div class="flex flex-col items-center justify-center gap-2 py-2">
+                          <div class="relative flex flex-col items-center justify-center gap-2 py-2">
                             <i class={"w-5 h-5 " + item.icon} />
-                            <div class="whitespace-nowrap text-center">
+                            <div class="whitespace-nowrap text-center flex items-center gap-1">
                               {item.name}
+                              <Show when={item.badge}>
+                                <FeatureStatusBadge type={item.badge!} />
+                              </Show>
                             </div>
                           </div>
                         </TabsTrigger>

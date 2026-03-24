@@ -27,7 +27,9 @@ pub struct CurseForge {
 
 impl CurseForge {
     pub fn new(client: reqwest_middleware::ClientWithMiddleware) -> Self {
-        let curseforge_api_base = env!("CURSEFORGE_API_BASE", "missing curseforge env api base");
+        // Use environment variable or default CurseForge API URL
+        let curseforge_api_base = option_env!("CURSEFORGE_API_BASE")
+            .unwrap_or("https://api.curseforge.com");
 
         Self {
             client,

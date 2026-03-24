@@ -14,7 +14,7 @@
 "_trn_update_pending_title": "アップデート v{{version}} 保留中",
 "_trn_update_pending_description": "アプリを閉じるとアップデートがインストールされます",
 "_trn_update_up_to_date": "最新の状態です！",
-"_trn_update_latest_version": "GDLauncher {{version}} は最新バージョンです",
+"_trn_update_latest_version": "Nokiatis Launcher {{version}} は最新バージョンです",
 "_trn_update_ready_description": "今すぐインストールするか、アプリを終了するまで待ちます",
 "_trn_update_installing": "アップデートをインストール中...",
 "_trn_update_installing_description": "アプリはまもなく再起動します",
@@ -32,5 +32,9 @@
 "_trn_update_check_failed_description": "アップデート確認を開始できませんでした。もう一度お試しください。",
 "_trn_update_copy_failed": "リンクのコピーに失敗しました",
 "_trn_update_copy_failed_description": "手動でコピーしてください",
-"_trn_update_pending_tooltip": "アップデート保留中"
+"_trn_update_pending_tooltip": "アップデート保留中",
+"_trn_palestine_free": "自由なパレスチナ",
+"_trn_palestine_message": "私たちはパレスチナの人々と共に立ちます。平和、正義、自由を！",
+"_trn_palestine_quote": "川から海まで、パレスチナは自由になる！",
+"_trn_made_with_love": "Minecraftコミュニティへの愛を込めて"
 }

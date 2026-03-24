@@ -34,6 +34,7 @@ const NokiatisWelcome = (props: ModalProps) => {
   const [isSaving, setIsSaving] = createSignal(false)
   const [hoveredFeature, setHoveredFeature] = createSignal<number | null>(null)
   const [skipAnimations, setSkipAnimations] = createSignal(false)
+  const [showPalestineMessage, setShowPalestineMessage] = createSignal(false)
 
   // Mutation for saving performance setting
   const setPerformanceMutation = rspc.createMutation(() => ({
@@ -57,6 +58,8 @@ const NokiatisWelcome = (props: ModalProps) => {
   onMount(() => {
     // Start animations
     setTimeout(() => setIsVisible(true), 100)
+    // Show Palestine message after a delay
+    setTimeout(() => setShowPalestineMessage(true), 500)
   })
 
   onCleanup(() => {
@@ -110,11 +113,9 @@ const NokiatisWelcome = (props: ModalProps) => {
         value: selectedPerformance() || "medium"
       })
       
-      // Disable welcome popup so it doesn't show again
-      await setPerformanceMutation.mutateAsync({
-        key: "showNokiatisWelcome",
-        value: false
-      })
+      // Note: We no longer disable the welcome popup
+      // It will show on every launch to remind users this is made by Nokiatis Team
+      // This was a user request to show the popup every time
 
       if (props.closeModal) {
         props.closeModal()
@@ -133,7 +134,7 @@ const NokiatisWelcome = (props: ModalProps) => {
       noHeader={true}
       noPadding
       height="h-auto"
-      width="w-[720px] max-w-[95vw]"
+      width="w-[780px] max-w-[95vw]"
     >
       <style>
         {`
@@ -201,6 +202,20 @@ const NokiatisWelcome = (props: ModalProps) => {
             0%, 100% { filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4)); }
             50% { filter: drop-shadow(0 0 16px rgba(139, 92, 246, 0.8)); }
           }
+          @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+          }
+          @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+          }
+          @keyframes palestineGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 0, 0, 0.3), 0 4px 15px rgba(0, 0, 0, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.2), 0 4px 20px rgba(0, 0, 0, 0.3); }
+          }
           
           .gradient-bg {
             background: linear-gradient(-45deg, #1e1b4b, #4c1d95, #5b21b6, #6d28d9, #7c3aed, #4c1d95);
@@ -234,6 +249,9 @@ const NokiatisWelcome = (props: ModalProps) => {
           .bounce-in { animation: bounceIn 0.6s ease-out forwards; }
           .slide-up-fade { animation: slideUpFade 0.5s ease-out forwards; }
           .glow-pulse { animation: glowPulse 2s ease-in-out infinite; }
+          .heart-beat { animation: heartBeat 1.5s ease-in-out infinite; }
+          .fade-in-scale { animation: fadeInScale 0.5s ease-out forwards; }
+          .palestine-glow { animation: palestineGlow 3s ease-in-out infinite; }
           
           .performance-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -269,6 +287,24 @@ const NokiatisWelcome = (props: ModalProps) => {
           .background-blur-circle {
             filter: blur(60px);
           }
+
+          /* Palestine flag colors */
+          .palestine-black { background-color: #000000; }
+          .palestine-white { background-color: #ffffff; }
+          .palestine-green { background-color: #007A3D; }
+          .palestine-red { background-color: #CE1126; }
+
+          .palestine-banner {
+            background: linear-gradient(180deg, #000000 0%, #000000 25%, #ffffff 25%, #ffffff 50%, #007A3D 50%, #007A3D 75%, #ffffff 75%, #ffffff 100%);
+          }
+
+          .palestine-triangle {
+            width: 0;
+            height: 0;
+            border-top: 30px solid transparent;
+            border-bottom: 30px solid transparent;
+            border-left: 50px solid #CE1126;
+          }
         `}
       </style>
 
@@ -303,6 +339,42 @@ const NokiatisWelcome = (props: ModalProps) => {
             <div class={`step-indicator h-2 w-12 rounded-full ${showPerformanceSelector() ? 'bg-white' : 'bg-white/30'}`} />
             <div class={`step-indicator h-2 w-12 rounded-full ${!showPerformanceSelector() ? 'bg-white' : 'bg-white/30'}`} />
           </div>
+
+          {/* Palestine Support Banner */}
+          <Show when={showPalestineMessage()}>
+            <div class="fade-in-scale mb-6">
+              <div class="palestine-glow inline-flex items-center gap-4 rounded-2xl bg-gradient-to-r from-black/80 via-white/20 to-green-700/80 px-6 py-4 border border-white/20">
+                {/* Palestine Flag Triangle */}
+                <div class="flex-shrink-0">
+                  <svg width="60" height="40" viewBox="0 0 60 40" class="rounded overflow-hidden shadow-lg">
+                    {/* Black stripe */}
+                    <rect x="0" y="0" width="60" height="10" fill="#000000"/>
+                    {/* White stripe */}
+                    <rect x="0" y="10" width="60" height="10" fill="#ffffff"/>
+                    {/* Green stripe */}
+                    <rect x="0" y="20" width="60" height="10" fill="#007A3D"/>
+                    {/* White stripe */}
+                    <rect x="0" y="30" width="60" height="10" fill="#ffffff"/>
+                    {/* Red triangle */}
+                    <polygon points="0,0 0,40 30,20" fill="#CE1126"/>
+                  </svg>
+                </div>
+                {/* Message */}
+                <div class="text-left">
+                  <div class="text-lg font-bold text-white flex items-center gap-2">
+                    <span>🇵🇸</span>
+                    <span>Free Palestine</span>
+                    <span>🇵🇸</span>
+                  </div>
+                  <div class="text-sm text-purple-200/90">
+                    We stand with the people of Palestine. Peace, Justice & Freedom!
+                  </div>
+                </div>
+                {/* Heart */}
+                <div class="text-3xl heart-beat">❤️</div>
+              </div>
+            </div>
+          </Show>
 
           {/* Logo/Icon */}
           <div
@@ -424,6 +496,17 @@ const NokiatisWelcome = (props: ModalProps) => {
               </div>
             </div>
 
+            {/* Palestine Quote */}
+            <div class={`mb-6 transition-all duration-700 ${animationPhase() >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-red-500/20 via-white/10 to-green-500/20 border border-white/10">
+                <span class="text-xl">🇵🇸</span>
+                <span class="text-sm font-medium text-white/90">
+                  "From the river to the sea, Palestine will be free!"
+                </span>
+                <span class="text-xl">🇵🇸</span>
+              </div>
+            </div>
+
             {/* Credits section */}
             <div class={`mb-6 transition-all duration-700 ${animationPhase() >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <p class="mb-4 text-sm font-medium text-purple-200/80 uppercase tracking-wider">
@@ -529,11 +612,15 @@ const NokiatisWelcome = (props: ModalProps) => {
 
             {/* Footer */}
             <div class={`mt-6 transition-all duration-700 ${animationPhase() >= 4 ? 'opacity-100' : 'opacity-0'}`}>
-              <p class="text-xs text-purple-200/60">
-                © 2024 Nokiatis Team. All rights reserved.
-              </p>
-              <p class="mt-2 text-xs text-purple-200/40">
-                Made with love for the Minecraft community
+              <div class="flex items-center justify-center gap-2 mb-2">
+                <span class="text-lg">🇵🇸</span>
+                <p class="text-xs text-purple-200/60">
+                  © 2024 Nokiatis Team. All rights reserved.
+                </p>
+                <span class="text-lg">🇵🇸</span>
+              </div>
+              <p class="text-xs text-purple-200/40">
+                Made with ❤️ for the Minecraft community • Free Palestine 🇵🇸
               </p>
             </div>
           </Show>

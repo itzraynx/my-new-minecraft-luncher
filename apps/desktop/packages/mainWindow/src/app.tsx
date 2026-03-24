@@ -42,26 +42,18 @@ const App = (props: Props) => {
     mutationKey: ["settings.completeFirstLaunch"]
   }))
 
-  // Get settings to check if welcome should be shown
-  const settingsQuery = rspc.createQuery(() => ({
-    queryKey: ["settings.getSettings"]
-  }))
-
-  // Show NokiatisWelcome popup only once (when showNokiatisWelcome is true)
+  // Show NokiatisWelcome popup EVERY TIME the launcher opens
+  // This shows the "Made by Nokiatis Team" popup on every launch
   createEffect(() => {
-    if (welcomeChecked() || settingsQuery.isLoading || isFirstLaunch.isLoading) return
+    if (welcomeChecked() || isFirstLaunch.isLoading) return
     
-    const settings = settingsQuery.data
-    const showWelcome = settings?.showNokiatisWelcome
-    
-    // Only show if setting is true AND this is not the first launch
-    if (showWelcome === true && isFirstLaunch.data !== true) {
+    // Show welcome popup on every launch (except first launch which has its own flow)
+    if (isFirstLaunch.data !== true) {
       setWelcomeChecked(true)
       untrack(() => {
         modalsContext?.openModal({ name: "nokiatisWelcome" })
       })
     } else {
-      // Mark as checked so we don't keep trying
       setWelcomeChecked(true)
     }
   })

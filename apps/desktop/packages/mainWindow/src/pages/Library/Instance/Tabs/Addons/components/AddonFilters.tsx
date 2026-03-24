@@ -9,13 +9,19 @@ import {
   SelectValue,
   Tooltip,
   TooltipContent,
-  TooltipTrigger
+  TooltipTrigger,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
 } from "@gd/ui"
 import { For, Show, onMount, onCleanup, createEffect } from "solid-js"
 import { Trans, useTransContext } from "@gd/i18n"
 import { getAddonTabKey } from "@gd/i18n/helpers"
 import { AddonType, Mod } from "@gd/core_module/bindings"
 import { getAddonTypeIcon } from "@/utils/addonIcons"
+import { useModal } from "@/managers/ModalsManager"
+import { useParams } from "@solidjs/router"
 
 const ADDON_TYPES: AddonType[] = [
   "mods",
@@ -46,10 +52,19 @@ interface AddonFiltersProps {
 
 export const AddonFilters = (props: AddonFiltersProps) => {
   const [t] = useTransContext()
+  const modal = useModal()
+  const params = useParams()
   let containerRef: HTMLDivElement | undefined
 
   const getAddonTypeLabel = (type: AddonType) => {
     return t(getAddonTabKey(type))
+  }
+
+  const handleImportFromFile = (addonType: AddonType) => {
+    modal?.openModal("addModFromFile", {
+      instanceId: parseInt(params.id, 10),
+      addonType
+    })
   }
 
   const visibleAddonTypes = () => {
@@ -255,20 +270,49 @@ export const AddonFilters = (props: AddonFiltersProps) => {
           </Tooltip>
 
           <Tooltip open={props.isInstanceLocked() ? undefined : false}>
-            <TooltipTrigger>
-              <Button
-                type="primary"
-                size="small"
-                onClick={props.onAddAddons}
-                disabled={props.isInstanceLocked()}
-                class="font-semibold"
-              >
-                <div class="i-hugeicons:add-01" />
-                <span class="hidden md:inline">
-                  <Trans key="content:_trn_add_addons" />
-                </span>
-              </Button>
-            </TooltipTrigger>
+            <DropdownMenu>
+              <TooltipTrigger>
+                <DropdownMenuTrigger
+                  as={Button}
+                  type="primary"
+                  size="small"
+                  disabled={props.isInstanceLocked()}
+                  class="font-semibold"
+                >
+                  <div class="i-hugeicons:add-01" />
+                  <span class="hidden md:inline">
+                    <Trans key="content:_trn_add_addons" />
+                  </span>
+                  <div class="i-hugeicons:arrow-down-01 w-3 h-3 ml-1" />
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onSelect={props.onAddAddons}>
+                  <div class="flex items-center gap-2">
+                    <div class="i-hugeicons:search-01 w-4 h-4" />
+                    <Trans key="content:_trn_browse_online" />
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleImportFromFile("mods")}>
+                  <div class="flex items-center gap-2">
+                    <div class="i-hugeicons:folder-01 w-4 h-4" />
+                    <Trans key="content:_trn_import_mod_from_file" />
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleImportFromFile("resourcepacks")}>
+                  <div class="flex items-center gap-2">
+                    <div class="i-hugeicons:image-01 w-4 h-4" />
+                    <Trans key="content:_trn_import_resourcepack" />
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleImportFromFile("shaders")}>
+                  <div class="flex items-center gap-2">
+                    <div class="i-hugeicons:effects w-4 h-4" />
+                    <Trans key="content:_trn_import_shader" />
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <TooltipContent>
               <Trans key="instances:_trn_locked_cannot_apply_changes" />
             </TooltipContent>

@@ -5,7 +5,7 @@ import SettingsGeneralData from "@/pages/Settings/settings.general.data"
 import AddonVersionsData from "@/pages/AddonViewPage/changelog.data"
 import InstanceData from "@/pages/Library/Instance/instance.data"
 import Login from "@/pages/Login"
-import withAdsLayout from "@/pages/withAds"
+import MainLayout from "@/pages/MainLayout"
 import Library from "@/pages/Library"
 import Home from "@/pages/Library/Home"
 import Instance from "@/pages/Library/Instance"
@@ -20,7 +20,7 @@ export const routes: RouteDefinition[] = [
   },
   {
     path: "/",
-    component: withAdsLayout,
+    component: MainLayout,
     children: [
       {
         path: "/library",
@@ -127,7 +127,11 @@ export const routes: RouteDefinition[] = [
         component: Search,
         children: [
           {
-            path: "/:type?",
+            path: "/",
+            component: lazy(() => import("@/pages/Search/Explore"))
+          },
+          {
+            path: "/:type",
             component: lazy(() => import("@/pages/Search/List"))
           }
         ]

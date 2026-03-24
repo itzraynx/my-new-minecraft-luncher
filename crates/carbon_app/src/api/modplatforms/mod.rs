@@ -396,16 +396,24 @@ pub(super) fn mount() -> RouterBuilder<App> {
 
         query GET_UNIFIED_CATEGORIES[app, _args:()] {
             let modplatforms = app.modplatforms_manager();
-            let curseforge_categories = modplatforms.curseforge.get_categories();
-            let modrinth_categories = modplatforms.modrinth.get_categories();
 
-            let (cf_categories, mr_categories) = tokio::try_join!(
-                curseforge_categories,
-                modrinth_categories
-            )?;
+            // Try to get CurseForge categories, but don't fail if unavailable
+            let cf_categories = match modplatforms.curseforge.get_categories().await {
+                Ok(response) => response.data.into_iter().map(|category| (category.id, FEUnifiedCategory::from(category))).collect(),
+                Err(e) => {
+                    tracing::warn!("CurseForge categories unavailable: {}. Using Modrinth only.", e);
+                    std::collections::HashMap::new()
+                }
+            };
 
-            let cf_categories = cf_categories.data.into_iter().map(|category| (category.id, FEUnifiedCategory::from(category))).collect();
-            let mr_categories = mr_categories.into_iter().map(|category| (category.name.clone(), FEUnifiedCategory::from(category))).collect();
+            // Get Modrinth categories
+            let mr_categories = match modplatforms.modrinth.get_categories().await {
+                Ok(categories) => categories.into_iter().map(|category| (category.name.clone(), FEUnifiedCategory::from(category))).collect(),
+                Err(e) => {
+                    tracing::warn!("Modrinth categories unavailable: {}", e);
+                    std::collections::HashMap::new()
+                }
+            };
 
             Ok(FEUnifiedCategories {
                 modrinth: mr_categories,

@@ -241,10 +241,7 @@ function useLoading() {
             if (discordLinkInline) {
               discordLinkInline.onclick = (e: Event) => {
                 e.preventDefault()
-                ipcRenderer.invoke(
-                  "openExternalLink",
-                  "https://discord.gdlauncher.com"
-                )
+                ipcRenderer.invoke("openExternalLink", "https://discord.gg/nokiatis")
               }
             }
             break
@@ -322,7 +319,7 @@ function useLoading() {
       })
 
       discordBtn.addEventListener("click", () => {
-        ipcRenderer.invoke("openExternalLink", "https://discord.gdlauncher.com")
+        ipcRenderer.invoke("openExternalLink", "https://discord.gg/nokiatis")
       })
 
       openDbFolderBtn.addEventListener("click", async () => {

@@ -1,7 +1,7 @@
 import { useLocation, useMatch } from "@solidjs/router"
-import { Show, createMemo } from "solid-js"
+import { Show, createMemo, createSignal, For, onMount, onCleanup } from "solid-js"
 import { wideLogoUrl } from "@/utils/logos"
-import { Tabs, TabsList, TabsTrigger, TabsIndicator, Button } from "@gd/ui"
+import { Tabs, TabsList, TabsTrigger, TabsIndicator, Button, Badge, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@gd/ui"
 import { useGDNavigate } from "@/managers/NavigationManager"
 import { AccountsDropdown } from "./AccountsDropdown"
 import { AccountStatus, AccountType } from "@gd/core_module/bindings"
@@ -12,6 +12,8 @@ import { EnhancedSearchBar } from "./EnhancedSearchBar"
 import { getAccountImageUuid } from "@/utils/showcaseHelpers"
 import { hasPendingUpdate, showPendingUpdateToast } from "@/utils/updater"
 import { useTransContext } from "@gd/i18n"
+import { rspc } from "@/utils/rspcClient"
+import NotificationCenter from "./NotificationCenter"
 
 export interface AccountsStatus {
   label: {
@@ -31,6 +33,9 @@ const AppNavbar = () => {
   const modalsContext = useModal()
   const [t] = useTransContext()
 
+  const [showNotifications, setShowNotifications] = createSignal(false)
+  const [showDownloads, setShowDownloads] = createSignal(false)
+
   const isLogin = useMatch(() => "/")
   const isSettings = useMatch(() => "/settings")
   const isSettingsNested = useMatch(() => "/settings/*")
@@ -40,6 +45,30 @@ const AppNavbar = () => {
     if (isNews()) return "news"
     return ""
   }
+
+  // Get active tasks (downloads)
+  const tasks = rspc.createQuery(() => ({
+    queryKey: ["vtask.getTasks"],
+    refetchInterval: 2000
+  }))
+
+  // Active downloads count
+  const activeDownloads = createMemo(() => {
+    const taskList = tasks.data || []
+    return taskList.filter((task: any) => 
+      task.status === "running" || task.status === "pending"
+    ).length
+  })
+
+  // Get unread notifications count
+  const notifications = rspc.createQuery(() => ({
+    queryKey: ["notifications.getAll"]
+  }))
+
+  const unreadNotifications = createMemo(() => {
+    const notifs = notifications.data || []
+    return notifs.filter((n: any) => !n.read).length
+  })
 
   const accounts = createMemo(() => {
     return (
@@ -60,16 +89,36 @@ const AppNavbar = () => {
     )
   })
 
+  // Close dropdowns when clicking outside
+  const handleClickOutside = (e: MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (!target.closest(".notification-dropdown") && !target.closest(".notification-trigger")) {
+      setShowNotifications(false)
+    }
+    if (!target.closest(".downloads-dropdown") && !target.closest(".downloads-trigger")) {
+      setShowDownloads(false)
+    }
+  }
+
+  onMount(() => {
+    document.addEventListener("click", handleClickOutside)
+  })
+
+  onCleanup(() => {
+    document.removeEventListener("click", handleClickOutside)
+  })
+
   return (
     <Show when={!isLogin()}>
       <nav
-        class="disable-view-transition bg-darkSlate-800 text-lightSlate-50 flex items-center justify-between gap-8 px-5"
+        class="disable-view-transition bg-darkSlate-800 text-lightSlate-50 flex items-center justify-between gap-8 px-5 border-b border-darkSlate-700"
         style={{
           height: "60px"
         }}
       >
+        {/* Logo Section */}
         <div
-          class="group relative z-0 flex h-full w-fit items-center"
+          class="group relative z-0 flex h-full w-fit items-center cursor-pointer"
           onClick={() => navigator.navigate("/library")}
         >
           <div
@@ -100,6 +149,8 @@ const AppNavbar = () => {
             />
           </div>
         </div>
+
+        {/* Center Section - Search & Create */}
         <div class="flex w-full items-center justify-center gap-4">
           <EnhancedSearchBar />
           <Button
@@ -115,41 +166,84 @@ const AppNavbar = () => {
             <div class="i-hugeicons:add-01 flex h-5 w-5" />
           </Button>
         </div>
-        <div class="text-lightSlate-50 flex h-full list-none items-center gap-6">
+
+        {/* Right Section - Icons & Account */}
+        <div class="text-lightSlate-50 flex h-full list-none items-center gap-4">
+          {/* Downloads Indicator */}
+          <Show when={activeDownloads() > 0}>
+            <button
+              class="downloads-trigger relative p-2 rounded-lg hover:bg-darkSlate-700 transition-colors group"
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowDownloads(!showDownloads())
+                setShowNotifications(false)
+              }}
+            >
+              <div class="i-hugeicons:download-02 h-5 w-5 text-primary-400 animate-pulse" />
+              <Badge 
+                variant="primary" 
+                class="absolute -top-1 -right-1 text-xs min-w-4 h-4 flex items-center justify-center"
+              >
+                {activeDownloads()}
+              </Badge>
+            </button>
+          </Show>
+
+          {/* Update Indicator */}
           <Show when={hasPendingUpdate()}>
-            <div
-              class="animate-icons-on-hover cursor-pointer text-green-500 hover:text-green-400 transition-colors"
+            <button
+              class="cursor-pointer p-2 rounded-lg hover:bg-darkSlate-700 transition-colors"
               onClick={showPendingUpdateToast}
               title={t("app:_trn_update_pending_tooltip")}
             >
-              <div class="i-hugeicons:download-04 text-2xl" />
-            </div>
+              <div class="i-hugeicons:download-04 h-5 w-5 text-green-500" />
+            </button>
           </Show>
+
+          {/* Notifications */}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              class="notification-trigger relative p-2 rounded-lg hover:bg-darkSlate-700 transition-colors"
+              onClick={() => setShowNotifications(!showNotifications())}
+            >
+              <div class="i-hugeicons:notification-bell-01 h-5 w-5 text-lightSlate-400" />
+              <Show when={unreadNotifications() > 0}>
+                <div class="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              </Show>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent class="notification-dropdown p-0 bg-transparent border-0 shadow-none" align="end">
+              <NotificationCenter onClose={() => setShowNotifications(false)} />
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Settings & News Tabs */}
           <Tabs
             value={selectedValue()}
             class="h-auto w-auto flex-row items-center"
           >
-            <TabsList class="bg-transparent gap-4 h-auto">
+            <TabsList class="bg-transparent gap-2 h-auto">
               <Show when={selectedValue()}>
                 <TabsIndicator />
               </Show>
               <TabsTrigger
                 value="settings"
-                class="p-2"
+                class="p-2 rounded-lg hover:bg-darkSlate-700 transition-colors"
                 onClick={() => navigator.navigate("/settings")}
               >
-                <div class="i-hugeicons:settings-01 h-6 w-6" />
+                <div class="i-hugeicons:settings-01 h-5 w-5" />
               </TabsTrigger>
               <TabsTrigger
                 value="news"
-                class="p-2"
+                class="p-2 rounded-lg hover:bg-darkSlate-700 transition-colors"
                 onClick={() => navigator.navigate("/news")}
               >
-                <div class="i-hugeicons:news h-6 w-6" />
+                <div class="i-hugeicons:news h-5 w-5" />
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          <div class="mr-6 flex justify-end lg:min-w-fit">
+
+          {/* Account Dropdown */}
+          <div class="mr-4 flex justify-end lg:min-w-fit">
             <Show when={globalStore.accounts.data}>
               <AccountsDropdown
                 accounts={accounts()}

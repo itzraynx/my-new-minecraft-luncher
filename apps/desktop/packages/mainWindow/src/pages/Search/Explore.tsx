@@ -1,197 +1,219 @@
+import { createSignal, Show, createMemo, For, onMount } from "solid-js"
+import { Trans, useTransContext } from "@gd/i18n"
+import { Tabs, TabsList, TabsTrigger, TabsIndicator, Button, Skeleton } from "@gd/ui"
+import { useGDNavigate } from "@/managers/NavigationManager"
+import { useSearchParams } from "@solidjs/router"
+import { FeaturedModsCarousel } from "./components/FeaturedModsCarousel"
+import { CategoriesGrid, MOD_CATEGORIES, MODPACK_CATEGORIES } from "./components/CategoriesGrid"
+import { TrendingModsSection } from "./components/TrendingModsSection"
+import { RecentlyUpdatedSection } from "./components/RecentlyUpdatedSection"
+import { rspc } from "@/utils/rspcClient"
+
+type ExploreTab = "modpacks" | "mods" | "shaders" | "resourcepacks"
+
 export function Explore() {
-  // const navigator = useGDNavigate()
-  // const searchResults = getSearchResults({
-  //   offset: 0,
-  //   limit: 40,
-  //   defaultSearchQuery: {
-  //     sortIndex: "popularity",
-  //     sortOrder: "descending",
-  //     projectType: "modpack"
-  //   }
-  // })
+  const [t] = useTransContext()
+  const navigator = useGDNavigate()
+  const [searchParams] = useSearchParams()
+  
+  const [activeTab, setActiveTab] = createSignal<ExploreTab>("modpacks")
+  const [selectedCategory, setSelectedCategory] = createSignal<string | null>(null)
 
-  // const popularModpacksCF = rspc.createQuery(() => ({
-  //   queryKey: [
-  //     "modplatforms.unifiedSearch",
-  //     {
-  //       sortIndex: {
-  //         curseForge: "popularity" as const
-  //       },
-  //       sortOrder: "descending" as const,
-  //       searchQuery: null,
-  //       categories: null,
-  //       gameVersions: null,
-  //       modloaders: null,
-  //       pageSize: 15,
-  //       projectType: "modpack",
-  //       index: null,
-  //       searchApi: "curseforge"
-  //     }
-  //   ]
-  // }))
+  const instanceId = () => {
+    const id = parseInt(searchParams.instanceId, 10)
+    return isNaN(id) ? undefined : id
+  }
 
-  // const popularModpacksMR = rspc.createQuery(() => ({
-  //   queryKey: [
-  //     "modplatforms.unifiedSearch",
-  //     {
-  //       sortIndex: {
-  //         modrinth: "relevance" as const
-  //       },
-  //       sortOrder: "descending" as const,
-  //       searchQuery: null,
-  //       categories: null,
-  //       gameVersions: null,
-  //       modloaders: null,
-  //       pageSize: 15,
-  //       projectType: "modpack",
-  //       index: null,
-  //       searchApi: "modrinth"
-  //     }
-  //   ]
-  // }))
+  const tabs = [
+    { id: "modpacks" as const, label: t("explore:_trn_modpacks"), icon: "i-hugeicons:package" },
+    { id: "mods" as const, label: t("explore:_trn_mods"), icon: "i-hugeicons:puzzle" },
+    { id: "shaders" as const, label: t("explore:_trn_shaders"), icon: "i-hugeicons:brush-01" },
+    { id: "resourcepacks" as const, label: t("explore:_trn_resourcepacks"), icon: "i-hugeicons:artboard" },
+  ]
 
-  // const popularCFQuery = {
-  //   sortIndex: {
-  //     curseForge: "popularity" as const
-  //   },
-  //   sortOrder: "descending" as const,
-  //   searchQuery: null,
-  //   categories: null,
-  //   gameVersions: null,
-  //   modloaders: null,
-  //   pageSize: 15,
-  //   projectType: null,
-  //   index: null,
-  //   searchApi: "curseforge" as const
-  // }
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategory(categoryId)
+    // Navigate to search with category filter
+    const projectType = activeTab() === "modpacks" ? "modpack" : 
+                        activeTab() === "mods" ? "mod" :
+                        activeTab() === "shaders" ? "shader" : "resourcepack"
+    navigator.navigate(`/search/${projectType}?category=${categoryId}`)
+  }
 
-  // const popularCF = rspc.createQuery(() => ({
-  //   queryKey: ["modplatforms.unifiedSearch", popularCFQuery]
-  // }))
-
-  // const popularMRQuery = {
-  //   sortIndex: {
-  //     modrinth: "relevance" as const
-  //   },
-  //   sortOrder: "descending" as const,
-  //   searchQuery: null,
-  //   categories: null,
-  //   gameVersions: null,
-  //   modloaders: null,
-  //   pageSize: 15,
-  //   projectType: null,
-  //   index: null,
-  //   searchApi: "modrinth" as const
-  // }
-
-  // const popularMR = rspc.createQuery(() => ({
-  //   queryKey: ["modplatforms.unifiedSearch", popularMRQuery]
-  // }))
-
-  // const recentlyUpdatedCFQuery = {
-  //   sortIndex: {
-  //     curseForge: "lastUpdated" as const
-  //   },
-  //   sortOrder: "descending" as const,
-  //   searchQuery: null,
-  //   categories: null,
-  //   gameVersions: null,
-  //   modloaders: null,
-  //   pageSize: 25,
-  //   projectType: null,
-  //   index: null,
-  //   searchApi: "curseforge" as const
-  // }
-
-  // const recentlyUpdatedCF = rspc.createQuery(() => ({
-  //   queryKey: ["modplatforms.unifiedSearch", recentlyUpdatedCFQuery]
-  // }))
-
-  // const recentlyUpdatedMRQuery = {
-  //   sortIndex: {
-  //     modrinth: "updated" as const
-  //   },
-  //   sortOrder: "descending" as const,
-  //   searchQuery: null,
-  //   categories: null,
-  //   gameVersions: null,
-  //   modloaders: null,
-  //   pageSize: 25,
-  //   projectType: null,
-  //   index: null,
-  //   searchApi: "modrinth" as const
-  // }
-
-  // const recentlyUpdatedMR = rspc.createQuery(() => ({
-  //   queryKey: ["modplatforms.unifiedSearch", recentlyUpdatedMRQuery]
-  // }))
-
-  // const recentlyUpdatedAllElements = () => {
-  //   const curseforge = recentlyUpdatedCF.data?.data ?? []
-  //   const modrinth = recentlyUpdatedMR.data?.data ?? []
-  //   return [...curseforge, ...modrinth].sort(
-  //     (a, b) =>
-  //       new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()
-  //   )
-  // }
-
-  // const popularModpacks = () => {
-  //   const curseforge = popularModpacksCF.data?.data ?? []
-  //   const modrinth = popularModpacksMR.data?.data ?? []
-
-  //   // Normalize download counts to account for platform differences
-  //   const normalizedModpacks = [
-  //     ...curseforge.map((pack) => ({
-  //       ...pack,
-  //       normalizedDownloads: pack.downloadsCount / 10 // Curseforge tends to have ~100x more downloads
-  //     })),
-  //     ...modrinth.map((pack) => ({
-  //       ...pack,
-  //       normalizedDownloads: pack.downloadsCount
-  //     }))
-  //   ]
-
-  //   // Sort by normalized downloads and take top 15
-  //   return normalizedModpacks
-  //     .sort((a, b) => b.normalizedDownloads - a.normalizedDownloads)
-  //     .slice(0, 15)
-  // }
-
-  // onMount(() => {
-  //   requestAnimationFrame(() => {
-  //     const scrollContainer = document.getElementById("gdl-content-wrapper")
-  //     console.log(window.location)
-  //     restoreScrollPosition(scrollContainer)
-  //   })
-  // })
+  const handleViewAllClick = (section: string) => {
+    const projectType = activeTab() === "modpacks" ? "modpack" : 
+                        activeTab() === "mods" ? "mod" :
+                        activeTab() === "shaders" ? "shader" : "resourcepack"
+    navigator.navigate(`/search/${projectType}`)
+  }
 
   return (
-    <div class="flex flex-col gap-8">
-      {/* <h1 class="text-center text-4xl font-bold">Explore or Search Anything</h1>
-      <ShowcaseScroller
-        title="Some Modpacks You Might Like"
-        elements={popularModpacks()}
-      />
-      <ShowcaseScroller
-        title="Currently Popular on Curseforge"
-        elements={popularCF.data?.data ?? []}
-        viewAllAction={() => {
-          setSearchQuery(popularCFQuery)
-          navigate("/explore/list")
-        }}
-      />
-      <ShowcaseScroller
-        title="Currently Popular on Modrinth"
-        elements={popularMR.data?.data ?? []}
-        viewAllAction={() => {
-          setSearchQuery(popularMRQuery)
-          navigate("/explore/list")
-        }}
-      />
-      <Masonry
-        title="Check out these recently updated addons"
-        elements={recentlyUpdatedAllElements()}
-      /> */}
+    <div class="h-full overflow-y-auto p-6">
+      <div class="max-w-6xl mx-auto space-y-8">
+        {/* Hero Section */}
+        <div class="text-center py-4">
+          <h1 class="text-3xl font-bold text-lightSlate-50 mb-2">
+            <Trans key="explore:_trn_discover_title" />
+          </h1>
+          <p class="text-lightSlate-400">
+            <Trans key="explore:_trn_discover_subtitle" />
+          </p>
+        </div>
+
+        {/* Tabs */}
+        <div class="flex justify-center">
+          <Tabs value={activeTab()} class="w-auto">
+            <TabsList class="bg-darkSlate-800/50 border border-darkSlate-700">
+              <TabsIndicator />
+              <For each={tabs}>
+                {(tab) => (
+                  <TabsTrigger
+                    value={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    class="px-4"
+                  >
+                    <div class={tab.icon + " w-4 h-4 mr-2"} />
+                    {tab.label}
+                  </TabsTrigger>
+                )}
+              </For>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        {/* Content based on active tab */}
+        <Show when={activeTab() === "modpacks"}>
+          <div class="space-y-8">
+            {/* Featured Modpacks */}
+            <FeaturedModsCarousel
+              title={t("explore:_trn_featured_modpacks")}
+              projectType="modpack"
+              instanceId={instanceId()}
+              maxItems={5}
+            />
+
+            {/* Categories */}
+            <div>
+              <CategoriesGrid
+                type="modpack"
+                onCategoryClick={handleCategoryClick}
+              />
+            </div>
+
+            {/* Trending Modpacks */}
+            <TrendingModsSection
+              title={t("explore:_trn_popular_modpacks")}
+              projectType="modpack"
+              instanceId={instanceId()}
+              limit={6}
+              showViewAll
+            />
+
+            {/* Recently Updated */}
+            <RecentlyUpdatedSection
+              title={t("explore:_trn_recently_updated_modpacks")}
+              projectType="modpack"
+              instanceId={instanceId()}
+              limit={5}
+            />
+          </div>
+        </Show>
+
+        <Show when={activeTab() === "mods"}>
+          <div class="space-y-8">
+            {/* Featured Mods */}
+            <FeaturedModsCarousel
+              title={t("explore:_trn_featured_mods")}
+              projectType="mod"
+              instanceId={instanceId()}
+              maxItems={5}
+            />
+
+            {/* Categories */}
+            <div>
+              <CategoriesGrid
+                type="mod"
+                onCategoryClick={handleCategoryClick}
+              />
+            </div>
+
+            {/* Trending Mods */}
+            <TrendingModsSection
+              title={t("explore:_trn_popular_mods")}
+              projectType="mod"
+              instanceId={instanceId()}
+              limit={6}
+              showViewAll
+            />
+
+            {/* Recently Updated */}
+            <RecentlyUpdatedSection
+              title={t("explore:_trn_recently_updated_mods")}
+              projectType="mod"
+              instanceId={instanceId()}
+              limit={5}
+            />
+          </div>
+        </Show>
+
+        <Show when={activeTab() === "shaders"}>
+          <div class="space-y-8">
+            {/* Featured Shaders */}
+            <FeaturedModsCarousel
+              title={t("explore:_trn_featured_shaders")}
+              projectType="shader"
+              instanceId={instanceId()}
+              maxItems={5}
+            />
+
+            {/* Trending Shaders */}
+            <TrendingModsSection
+              title={t("explore:_trn_popular_shaders")}
+              projectType="shader"
+              instanceId={instanceId()}
+              limit={6}
+              showViewAll
+            />
+
+            {/* Recently Updated */}
+            <RecentlyUpdatedSection
+              title={t("explore:_trn_recently_updated_shaders")}
+              projectType="shader"
+              instanceId={instanceId()}
+              limit={5}
+            />
+          </div>
+        </Show>
+
+        <Show when={activeTab() === "resourcepacks"}>
+          <div class="space-y-8">
+            {/* Featured Resource Packs */}
+            <FeaturedModsCarousel
+              title={t("explore:_trn_featured_resourcepacks")}
+              projectType="resourcepack"
+              instanceId={instanceId()}
+              maxItems={5}
+            />
+
+            {/* Trending Resource Packs */}
+            <TrendingModsSection
+              title={t("explore:_trn_popular_resourcepacks")}
+              projectType="resourcepack"
+              instanceId={instanceId()}
+              limit={6}
+              showViewAll
+            />
+
+            {/* Recently Updated */}
+            <RecentlyUpdatedSection
+              title={t("explore:_trn_recently_updated_resourcepacks")}
+              projectType="resourcepack"
+              instanceId={instanceId()}
+              limit={5}
+            />
+          </div>
+        </Show>
+      </div>
     </div>
   )
 }

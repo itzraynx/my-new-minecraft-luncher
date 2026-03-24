@@ -14,7 +14,7 @@
   "_trn_update_pending_title": "Aggiornamento v{{version}} in attesa",
   "_trn_update_pending_description": "L'aggiornamento verrà installato alla chiusura dell'app",
   "_trn_update_up_to_date": "Sei aggiornato!",
-  "_trn_update_latest_version": "GDLauncher {{version}} è l'ultima versione",
+  "_trn_update_latest_version": "Nokiatis Launcher {{version}} è l'ultima versione",
   "_trn_update_ready_description": "Installa ora o attendi la chiusura dell'app",
   "_trn_update_installing": "Installazione aggiornamento...",
   "_trn_update_installing_description": "L'app si riavvierà a breve",
@@ -32,5 +32,9 @@
   "_trn_update_check_failed_description": "Impossibile avviare il controllo aggiornamenti. Riprova.",
   "_trn_update_copy_failed": "Copia link fallita",
   "_trn_update_copy_failed_description": "Prova a copiare manualmente",
-  "_trn_update_pending_tooltip": "Aggiornamento in attesa"
+  "_trn_update_pending_tooltip": "Aggiornamento in attesa",
+  "_trn_palestine_free": "Palestina Libera",
+  "_trn_palestine_message": "Stiamo con il popolo della Palestina. Pace, Giustizia e Libertà!",
+  "_trn_palestine_quote": "Dal fiume al mare, la Palestina sarà libera!",
+  "_trn_made_with_love": "Fatto con amore per la community di Minecraft"
 }

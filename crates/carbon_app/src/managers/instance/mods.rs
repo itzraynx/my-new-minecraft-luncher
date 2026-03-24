@@ -1020,6 +1020,91 @@ impl ManagerRef<'_, InstanceManager> {
 
         Ok(logo_image)
     }
+
+    /// Import mod files from local file paths into an instance.
+    /// This copies the files to the appropriate addon folder and triggers metadata caching.
+    pub async fn import_mod_files(
+        self,
+        instance_id: InstanceId,
+        addon_type: domain::AddonType,
+        file_paths: Vec<std::path::PathBuf>,
+    ) -> anyhow::Result<()> {
+        // Ensure the modpack is not locked
+        self.ensure_modpack_not_locked(instance_id).await?;
+
+        // Get instance path
+        let instances = self.instances.read().await;
+        let instance = instances
+            .get(&instance_id)
+            .ok_or(InvalidInstanceIdError(instance_id))?;
+
+        let shortpath = instance.shortpath.clone();
+        drop(instances);
+
+        let instance_path = self
+            .app
+            .settings_manager()
+            .runtime_path
+            .get_instances()
+            .get_instance_path(&shortpath);
+
+        // Get the target folder for this addon type
+        let target_folder = addon_type.get_folder_path(&instance_path);
+
+        // Ensure the target folder exists
+        tokio::fs::create_dir_all(&target_folder).await?;
+
+        // Copy each file to the target folder
+        for source_path in file_paths {
+            if !source_path.exists() {
+                tracing::warn!("Source file does not exist: {:?}", source_path);
+                continue;
+            }
+
+            let filename = match source_path.file_name() {
+                Some(name) => name.to_string_lossy().to_string(),
+                None => {
+                    tracing::warn!("Could not get filename from path: {:?}", source_path);
+                    continue;
+                }
+            };
+
+            let target_path = target_folder.join(&filename);
+
+            // Check if file already exists
+            if target_path.exists() {
+                tracing::warn!("File already exists, skipping: {:?}", target_path);
+                continue;
+            }
+
+            // Copy the file
+            match tokio::fs::copy(&source_path, &target_path).await {
+                Ok(_) => {
+                    tracing::info!("Copied mod file: {} -> {:?}", filename, target_path);
+                }
+                Err(e) => {
+                    tracing::error!("Failed to copy file {:?}: {}", source_path, e);
+                    return Err(anyhow::anyhow!(
+                        "Failed to copy file {}: {}",
+                        filename,
+                        e
+                    ));
+                }
+            }
+        }
+
+        // Trigger metadata caching for the new files
+        self.app
+            .meta_cache_manager()
+            .queue_caching(instance_id, true)
+            .await;
+
+        // Invalidate the mods list
+        self.app
+            .invalidate(INSTANCE_MODS, Some(instance_id.0.into()));
+
+        Ok(())
+    }
 }
 
 #[derive(Error, Debug)]

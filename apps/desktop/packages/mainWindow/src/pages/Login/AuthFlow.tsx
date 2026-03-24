@@ -748,7 +748,7 @@ function AuthFlowContent() {
       >
         {/* Logo */}
         <div class="h-30 flex justify-center">
-          <img class="w-60" src={wideLogoUrl} alt="GDLauncher" />
+          <img class="w-60" src={wideLogoUrl} alt="Nokiatis Launcher" />
         </div>
 
         <Show

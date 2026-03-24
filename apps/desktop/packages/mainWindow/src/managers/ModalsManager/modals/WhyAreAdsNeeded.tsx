@@ -165,7 +165,7 @@ const WhyAreAdsNeeded = (props: ModalProps) => {
                   <div class="bg-primary-500/20 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg p-1.5">
                     <img
                       src={logoUrl}
-                      alt="GDLauncher"
+                      alt="Nokiatis Launcher"
                       class="h-full w-full object-contain"
                     />
                   </div>

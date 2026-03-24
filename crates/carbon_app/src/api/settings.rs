@@ -545,6 +545,10 @@ struct FESettings {
     mod_sources: ModSources,
     terms_and_privacy_accepted: bool,
     gdl_account_id: Option<String>,
+    // Nokiatis specific settings
+    show_nokiatis_welcome: bool,
+    enable_offline_mode: bool,
+    animation_performance: String,
 }
 
 impl TryFrom<carbon_repos::db::app_configuration::Data> for FESettings {
@@ -600,6 +604,10 @@ impl TryFrom<carbon_repos::db::app_configuration::Data> for FESettings {
             },
             terms_and_privacy_accepted: data.terms_and_privacy_accepted,
             gdl_account_id: data.gdl_account_uuid,
+            // Nokiatis specific settings
+            show_nokiatis_welcome: data.show_nokiatis_welcome,
+            enable_offline_mode: data.enable_offline_mode,
+            animation_performance: data.animation_performance,
         })
     }
 }
@@ -700,6 +708,13 @@ pub struct FESettingsUpdate {
     pub terms_and_privacy_accepted: Option<Set<bool>>,
     #[specta(optional)]
     pub gdl_account_id: Option<Set<Option<String>>>,
+    // Nokiatis specific settings
+    #[specta(optional)]
+    pub show_nokiatis_welcome: Option<Set<bool>>,
+    #[specta(optional)]
+    pub enable_offline_mode: Option<Set<bool>>,
+    #[specta(optional)]
+    pub animation_performance: Option<Set<String>>,
 }
 
 #[derive(Type, Debug, Deserialize, Serialize, Clone)]

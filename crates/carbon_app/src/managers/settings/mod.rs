@@ -315,6 +315,34 @@ impl ManagerRef<'_, SettingsManager> {
             ));
         }
 
+        // Nokiatis specific settings
+        if let Some(show_nokiatis_welcome) = incoming_settings.show_nokiatis_welcome {
+            queries.push(self.app.prisma_client.app_configuration().update(
+                app_configuration::id::equals(0),
+                vec![app_configuration::show_nokiatis_welcome::set(
+                    show_nokiatis_welcome.inner(),
+                )],
+            ));
+        }
+
+        if let Some(enable_offline_mode) = incoming_settings.enable_offline_mode {
+            queries.push(self.app.prisma_client.app_configuration().update(
+                app_configuration::id::equals(0),
+                vec![app_configuration::enable_offline_mode::set(
+                    enable_offline_mode.inner(),
+                )],
+            ));
+        }
+
+        if let Some(animation_performance) = incoming_settings.animation_performance {
+            queries.push(self.app.prisma_client.app_configuration().update(
+                app_configuration::id::equals(0),
+                vec![app_configuration::animation_performance::set(
+                    animation_performance.inner(),
+                )],
+            ));
+        }
+
         if !queries.is_empty() {
             db._batch(queries).await?;
             self.app.invalidate(GET_SETTINGS, None);

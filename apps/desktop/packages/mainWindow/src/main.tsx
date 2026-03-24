@@ -112,10 +112,9 @@ render(() => {
 
   const startTime = Date.now()
 
+  // Skip intro animation for Nokiatis Launcher - go straight to loading
   const [isReady, setIsReady] = createSignal(false)
-  const [isIntroAnimationFinished, setIsIntroAnimationFinished] = createSignal(
-    window.skipIntroAnimation
-  )
+  const [isIntroAnimationFinished, setIsIntroAnimationFinished] = createSignal(true) // Always skip intro animation
 
   createEffect(() => {
     if (!isIntroAnimationFinished()) return

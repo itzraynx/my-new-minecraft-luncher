@@ -21,12 +21,12 @@ export interface Occasion {
   duration: number // Milliseconds to show seasonal splash before auto-redirect
 }
 
-// Default assets (current production assets)
+// Default assets (current production assets - Nokiatis Launcher)
 const DEFAULT_ASSETS: OccasionAssets = {
-  preloadRive: "gd_logo_animation.riv",
+  preloadRive: "nokiatis_logo_animation.riv",
   authVideo: "assets/images/login_background.webm",
-  logoIcon: "assets/images/gdlauncher_logo.svg",
-  logoWide: "assets/images/gdlauncher_wide_logo_blue.svg"
+  logoIcon: "assets/images/nokiatis_logo.svg",
+  logoWide: "assets/images/nokiatis_wide_logo.svg"
 }
 
 // Occasion configurations

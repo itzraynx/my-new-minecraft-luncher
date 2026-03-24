@@ -149,8 +149,22 @@ pub(super) fn mount() -> RouterBuilder<App> {
             match search_params.search_api {
                 Some(FEUnifiedPlatform::Curseforge) => {
                     let modplatforms = app.modplatforms_manager();
-                    let curseforge_response = modplatforms.curseforge.search(search_params.into()).await?;
-                    Ok(responses::FEUnifiedSearchResponse::from(curseforge_response))
+                    match modplatforms.curseforge.search(search_params.clone().into()).await {
+                        Ok(curseforge_response) => Ok(responses::FEUnifiedSearchResponse::from(curseforge_response)),
+                        Err(e) => {
+                            // Log the error but return empty results instead of failing
+                            tracing::warn!("CurseForge search failed: {}. Returning empty results.", e);
+                            Ok(responses::FEUnifiedSearchResponse {
+                                data: vec![],
+                                pagination: Some(responses::FEUnifiedPagination {
+                                    index: 0,
+                                    page_size: search_params.page_size.unwrap_or(40) as i32,
+                                    result_count: 0,
+                                    total_count: 0,
+                                }),
+                            })
+                        }
+                    }
                 }
                 Some(FEUnifiedPlatform::Modrinth) => {
                     let modplatforms = app.modplatforms_manager();
@@ -161,12 +175,33 @@ pub(super) fn mount() -> RouterBuilder<App> {
                     // Search both platforms and merge results
                     let modplatforms = app.modplatforms_manager();
 
-                    let (cf_response, mr_response) = tokio::try_join!(
-                        modplatforms.curseforge.search(search_params.clone().into()),
-                        modplatforms.modrinth.search(search_params.into())
-                    )?;
+                    // Try CurseForge, fallback to empty on error
+                    let cf_result = match modplatforms.curseforge.search(search_params.clone().into()).await {
+                        Ok(response) => response,
+                        Err(e) => {
+                            tracing::warn!("CurseForge search failed in unified search: {}", e);
+                            carbon_platforms::curseforge::CurseForgeResponse {
+                                data: vec![],
+                                pagination: None,
+                            }
+                        }
+                    };
 
-                    let merged = responses::FEUnifiedSearchResponse::merge(cf_response.into(), mr_response.into());
+                    // Try Modrinth
+                    let mr_result = match modplatforms.modrinth.search(search_params.into()).await {
+                        Ok(response) => response,
+                        Err(e) => {
+                            tracing::warn!("Modrinth search failed in unified search: {}", e);
+                            carbon_platforms::modrinth::responses::ProjectSearchResponse {
+                                hits: vec![],
+                                offset: 0,
+                                limit: 40,
+                                total_hits: 0,
+                            }
+                        }
+                    };
+
+                    let merged = responses::FEUnifiedSearchResponse::merge(cf_result.into(), mr_result.into());
                     Ok(merged)
                 }
             }

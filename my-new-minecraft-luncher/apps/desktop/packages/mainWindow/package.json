@@ -1,0 +1,20 @@
+{
+  "name": "@nokiatis/main-window",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.tsx",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "solid-js": "^1.8.7",
+    "@solidjs/router": "^0.10.0",
+    "@nokiatis/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.2",
+    "vite": "^5.0.0",
+    "vite-plugin-solid": "^2.7.0"
+  }
+}

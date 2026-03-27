@@ -54,14 +54,20 @@ jobs:
         run: pnpm build:win-x64
         continue-on-error: true
 
-      - name: Find and upload EXE
+      - name: List output files
+        run: |
+          ls -la apps/desktop/release/ 2>/dev/null || echo "No release dir"
+          ls -la apps/desktop/dist/ 2>/dev/null || echo "No dist dir"
+          ls -la target/release/ 2>/dev/null || echo "No target/release dir"
+
+      - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nokiatis-launcher-windows
           path: |
-            apps/desktop/dist/*.exe
-            apps/desktop/dist/*.blockmap
-            target/release/*.exe
+            apps/desktop/release/*.exe
+            apps/desktop/release/*.zip
+            target/release/carbon_app.exe
           retention-days: 30
           if-no-files-found: warn
 
@@ -113,12 +119,20 @@ jobs:
         run: pnpm build:linux-x64
         continue-on-error: true
 
-      - name: Find and upload AppImage
+      - name: List output files
+        run: |
+          ls -la apps/desktop/release/ 2>/dev/null || echo "No release dir"
+          ls -la apps/desktop/dist/ 2>/dev/null || echo "No dist dir"
+          ls -la target/release/ 2>/dev/null || echo "No target/release dir"
+
+      - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nokiatis-launcher-linux
           path: |
-            apps/desktop/dist/*.AppImage
+            apps/desktop/release/*.AppImage
+            apps/desktop/release/*.deb
+            apps/desktop/release/*.zip
             target/release/carbon_app
           retention-days: 30
           if-no-files-found: warn

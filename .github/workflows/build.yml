@@ -67,14 +67,19 @@ jobs:
         run: pnpm build:win-x64
 
       - name: List release directory
-        run: dir target\x86_64-pc-windows-msvc\release\ /s || echo "No release files found"
+        run: |
+          echo "=== Apps desktop release ==="
+          dir apps\desktop\release\ /s || echo "No release files found"
+          echo "=== Target release ==="
+          dir target\release\ /s || echo "No target release files found"
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nokiatis-launcher-windows
           path: |
-            target/x86_64-pc-windows-msvc/release/carbon_app.exe
+            apps/desktop/release/*.exe
+            apps/desktop/release/*.zip
           retention-days: 30
           if-no-files-found: warn
 
@@ -131,13 +136,18 @@ jobs:
         run: pnpm build:linux-x64
 
       - name: List release directory
-        run: ls -la target/x86_64-unknown-linux-gnu/release/ || echo "No release files found"
+        run: |
+          echo "=== Apps desktop release ==="
+          ls -la apps/desktop/release/ || echo "No release files found"
+          echo "=== Target release ==="
+          ls -la target/release/ || echo "No target release files found"
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nokiatis-launcher-linux
           path: |
-            target/x86_64-unknown-linux-gnu/release/carbon_app
+            apps/desktop/release/*.AppImage
+            apps/desktop/release/*.zip
           retention-days: 30
           if-no-files-found: warn

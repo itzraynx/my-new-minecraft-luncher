@@ -67,11 +67,12 @@ jobs:
         run: pnpm build:win-x64
 
       - name: List release directory
+        shell: cmd
         run: |
-          echo "=== Apps desktop release ==="
-          dir apps\desktop\release\ /s || echo "No release files found"
-          echo "=== Target release ==="
-          dir target\release\ /s || echo "No target release files found"
+          echo === Apps desktop release ===
+          dir apps\desktop\release\ /s
+          echo === Target release ===
+          dir target\release\ /s
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
@@ -138,9 +139,9 @@ jobs:
       - name: List release directory
         run: |
           echo "=== Apps desktop release ==="
-          ls -la apps/desktop/release/ || echo "No release files found"
+          ls -la apps/desktop/release/ || true
           echo "=== Target release ==="
-          ls -la target/release/ || echo "No target release files found"
+          ls -la target/release/ || true
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4

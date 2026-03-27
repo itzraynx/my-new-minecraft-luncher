@@ -504,6 +504,15 @@ impl ManagerRef<'_, InstanceManager> {
 
                     let _liveness_watch = app.instance_manager().instance_running_tracker.marker();
 
+                    // Get the StandardVersion from the version Option
+                    let version = match version {
+                        Some(v) => v,
+                        None => {
+                            tracing::error!("No version available for Discord Rich Presence");
+                            return;
+                        }
+                    };
+
                     // Get modloader info for Discord Rich Presence
                     let (mod_loader, mod_loader_version) = version
                         .modloaders

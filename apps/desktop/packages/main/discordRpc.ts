@@ -32,6 +32,13 @@ export type PresenceState =
   | "installing" 
   | "launching" 
   | "playing"
+  | "crashed"        // Game crashed
+  | "loading"         // Loading world
+  | "death"           // Player died
+  | "achievement"     // Got achievement
+  | "screenshot"      // Taking screenshot
+  | "paused"          // Game paused
+  | "menu"            // In game menu
 
 export interface GameInfo {
   instanceName: string

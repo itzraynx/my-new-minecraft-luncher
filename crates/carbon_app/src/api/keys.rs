@@ -141,6 +141,7 @@ keys! {
         EXPLORE                                     = "explore";
         EXPORT                                      = "export";
         GET_MODPACK_INFO                            = "getModpackInfo";
+        IMPORT_MOD_FILES                             = "importModFiles";
 
         // Backup System
         GET_BACKUPS                                 = "getBackups";

@@ -224,6 +224,9 @@ impl ManagerRef<'_, InstanceManager> {
             None => bail!("Instance has no associated game version and cannot be launched"),
         };
 
+        // Clone version for later use in Discord Rich Presence after the game launches
+        let version_for_presence = version.clone();
+
         let task = VisualTask::new(match &launch_account {
             Some(_) => Translation::InstanceTaskLaunch {
                 name: config.name.clone(),
@@ -504,8 +507,8 @@ impl ManagerRef<'_, InstanceManager> {
 
                     let _liveness_watch = app.instance_manager().instance_running_tracker.marker();
 
-                    // Get the StandardVersion from the version Option
-                    let version = match version {
+                    // Get the StandardVersion from version_for_presence for Discord Rich Presence
+                    let version = match version_for_presence {
                         Some(v) => v,
                         None => {
                             tracing::error!("No version available for Discord Rich Presence");

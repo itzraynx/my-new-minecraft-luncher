@@ -122,7 +122,7 @@ module.exports = {
   linux: {
     icon: `build/${iconName}.png`,
     target:
-      appChannel === "snapshot" ? ["zip"] : ["zip", "appImage", "deb", "rpm"],
+      appChannel === "snapshot" ? ["zip"] : ["zip", "appImage", "deb"],
     artifactName: "${productName}__${version}__${os}__" + arch + ".${ext}",
     category: "Game",
     synopsis: "Custom Minecraft Launcher",

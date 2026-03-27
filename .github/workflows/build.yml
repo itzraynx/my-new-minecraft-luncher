@@ -10,7 +10,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
   CARGO_INCREMENTAL: 0
-  # Required environment variables for compile-time
   USER_AGENT_PREFIX: "NokiatisLauncher"
   MS_AUTH_CLIENT_ID: "00000000402b72ab"
   META_BASE_URL: "https://piston-meta.mojang.com"
@@ -23,7 +22,7 @@ jobs:
     runs-on: windows-latest
     name: Build Windows EXE
     timeout-minutes: 90
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -57,30 +56,17 @@ jobs:
       - name: Iridium patchfix
         run: node iridium_patchfix.js
 
-      - name: Prisma codegen (native first, then use for cross-compile)
-        run: |
-          # Generate Prisma client using NATIVE toolchain (not cross-compiled)
-          # The generated code is platform-independent Rust source code
-          cargo run -p prisma-cli -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
+      - name: Prisma codegen
+        run: cargo run -p prisma-cli -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
 
       - name: Build
         run: pnpm build:win-x64
 
-      - name: List release directory
-        shell: cmd
-        run: |
-          echo === Apps desktop release ===
-          dir apps\desktop\release\ /s
-          echo === Target release ===
-          dir target\release\ /s
-
-      - name: Upload Windows artifacts
+      - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
         with:
           name: nokiatis-launcher-windows
-          path: |
-            apps/desktop/release/*.exe
-            apps/desktop/release/*.zip
+          path: apps/desktop/release/
           retention-days: 30
           if-no-files-found: warn
 
@@ -88,7 +74,7 @@ jobs:
     runs-on: ubuntu-22.04
     name: Build Linux AppImage
     timeout-minutes: 90
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -127,28 +113,16 @@ jobs:
       - name: Iridium patchfix
         run: node iridium_patchfix.js
 
-      - name: Prisma codegen (native)
-        run: |
-          # Generate Prisma client using native toolchain
-          # The generated code is platform-independent Rust source code
-          cargo run -p prisma-cli -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
+      - name: Prisma codegen
+        run: cargo run -p prisma-cli -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
 
       - name: Build
         run: pnpm build:linux-x64
 
-      - name: List release directory
-        run: |
-          echo "=== Apps desktop release ==="
-          ls -la apps/desktop/release/ || true
-          echo "=== Target release ==="
-          ls -la target/release/ || true
-
-      - name: Upload Linux artifacts
+      - name: Upload Linux AppImage
         uses: actions/upload-artifact@v4
         with:
           name: nokiatis-launcher-linux
-          path: |
-            apps/desktop/release/*.AppImage
-            apps/desktop/release/*.zip
+          path: apps/desktop/release/
           retention-days: 30
           if-no-files-found: warn

@@ -10,7 +10,6 @@ import {
 import { Dynamic, Portal } from "solid-js/web"
 import { useTransContext, TypedTFunction } from "@gd/i18n"
 import { useGDNavigate } from "../NavigationManager"
-import adSize from "@/utils/adhelper"
 
 export interface ModalProps {
   title: string
@@ -94,10 +93,6 @@ const getDefaultModals = (t: TypedTFunction) => ({
   onBoarding: {
     component: lazy(() => import("./modals/OnBoarding")),
     noHeader: true
-  },
-  whyAreAdsNeeded: {
-    component: lazy(() => import("./modals/WhyAreAdsNeeded")),
-    title: t("modals:_trn_why_are_ads_needed")
   },
   modsUpdater: {
     component: lazy(() => import("./modals/ModsUpdater")),
@@ -321,18 +316,6 @@ export const ModalProvider = (props: { children: JSX.Element }) => {
                     </div>
                     <div class="bg-darkSlate-900 absolute inset-0 opacity-95 transition-opacity duration-100" />
                   </div>
-
-                  <div
-                    class="text-lightSlate-50 z-999 bg-darkSlate-900 h-screen origin-center place-items-center opacity-95 transition-opacity duration-100"
-                    style={{
-                      width: `${adSize.width}px`
-                    }}
-                    onMouseDown={() => {
-                      if (!preventClose) {
-                        closeModal()
-                      }
-                    }}
-                  />
                 </div>
               )
             }}

@@ -29,6 +29,8 @@ jobs:
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
 
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
@@ -42,25 +44,33 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Run codegen
-        run: pnpm codegen
+      - name: Build prisma-cli (for generating db.rs)
+        run: cargo build -p prisma-cli --release
+
+      - name: Generate Prisma client (db.rs)
+        run: cargo run -p prisma-cli --release -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
+
+      - name: Generate rspc bindings
+        run: cargo run -p carbon_app -- --generate-ts-bindings
         continue-on-error: true
 
       - name: Build Rust backend
-        run: cargo build -p carbon_app --release
-        continue-on-error: true
+        run: cargo build -p carbon_app --release --target x86_64-pc-windows-msvc
 
-      - name: Build frontend
+      - name: Build frontend with Tauri
         run: pnpm build:win-x64
         continue-on-error: true
+
+      - name: List release directory
+        run: dir target\x86_64-pc-windows-msvc\release\ /s || echo "No release files found"
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nokiatis-launcher-windows
           path: |
-            apps/desktop/release/
-            target/release/carbon_app.exe
+            target/x86_64-pc-windows-msvc/release/carbon_app.exe
+            target/x86_64-pc-windows-msvc/release/bundle/
           retention-days: 30
           if-no-files-found: warn
 
@@ -82,6 +92,8 @@ jobs:
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu
 
       - name: Install system dependencies
         run: |
@@ -100,24 +112,31 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Run codegen
-        run: pnpm codegen
+      - name: Build prisma-cli (for generating db.rs)
+        run: cargo build -p prisma-cli --release
+
+      - name: Generate Prisma client (db.rs)
+        run: cargo run -p prisma-cli --release -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
+
+      - name: Generate rspc bindings
+        run: cargo run -p carbon_app -- --generate-ts-bindings
         continue-on-error: true
 
       - name: Build Rust backend
-        run: cargo build -p carbon_app --release
-        continue-on-error: true
+        run: cargo build -p carbon_app --release --target x86_64-unknown-linux-gnu
 
-      - name: Build frontend
+      - name: Build frontend with Tauri
         run: pnpm build:linux-x64
         continue-on-error: true
+
+      - name: List release directory
+        run: ls -la target/x86_64-unknown-linux-gnu/release/ || echo "No release files found"
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nokiatis-launcher-linux
           path: |
-            apps/desktop/release/
-            target/release/carbon_app
+            target/x86_64-unknown-linux-gnu/release/carbon_app
           retention-days: 30
           if-no-files-found: warn

@@ -1,7 +1,6 @@
 [workspace]
 members = ["crates/*"]
 resolver = "2"
-exclude = ["crates/iridium"]
 
 [profile.release]
 split-debuginfo = "unpacked"

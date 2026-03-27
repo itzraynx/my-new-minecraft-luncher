@@ -1,0 +1,8 @@
+[package]
+name = "iridium"
+version = "0.1.0"
+edition = "2024"
+description = "Iridium analytics and telemetry module for Nokiatis Launcher"
+
+[dependencies]
+serde_json = { workspace = true }

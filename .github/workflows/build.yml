@@ -8,8 +8,15 @@ on:
   workflow_dispatch:
 
 env:
-  CURSEFORGE_API_KEY: ""
   CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  # Required environment variables for compile-time
+  USER_AGENT_PREFIX: "NokiatisLauncher"
+  MS_AUTH_CLIENT_ID: "00000000402b72ab"
+  META_BASE_URL: "https://piston-meta.mojang.com"
+  TEST_BASE_API: "https://test.gdlauncher.com"
+  BASE_API: "https://api.gdlauncher.com"
+  CURSEFORGE_API_KEY: ""
 
 jobs:
   build-windows:
@@ -45,7 +52,8 @@ jobs:
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Prepare - Create empty db.rs
-        run: echo "" > crates/carbon_repos/src/db.rs
+        run: |
+          echo "" > crates/carbon_repos/src/db.rs
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -58,8 +66,6 @@ jobs:
 
       - name: Build
         run: pnpm build:win-x64
-        env:
-          CARGO_INCREMENTAL: 0
 
       - name: List release directory
         run: dir target\x86_64-pc-windows-msvc\release\ /s || echo "No release files found"
@@ -111,7 +117,8 @@ jobs:
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Prepare - Create empty db.rs
-        run: echo "" > crates/carbon_repos/src/db.rs
+        run: |
+          echo "" > crates/carbon_repos/src/db.rs
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -124,8 +131,6 @@ jobs:
 
       - name: Build
         run: pnpm build:linux-x64
-        env:
-          CARGO_INCREMENTAL: 0
 
       - name: List release directory
         run: ls -la target/x86_64-unknown-linux-gnu/release/ || echo "No release files found"

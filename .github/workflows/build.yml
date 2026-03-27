@@ -51,18 +51,17 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Prepare - Create empty db.rs
-        run: |
-          echo "" > crates/carbon_repos/src/db.rs
-
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
       - name: Iridium patchfix
         run: node iridium_patchfix.js
 
-      - name: Prisma codegen
-        run: pnpm prisma:generate:win-x64
+      - name: Prisma codegen (native first, then use for cross-compile)
+        run: |
+          # Generate Prisma client using NATIVE toolchain (not cross-compiled)
+          # The generated code is platform-independent Rust source code
+          cargo run -p prisma-cli -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
 
       - name: Build
         run: pnpm build:win-x64
@@ -116,18 +115,17 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Prepare - Create empty db.rs
-        run: |
-          echo "" > crates/carbon_repos/src/db.rs
-
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
       - name: Iridium patchfix
         run: node iridium_patchfix.js
 
-      - name: Prisma codegen
-        run: pnpm prisma:generate:linux-x64
+      - name: Prisma codegen (native)
+        run: |
+          # Generate Prisma client using native toolchain
+          # The generated code is platform-independent Rust source code
+          cargo run -p prisma-cli -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
 
       - name: Build
         run: pnpm build:linux-x64

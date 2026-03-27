@@ -9,11 +9,13 @@ on:
 
 env:
   CURSEFORGE_API_KEY: ""
+  CARGO_TERM_COLOR: always
 
 jobs:
   build-windows:
     runs-on: windows-latest
     name: Build Windows EXE
+    timeout-minutes: 90
     
     steps:
       - name: Checkout code
@@ -28,8 +30,9 @@ jobs:
         run: npm install -g pnpm@9.13.2
 
       - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
+          toolchain: 1.85.1
           targets: x86_64-pc-windows-msvc
 
       - name: Cache Rust
@@ -41,25 +44,22 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
+      - name: Prepare - Create empty db.rs
+        run: echo "" > crates/carbon_repos/src/db.rs
+
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Build prisma-cli (for generating db.rs)
-        run: cargo build -p prisma-cli --release
+      - name: Iridium patchfix
+        run: node iridium_patchfix.js
 
-      - name: Generate Prisma client (db.rs)
-        run: cargo run -p prisma-cli --release -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
+      - name: Prisma codegen
+        run: pnpm prisma:generate:win-x64
 
-      - name: Generate rspc bindings
-        run: cargo run -p carbon_app -- --generate-ts-bindings
-        continue-on-error: true
-
-      - name: Build Rust backend
-        run: cargo build -p carbon_app --release --target x86_64-pc-windows-msvc
-
-      - name: Build frontend with Tauri
+      - name: Build
         run: pnpm build:win-x64
-        continue-on-error: true
+        env:
+          CARGO_INCREMENTAL: 0
 
       - name: List release directory
         run: dir target\x86_64-pc-windows-msvc\release\ /s || echo "No release files found"
@@ -70,13 +70,13 @@ jobs:
           name: nokiatis-launcher-windows
           path: |
             target/x86_64-pc-windows-msvc/release/carbon_app.exe
-            target/x86_64-pc-windows-msvc/release/bundle/
           retention-days: 30
           if-no-files-found: warn
 
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Build Linux AppImage
+    timeout-minutes: 90
     
     steps:
       - name: Checkout code
@@ -91,8 +91,9 @@ jobs:
         run: npm install -g pnpm@9.13.2
 
       - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
+          toolchain: 1.85.1
           targets: x86_64-unknown-linux-gnu
 
       - name: Install system dependencies
@@ -109,25 +110,22 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
+      - name: Prepare - Create empty db.rs
+        run: echo "" > crates/carbon_repos/src/db.rs
+
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Build prisma-cli (for generating db.rs)
-        run: cargo build -p prisma-cli --release
+      - name: Iridium patchfix
+        run: node iridium_patchfix.js
 
-      - name: Generate Prisma client (db.rs)
-        run: cargo run -p prisma-cli --release -- generate --schema=./crates/carbon_repos/prisma/schema.prisma
+      - name: Prisma codegen
+        run: pnpm prisma:generate:linux-x64
 
-      - name: Generate rspc bindings
-        run: cargo run -p carbon_app -- --generate-ts-bindings
-        continue-on-error: true
-
-      - name: Build Rust backend
-        run: cargo build -p carbon_app --release --target x86_64-unknown-linux-gnu
-
-      - name: Build frontend with Tauri
+      - name: Build
         run: pnpm build:linux-x64
-        continue-on-error: true
+        env:
+          CARGO_INCREMENTAL: 0
 
       - name: List release directory
         run: ls -la target/x86_64-unknown-linux-gnu/release/ || echo "No release files found"
